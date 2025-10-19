@@ -4,7 +4,8 @@ import { usePathname } from "next/navigation"; // Remove if not using Next.js
 import { useAuth } from "../../hooks/useAuth";
 interface MenuItem {
   title: string;
-  icon: JSX.Element;
+  //@ts-ignore
+  icon: any;
   url: string;
 }
 
