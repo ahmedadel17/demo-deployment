@@ -41,18 +41,40 @@ function ProductDetails() {
 
             <div className="space-y-6">
                 {/* <!-- Product Title and Rating --> */}
-             <ProductTitle />
+             <ProductTitle 
+               name=""
+               rate={0}
+               rate1={0}
+               rate2={0}
+               rate3={0}
+               rate4={0}
+               rate5={0}
+               out_of_stock={false}
+             />
 
                 {/* <!-- Price --> */}
-                <ProductPrice />
+                <ProductPrice 
+                  price={0}
+                  old_price={0}
+                />
 
                 {/* <!-- Product Description --> */}
-                <ProductDescription />
+                <ProductDescription 
+                  short_description=""
+                  description=""
+                />
 
                 <hr className="border-gray-300 dark:border-gray-800"/>
 
                 {/* <!-- Quantity --> */}
-              <ProductVariations />
+              <ProductVariations 
+                variations={{
+                  id: 1,
+                  name: "Size",
+                  values: []
+                }}
+                hasVariations={false}
+              />
 
                 <div className="space-y-2">
                     <label htmlFor="comment" className="block text-sm font-medium text-gray-900 dark:text-white">Do you have another comment?</label>

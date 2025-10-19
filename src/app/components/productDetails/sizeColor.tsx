@@ -40,7 +40,7 @@ function SizeColor({ variations, onSelectionChange }: SizeColorProps) {
       <div className="product-size mt-4">
         <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Size</h4>
         <div className="grid grid-cols-4 gap-2">
-          { variations[0][0]?.values?.map((size: {
+          { (variations[0] as any)?.[0]?.values?.map((size: {
             id: number;
             value: string;
           }) => (
@@ -62,7 +62,7 @@ function SizeColor({ variations, onSelectionChange }: SizeColorProps) {
       <div className="product-color mt-4">
         <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Color</h4>
         <div className="flex flex-wrap gap-3">
-        {variations[0][1]?.values?.map((color: {
+        {(variations[0] as any)?.[1]?.values?.map((color: {
             id: number;
             value: string;
             color?: string;

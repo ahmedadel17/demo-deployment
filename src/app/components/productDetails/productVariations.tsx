@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import SizeColor from './sizeColor'
 
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { 
   setSelection, 
@@ -31,6 +32,7 @@ interface ProductVariationsProps {
 
 function ProductVariations({ variations, hasVariations, productId, onDataChange }: ProductVariationsProps) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   
   // Get product state from Redux
   const { selectedSizeId, selectedColorId, variationData, isLoadingVariation, error } = useAppSelector((state) => state.product);
@@ -171,7 +173,7 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
 </div>
 
 {/* <!-- Size and Color Selection --> */}
-{hasVariations && variations.length > 0 && (
+{hasVariations && Array.isArray(variations) && variations.length > 0 && (
   <SizeColor 
     variations={[variations]} 
     onSelectionChange={handleSelectionChange}

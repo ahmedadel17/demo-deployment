@@ -30,7 +30,7 @@ function ProductTitle({ name, rate, rate1, rate2, rate3, rate4, rate5,out_of_sto
             </div>
             <span className="text-sm text-gray-600 dark:text-gray-400 ml-2 rtl:ml-0 rtl:mr-2">{rate} (89 reviews)</span>
         </div>
-        {variationData && <span className={`product-stock text-sm ${out_of_stock ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>{variationData?.data?.out_of_stock ? 'Out of Stock' : 'In Stock'}</span>}
+        {variationData && <span className={`product-stock text-sm ${out_of_stock ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>{(variationData?.data as any)?.out_of_stock ? 'Out of Stock' : 'In Stock'}</span>}
         {!variationData && <span className={`product-stock text-sm ${out_of_stock ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>{out_of_stock ? 'Out of Stock' : 'In Stock'}</span>}
     </div>
 </>

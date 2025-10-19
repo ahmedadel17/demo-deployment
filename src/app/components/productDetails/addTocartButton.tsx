@@ -64,7 +64,7 @@ function AddToCartButton({
 
     try {
       const requestData = {
-        item_id: defaultVariationId? defaultVariationId : (variationData?.data as any)?.id ? (variationData.data as any).id : productId,
+        item_id: defaultVariationId? defaultVariationId : (variationData?.data as any)?.id ? (variationData?.data as any).id : productId,
         qty: quantity,
         customer_note: customerNote,
         type: 'product',

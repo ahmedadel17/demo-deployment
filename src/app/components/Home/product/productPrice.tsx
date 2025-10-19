@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ProductPrice({ old_price, price_after_discount, price }: { old_price: string | null, price_after_discount: string | null, price: string }) {
+function ProductPrice({ old_price, price_after_discount, price }: { old_price: string | null | undefined, price_after_discount: string | null | undefined, price: string }) {
   return (
     <div className="flex items-center gap-2">
             {old_price && (

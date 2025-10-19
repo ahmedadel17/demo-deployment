@@ -6,8 +6,9 @@ import axios from 'axios';
 
 interface Country {
   id: number;
-    title: string;  
+  title: string;  
   flag?: string;
+  dial_code?: string;
 }
 
 interface CountrySearchSelectProps {
@@ -87,11 +88,11 @@ const CountrySearchSelect: React.FC<CountrySearchSelectProps> = ({
   );
 
   // Get selected country
-  const selectedCountry = countries.find(country => country.id === value);
+  const selectedCountry = countries.find(country => country.id.toString() === value);
 
   // Handle country selection
   const handleCountrySelect = (country: Country) => {
-    onChange(country.id);
+    onChange(country.id.toString());
     setIsOpen(false);
     setSearchQuery('');
     setHighlightedIndex(-1);

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react'
 import * as countriesData from "country-codes-flags-phone-codes";
+//@ts-ignore
 import Flag from 'react-world-flags'
 import { useTranslations, useLocale } from 'next-intl';  
 const countries = countriesData?.countries || [];

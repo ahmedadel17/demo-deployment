@@ -6,7 +6,7 @@ function VariationTitle() {
 console.log('variationData', variationData);
   return (
     <div>
-      <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{variationData?.data?.name}</h2>
+      <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{(variationData?.data as any)?.name}</h2>
     </div>
   )
 }

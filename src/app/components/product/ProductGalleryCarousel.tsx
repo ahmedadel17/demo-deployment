@@ -10,6 +10,11 @@ interface ProductGalleryCarouselProps {
   discount?: string;
 }
 
+interface ImageData {
+  url?: string;
+  thumbnail?: string;
+}
+
 const ProductGalleryCarousel: React.FC<ProductGalleryCarouselProps> = ({ 
   images, 
   discount 
@@ -129,7 +134,7 @@ const ProductGalleryCarousel: React.FC<ProductGalleryCarouselProps> = ({
                 >
                   <Image
                     ref={imageRef}
-                    src={image || image.url }
+                    src={image}
                     alt={`Product ${index + 1}`}
                     fill
                     className="zoom-image object-cover transition-transform duration-300"
@@ -142,11 +147,11 @@ const ProductGalleryCarousel: React.FC<ProductGalleryCarouselProps> = ({
                 </div>
               </div>
             ))}
-            {variationData && (
-                [variationData?.data?.thumbnail, ...variationData?.data?.gallery].map((image, index) => (
+            {variationData && variationData?.data && (
+                (variationData.data as any)?.gallery?.map((image: any, index: number) => (
                     <div key={index} className="embla__slide">
                         <Image
-                            src={image.url  || image || null}
+                            src={image}
                             alt={`Product ${index + 1}`}
                             fill
                             className="zoom-image object-cover transition-transform duration-300"
@@ -251,11 +256,11 @@ const ProductGalleryCarousel: React.FC<ProductGalleryCarouselProps> = ({
               </button>
             </div>
           ))}
-          {variationData && (
-            [ ...variationData?.data?.gallery].map((image, index) => (
+          {variationData && variationData?.data && (
+            (variationData.data as any)?.gallery?.map((image: any, index: number) => (
                 <div key={index} className="embla__slide">
                     <Image
-                        src={image || image.url }
+                        src={image}
                         alt={`Thumbnail ${index + 1}`}
                     />
                 </div>

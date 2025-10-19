@@ -177,7 +177,6 @@ export const useAuth = () => {
     setToken: setAuthToken,
     clearError: clearAuthError,
     getToken,
-    isAuthenticated: isAuthenticated(),
     sendOTP,
     
     // Redux actions (for direct use)
