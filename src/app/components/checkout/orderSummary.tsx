@@ -156,7 +156,7 @@ function OrderSummary() {
       )}
       
       {/* 2. Shipping Method page - Show Go to Payment button */}
-      {order.status === 'shippingMethod' && (
+      {order.status == 'shippingMethod' && (
         <button
           onClick={() => {
             router.push('/checkout/paymentMethod');
@@ -170,7 +170,7 @@ function OrderSummary() {
       )}
       
       {/* 3. Payment page - Show Place Order button */}
-      {order.status === 'paymentMethod' && (
+      {order.status === 'PlaceOrder' && (
         <button
           onClick={placeOrder}
           disabled={!order.shipping_address_id || !order.shipping_method_slug}

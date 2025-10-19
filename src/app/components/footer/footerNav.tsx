@@ -49,20 +49,25 @@ function FooterNav() {
 
   return (
     <div 
-      className="fixed block lg:hidden bottom-0 left-0 right-0 z-50 w-full h-16 bg-white border-t border-gray-200 shadow-lg" 
+      className="fixed block lg:hidden bottom-0 left-0 right-0 z-50 w-full bg-white border-t border-gray-200 shadow-lg" 
       style={{ 
-        paddingBottom: 'env(safe-area-inset-bottom)',
         backgroundColor: '#ffffff',
         position: 'fixed',
         bottom: '0',
         left: '0',
         right: '0',
         width: '100%',
-        height: '64px',
+        height: 'calc(64px + env(safe-area-inset-bottom, 0px))',
         zIndex: 9999
       }}
     >
-      <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
+      <div 
+        className="grid max-w-lg grid-cols-4 mx-auto font-medium"
+        style={{
+          height: '64px',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)'
+        }}
+      >
         {navItems.map((item) => {
           const isActive = pathname === item.href
           return (

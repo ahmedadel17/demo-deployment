@@ -16,6 +16,7 @@ import { Suspense } from "react";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import HeaderTopBar from "./components/header/headerTopBar";
+import ThemeScript from "./components/ThemeScript";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -34,9 +35,10 @@ export default async function RootLayout({
   return (
     <html dir={isRTL ? 'rtl' : 'ltr'} lang={locale}>
       <head>
+        <ThemeScript />
       </head>
       <body
-        className={`font-inter antialiased dark:bg-gray-900 ${isRTL ? 'rtl' : 'ltr'}`}
+        className={`font-inter antialiased bg-white dark:bg-gray-900 ${isRTL ? 'rtl' : 'ltr'}`}
       >
         <NextIntlClientProvider messages={messages}>
           <ReduxProvider>

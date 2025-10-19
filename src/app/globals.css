@@ -18,6 +18,17 @@ html, body {
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
   }
+  
+  /* Ensure body has proper background in all modes */
+  body.light {
+    background-color: #ffffff;
+    color: #171717;
+  }
+  
+  body.dark {
+    background-color: #0a0a0a;
+    color: #ededed;
+  }
 }
 
 /* Marquee Animation */
@@ -34,11 +45,16 @@ html, body {
   animation: marquee 20s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Light mode (default) */
+:root.light {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Dark mode */
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 
