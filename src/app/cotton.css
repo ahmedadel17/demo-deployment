@@ -1,0 +1,65 @@
+@layer utilities {
+    .custom-site {
+        /* Custom Css Start */
+
+        & .marquee-container {
+            @apply bg-[#0f1340];
+        }
+
+        & .hs-btn,
+        & .te-btn-primary {
+            @apply bg-[#CAA34E];
+
+            &:hover {
+                @apply bg-[#b58b38];
+            }
+        }
+
+        & .header-cart-item,
+        & .header-wishlist-item,
+        & .header-notification-item {
+            @apply bg-[#1F2784];
+        }
+
+        & .te-navbar-link:hover,
+        & .topbar-contact .text-primary-500 {
+            @apply text-[#CAA34E];
+        }
+
+        & .te-navbar-link {
+            @apply py-[0.7rem];
+
+            &:hover {
+                @apply bg-[#fbf9f5] text-[#CAA34E] dark:bg-gray-900 dark:text-[#CAA34E] rounded-none;
+            }
+        }
+
+        & .te-navbar-link-active {
+            @apply bg-[#fbf9f5] dark:bg-gray-900 text-[#CAA34E] dark:text-[#CAA34E] rounded-none;
+        }
+
+        & .product-add-to-wishlist.active {
+            @apply bg-[#f6f1e5] border-[#CAA34E];
+        }
+        & .wishlist-active {
+            @apply text-[#CAA34E];
+        }
+
+        & .footer-box {
+            @apply bg-white dark:bg-gray-800;
+
+            & .box-icon {
+                @apply bg-[#f6f1e5] dark:bg-gray-900;
+            }
+        }
+
+        & .te-footer {
+            @apply bg-[#0f1340] dark:bg-gray-800;
+
+            & .te-footer-app-download a {
+                @apply bg-[#131851] hover:bg-[#171d60] dark:bg-gray-900 dark:hover:bg-gray-700; 
+            }
+        }
+        /* Custom Css End */
+    }
+}

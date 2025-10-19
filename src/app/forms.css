@@ -1,0 +1,276 @@
+label,
+.contact-form-template .ci-label {
+  @apply block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300;
+}
+
+@layer base {
+  /* Base Input Styles - Light Mode */
+  [type="text"],
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  select {
+    @apply h-12 lg:h-10;
+  }
+
+  /* Base Input Styles - Light Mode */
+  [type="text"],
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
+  [type="file"],
+  [multiple],
+  textarea,
+  select {
+    @apply w-full px-input-x py-2 border border-gray-300 rounded-input text-gray-900 placeholder-gray-400 text-sm leading-5 transition-colors duration-200 bg-white shadow-sm;
+  }
+
+  .input-mobile-sm {
+    @apply py-1 h-8 lg:py-2 lg:h-10;
+  }
+
+  select {
+    @apply bg-[right_0.5rem_center] rtl:bg-left rtl:bg-[left_0.6rem_center];
+  }
+
+  /* Focus States - Light Mode */
+  [type="text"]:focus,
+  [type="email"]:focus,
+  [type="url"]:focus,
+  [type="password"]:focus,
+  [type="number"]:focus,
+  [type="date"]:focus,
+  [type="datetime-local"]:focus,
+  [type="month"]:focus,
+  [type="search"]:focus,
+  [type="tel"]:focus,
+  [type="time"]:focus,
+  [type="week"]:focus,
+  [type="file"]:focus,
+  [multiple]:focus,
+  textarea:focus,
+  select:focus {
+    @apply border-primary-500 ring-1 ring-primary-500;
+    @apply outline-none;
+  }
+
+  /* Disabled States - Light Mode */
+  [type="text"]:disabled,
+  [type="email"]:disabled,
+  [type="url"]:disabled,
+  [type="password"]:disabled,
+  [type="number"]:disabled,
+  [type="date"]:disabled,
+  [type="datetime-local"]:disabled,
+  [type="month"]:disabled,
+  [type="search"]:disabled,
+  [type="tel"]:disabled,
+  [type="time"]:disabled,
+  [type="week"]:disabled,
+  [type="file"]:disabled,
+  [multiple]:disabled,
+  textarea:disabled,
+  select:disabled {
+    @apply bg-gray-50 text-gray-500 border-gray-200;
+    @apply cursor-not-allowed;
+  }
+
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"] {
+    @apply cursor-pointer;
+  }
+
+  /* Error States - Light Mode */
+  .input-error,
+  [type="text"].error,
+  [type="email"].error,
+  [type="password"].error,
+  textarea.error,
+  select.error {
+    @apply border-red-500 ring-1 ring-red-500;
+  }
+
+  /* Success States - Light Mode */
+  .input-success,
+  [type="text"].success,
+  [type="email"].success,
+  [type="password"].success,
+  textarea.success,
+  select.success {
+    @apply border-green-500 ring-1 ring-green-500;
+  }
+
+  /* DARK MODE STYLES */
+  .dark [type="text"],
+  .dark [type="email"],
+  .dark [type="url"],
+  .dark [type="password"],
+  .dark [type="number"],
+  .dark [type="date"],
+  .dark [type="datetime-local"],
+  .dark [type="month"],
+  .dark [type="search"],
+  .dark [type="tel"],
+  .dark [type="time"],
+  .dark [type="week"],
+  .dark [type="file"],
+  .dark [multiple],
+  .dark textarea,
+  .dark select {
+    @apply bg-gray-800 border-gray-600;
+    @apply text-gray-100 placeholder-gray-400;
+  }
+
+  /* Focus States - Dark Mode */
+  .dark [type="text"]:focus,
+  .dark [type="email"]:focus,
+  .dark [type="url"]:focus,
+  .dark [type="password"]:focus,
+  .dark [type="number"]:focus,
+  .dark [type="date"]:focus,
+  .dark [type="datetime-local"]:focus,
+  .dark [type="month"]:focus,
+  .dark [type="search"]:focus,
+  .dark [type="tel"]:focus,
+  .dark [type="time"]:focus,
+  .dark [type="week"]:focus,
+  .dark [type="file"]:focus,
+  .dark [multiple]:focus,
+  .dark textarea:focus,
+  .dark select:focus {
+    @apply border-primary-400 ring-primary-400;
+    @apply bg-gray-700;
+  }
+
+  /* Disabled States - Dark Mode */
+  .dark [type="text"]:disabled,
+  .dark [type="email"]:disabled,
+  .dark [type="url"]:disabled,
+  .dark [type="password"]:disabled,
+  .dark [type="number"]:disabled,
+  .dark [type="date"]:disabled,
+  .dark [type="datetime-local"]:disabled,
+  .dark [type="month"]:disabled,
+  .dark [type="search"]:disabled,
+  .dark [type="tel"]:disabled,
+  .dark [type="time"]:disabled,
+  .dark [type="week"]:disabled,
+  .dark [type="file"]:disabled,
+  .dark [multiple]:disabled,
+  .dark textarea:disabled,
+  .dark select:disabled {
+    @apply bg-gray-900 text-gray-600 border-gray-700;
+  }
+
+  /* Error States - Dark Mode */
+  .dark .input-error,
+  .dark [type="text"].error,
+  .dark [type="email"].error,
+  .dark [type="password"].error,
+  .dark textarea.error,
+  .dark select.error {
+    @apply border-red-400 ring-red-400;
+  }
+
+  /* Success States - Dark Mode */
+  .dark .input-success,
+  .dark [type="text"].success,
+  .dark [type="email"].success,
+  .dark [type="password"].success,
+  .dark textarea.success,
+  .dark select.success {
+    @apply border-green-400 ring-green-400;
+  }
+
+  /* RTL SUPPORT */
+  [dir="rtl"] [type="text"],
+  [dir="rtl"] [type="email"],
+  [dir="rtl"] [type="url"],
+  [dir="rtl"] [type="password"],
+  [dir="rtl"] [type="number"],
+  [dir="rtl"] [type="date"],
+  [dir="rtl"] [type="datetime-local"],
+  [dir="rtl"] [type="month"],
+  [dir="rtl"] [type="search"],
+  [dir="rtl"] [type="tel"],
+  [dir="rtl"] [type="time"],
+  [dir="rtl"] [type="week"],
+  [dir="rtl"] [type="file"],
+  [dir="rtl"] [multiple],
+  [dir="rtl"] textarea,
+  [dir="rtl"] select {
+    @apply text-right;
+  }
+
+  /* Checkbox and Radio Styles */
+  [type="checkbox"],
+  [type="radio"] {
+    @apply border-gray-300 text-primary-600;
+    @apply focus:border-primary-500 focus:ring-primary-500;
+    @apply transition-colors duration-200;
+  }
+
+  [type="checkbox"] {
+    @apply rounded;
+  }
+
+  [type="checkbox"]:checked {
+    @apply !bg-primary-500;
+  }
+
+  /* Dark mode for checkbox/radio */
+  .dark [type="checkbox"],
+  .dark [type="radio"] {
+    @apply border-gray-600 bg-gray-800 text-primary-400;
+    @apply focus:border-primary-400 focus:ring-primary-400;
+  }
+
+  /* File input specific styles */
+  [type="file"] {
+    @apply file:me-4 file:py-2 file:px-4;
+    @apply file:rounded-btn file:border-0;
+    @apply file:text-sm file:font-medium;
+    @apply file:bg-primary-50 file:text-primary-700;
+    @apply hover:file:bg-primary-100;
+    @apply file:transition-colors file:duration-200;
+  }
+
+  /* RTL file input */
+  [dir="rtl"] [type="file"] {
+    @apply file:ms-4 file:me-0;
+  }
+
+  /* Dark mode file input */
+  .dark [type="file"] {
+    @apply file:bg-primary-900 file:text-primary-300;
+    @apply hover:file:bg-primary-800;
+  }
+
+  /* Select dropdown arrow customization */
+  select {
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+
+  /* RTL select arrow */
+  [dir="rtl"] select {
+    padding-left: 2.5rem;
+    padding-right: 0.75rem;
+  }
+}

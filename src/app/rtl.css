@@ -1,0 +1,253 @@
+/* RTL (Right-to-Left) Styles for Arabic Language */
+
+/* Base RTL styles */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right !important;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left !important;
+}
+
+/* Flexbox RTL adjustments */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .flex-row-reverse {
+  flex-direction: row;
+}
+
+/* Grid RTL adjustments */
+[dir="rtl"] .grid-cols-2 > *:nth-child(1) {
+  order: 2;
+}
+
+[dir="rtl"] .grid-cols-2 > *:nth-child(2) {
+  order: 1;
+}
+
+/* Margin and padding RTL adjustments */
+[dir="rtl"] .ml-auto {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: 0 !important;
+  margin-left: auto !important;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0 !important;
+  margin-right: 0.5rem !important;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0 !important;
+  margin-left: 0.5rem !important;
+}
+
+[dir="rtl"] .ml-4 {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
+}
+
+[dir="rtl"] .mr-4 {
+  margin-right: 0 !important;
+  margin-left: 1rem !important;
+}
+
+/* Header RTL adjustments */
+[dir="rtl"] .te-navbar-content {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .header-actions {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .te-navbar-brand {
+  order: 2;
+}
+
+[dir="rtl"] .header-actions {
+  order: 1;
+}
+
+/* Mobile menu RTL adjustments */
+[dir="rtl"] .te-navbar-nav-mobile {
+  right: 0;
+  left: auto;
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .te-navbar-nav-mobile.te-navbar-nav-mobile-show {
+  transform: translateX(0);
+}
+
+/* Dropdown RTL adjustments */
+[dir="rtl"] .language-toggle-container .absolute {
+  right: 0;
+  left: auto;
+}
+
+/* Form RTL adjustments */
+[dir="rtl"] input[type="text"],
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] textarea {
+  text-align: right;
+}
+
+[dir="rtl"] input[type="text"]::placeholder,
+[dir="rtl"] input[type="email"]::placeholder,
+[dir="rtl"] input[type="tel"]::placeholder,
+[dir="rtl"] textarea::placeholder {
+  text-align: right;
+}
+
+/* Button RTL adjustments */
+[dir="rtl"] .btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .btn svg {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Cart and product RTL adjustments */
+[dir="rtl"] .cart-item {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .product-info {
+  text-align: right;
+}
+
+[dir="rtl"] .product-price {
+  text-align: right;
+}
+
+/* Navigation RTL adjustments */
+[dir="rtl"] .te-navbar-link {
+  text-align: right;
+}
+
+[dir="rtl"] .te-navbar-submenu {
+  right: 0;
+  left: auto;
+}
+
+/* Footer RTL adjustments */
+[dir="rtl"] .footer-content {
+  text-align: right;
+}
+
+[dir="rtl"] .footer-links {
+  text-align: right;
+}
+
+/* Icon RTL adjustments */
+[dir="rtl"] .icon-left {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .icon-right {
+  transform: scaleX(-1);
+}
+
+/* Arrow RTL adjustments */
+[dir="rtl"] .arrow-left {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .arrow-right {
+  transform: scaleX(-1);
+}
+
+/* Slider RTL adjustments */
+[dir="rtl"] .embla__button--prev {
+  right: 0;
+  left: auto;
+}
+
+[dir="rtl"] .embla__button--next {
+  left: 0;
+  right: auto;
+}
+
+/* Checkout RTL adjustments */
+[dir="rtl"] .checkout-form {
+  text-align: right;
+}
+
+[dir="rtl"] .form-group {
+  text-align: right;
+}
+
+[dir="rtl"] .form-label {
+  text-align: right;
+}
+
+/* Language toggle RTL adjustments */
+[dir="rtl"] .language-toggle-container button {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .language-toggle-container svg {
+  transform: scaleX(-1);
+}
+
+/* Responsive RTL adjustments */
+@media (max-width: 768px) {
+  [dir="rtl"] .te-navbar-nav-mobile {
+    right: 0;
+    left: auto;
+  }
+  
+  [dir="rtl"] .mobile-menu-toggle {
+    right: 1rem;
+    left: auto;
+  }
+}
+
+/* Dark mode RTL adjustments */
+[dir="rtl"].dark .te-navbar-nav-mobile {
+  background: linear-gradient(to left, #1f2937, #111827);
+}
+
+/* Animation RTL adjustments */
+[dir="rtl"] .slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+[dir="rtl"] .slide-in-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+
