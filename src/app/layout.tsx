@@ -6,6 +6,8 @@ import "./rtl.css";
 import HeaderStyle1 from "./components/header/styles/headerStyle1";
 import FooterStyle1 from "./components/footer/styles/footerStyle1";
 import Marquee from "./components/marquee";
+import ScriptLoader from "./components/ScriptLoader";
+import ScrollEffects from "./components/ScrollEffects";
 import FooterNav from "./components/footer/footerNav";
 import ReduxProvider from "./components/ReduxProvider";
 import CartInitializer from "./components/cart/CartInitializer";
@@ -30,11 +32,11 @@ export default async function RootLayout({
   const isRTL = locale === 'ar';
   
   return (
-    <html dir={isRTL ? 'rtl' : 'ltr'} lang={locale} className="light">
+    <html dir={isRTL ? 'rtl' : 'ltr'} lang={locale}>
       <head>
       </head>
       <body
-        className={` ${isRTL ? 'rtl' : 'ltr'}`}
+        className={`font-inter antialiased dark:bg-gray-900 ${isRTL ? 'rtl' : 'ltr'}`}
       >
         <NextIntlClientProvider messages={messages}>
           <ReduxProvider>
@@ -49,8 +51,8 @@ export default async function RootLayout({
             <FooterNav />
             <FooterStyle1 />
           
-          <Toaster position="top-center" /> 
           </ReduxProvider>
+          <Toaster position="top-center" /> 
         </NextIntlClientProvider>
       </body>
     </html>
