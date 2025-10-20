@@ -8,6 +8,7 @@ import Slider from './components/Home/slider'
 import Breadcrumb from "./components/header/headerBreadcrumb";
 import axios from "axios";
 import {getTranslations} from 'next-intl/server'
+import { EmblaCarousel } from "./components/Home/emblaslider";
 export default  async function Home() {
   const t = await getTranslations();
   const home = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/home-v2`);
@@ -15,7 +16,9 @@ export default  async function Home() {
   return (
     <div className="" >
         <Breadcrumb />
-      <Slider slides={home.data.data.sections.sliders.data || []} />
+
+        <EmblaCarousel slides={home.data.data.sections.sliders.data} />
+      {/* <Slider slides={home.data.data.sections.sliders.data || []} /> */}
         <ProductSlider products={home.data.data.sections.featured_products.data} />
     </div>
 

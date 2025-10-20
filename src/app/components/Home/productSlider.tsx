@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from './product/ProductCard';
 import { Product } from '@/app/dummyData/products';
@@ -10,12 +11,12 @@ export default function ProductSlider({ products }: { products: Product[] }) {
   const [isRTL, setIsRTL] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    containScroll: false,
+    containScroll: 'trimSnaps',
     align: 'start',
     skipSnaps: false,
     dragFree: false,
     direction: isRTL ? 'rtl' : 'ltr',
-  });
+  }, [Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: false })]);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -45,23 +46,20 @@ export default function ProductSlider({ products }: { products: Product[] }) {
     return () => observer.disconnect();
   }, []);
 
-  // Auto-play functionality
+  // Reinitialize Embla when direction changes
   useEffect(() => {
     if (!emblaApi) return;
-
-    const autoplay = () => {
-      // In RTL mode, scroll in the opposite direction for natural flow
-      if (isRTL) {
-        emblaApi.scrollPrev();
-      } else {
-        emblaApi.scrollNext();
-      }
-    };
-
-    const interval = setInterval(autoplay, 10000); // Auto-advance every 6 seconds
-
-    return () => clearInterval(interval);
+    emblaApi.reInit({
+      loop: true,
+      containScroll: 'trimSnaps',
+      align: 'start',
+      skipSnaps: false,
+      dragFree: false,
+      direction: isRTL ? 'rtl' : 'ltr',
+    });
   }, [emblaApi, isRTL]);
+
+
 
   return (
     <section className="py-16  dark:bg-gray-900">
@@ -105,7 +103,10 @@ export default function ProductSlider({ products }: { products: Product[] }) {
           </div>
 
           {/* Embla Carousel Wrapper */}
-          <div className="embla overflow-hidden relative" ref={emblaRef}>
+          <div 
+            className="embla overflow-hidden relative" 
+            ref={emblaRef}
+          >
             <div className="embla__container flex gap-3 lg:gap-6 py-1">
               {products?.map((_, index) => {
                 // Group products in sets of 4 for large screens

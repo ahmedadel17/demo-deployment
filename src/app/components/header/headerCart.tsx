@@ -87,7 +87,7 @@ const CartDropdown: React.FC = () => {
             My Cart
           </span>
           <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
-            {cartData?.cart_count || 0}
+            {cartData?.amount_to_pay || 0}
           </span>
         </div>
       </div>

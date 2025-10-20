@@ -1,15 +1,23 @@
 /* Embla Carousel Styles */
 .embla {
   overflow: hidden;
+  position: relative;
+  touch-action: pan-y pinch-zoom;
 }
 
 .embla__container {
   display: flex;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .embla__slide {
   flex: 0 0 100%;
   min-width: 0;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 /* Thumbnail carousel styles */
@@ -173,9 +181,72 @@
   }
 }
 
-/* Animation for smooth transitions */
+/* Animation for smooth transitions - Let Embla handle its own transitions */
 .embla__slide {
-  transition: transform 0.3s ease;
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.embla__container {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Smooth product card animations */
+.embla__slide .product-card {
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+.embla__slide:hover .product-card {
+  transform: scale(1.02);
+}
+
+/* Smooth button transitions */
+.embla-prev,
+.embla-next {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: scale(1);
+}
+
+.embla-prev:hover,
+.embla-next:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Product slider specific animations */
+.te-products .embla {
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y pinch-zoom;
+}
+
+.te-products .embla__container {
+  display: flex;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.te-products .embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Ensure smooth loop transitions */
+.te-products .embla__container[data-loop="true"] {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Prevent jarring transitions at loop boundaries */
+.te-products .embla__container.embla__container--loop {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* Focus styles for accessibility */

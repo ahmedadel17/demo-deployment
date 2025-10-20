@@ -6,8 +6,6 @@ import "./rtl.css";
 import HeaderStyle1 from "./components/header/styles/headerStyle1";
 import FooterStyle1 from "./components/footer/styles/footerStyle1";
 import Marquee from "./components/marquee";
-import ScriptLoader from "./components/ScriptLoader";
-import ScrollEffects from "./components/ScrollEffects";
 import FooterNav from "./components/footer/footerNav";
 import ReduxProvider from "./components/ReduxProvider";
 import CartInitializer from "./components/cart/CartInitializer";
@@ -33,12 +31,12 @@ export default async function RootLayout({
   const isRTL = locale === 'ar';
   
   return (
-    <html dir={isRTL ? 'rtl' : 'ltr'} lang={locale}>
+    <html dir={isRTL ? 'rtl' : 'ltr'} lang={locale} suppressHydrationWarning>
       <head>
         <ThemeScript />
       </head>
       <body
-        className={`font-inter antialiased bg-white dark:bg-gray-900 ${isRTL ? 'rtl' : 'ltr'}`}
+        className={` relative font-inter antialiased bg-white min-h-screen dark:bg-gray-900 ${isRTL ? 'rtl' : 'ltr'}`}
       >
         <NextIntlClientProvider messages={messages}>
           <ReduxProvider>

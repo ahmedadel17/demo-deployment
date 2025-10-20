@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from './useAuth';
+import { toast } from 'react-hot-toast';
 
 interface Product {
   id: string;
@@ -13,6 +15,7 @@ export function useProductInteractions() {
   const [compareList, setCompareList] = useState<Product[]>([]);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [wishlistItems, setWishlistItems] = useState<string[]>([]);
+  const { isAuthenticated } = useAuth();
 
   // Initialize wishlist count
   useEffect(() => {
@@ -70,6 +73,12 @@ export function useProductInteractions() {
 
   // Add to cart functionality
   const addToCart = useCallback((productId: string, button: HTMLButtonElement) => {
+    // Check authentication first
+    if (!isAuthenticated) {
+      toast.error('Please login first to add items to cart');
+      return;
+    }
+
     // Prevent double-clicks
     if (button.disabled || button.classList.contains('tewido-disabled')) {
       return;

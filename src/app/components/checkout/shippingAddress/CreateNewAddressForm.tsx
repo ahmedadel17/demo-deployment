@@ -88,8 +88,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
         </div>
       </div>
     }>
-      <div className="bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{('Create New Address')}</h2>
+      <div className="bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-1">
 
         <Formik
           initialValues={initialValues}

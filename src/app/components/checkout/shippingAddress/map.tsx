@@ -102,7 +102,7 @@ export default function MapComponent({ onLocationSelect, searchInputRef }: MapCo
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
+    <div className="flex flex-col items-center  ">
       <div ref={mapRef} className="w-full h-[500px] rounded-lg shadow" />
       <div className="text-sm text-gray-700 mt-2">
         📍 Lat: {position.lat.toFixed(6)}, Lng: {position.lng.toFixed(6)}

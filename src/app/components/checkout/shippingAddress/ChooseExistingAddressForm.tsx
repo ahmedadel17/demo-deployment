@@ -102,7 +102,7 @@ const ChooseExistingAddressForm: React.FC<ChooseExistingAddressFormProps> = ({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-6">
+    <div className="bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-2">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{('Choose Existing Address')}</h2>
 
       <div className="space-y-3">

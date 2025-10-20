@@ -89,8 +89,8 @@ export default function HyperPayPayment({ selectedBrand, onPaymentReady }: Hyper
     <section className="cart-page">
       <div className="container">
         <div className="cart-content shipping-information-section">
-          <div className="row">
-            <div className="col-lg-7">
+          <div className="w-full">
+            <div className="w-full">
 
               {isLoading ? (
                 <div className="flex items-center justify-center p-8">
@@ -130,7 +130,7 @@ export default function HyperPayPayment({ selectedBrand, onPaymentReady }: Hyper
                     />
                 </>
               ) : (
-                <div className="flex items-center justify-center p-8">
+                <div className="flex items-center justify-center p-2">
                   <div className="text-center">
                     <div className="text-gray-500 mb-2">Payment form not available</div>
                     <div className="text-sm text-gray-400">Please try again or contact support</div>
@@ -138,9 +138,7 @@ export default function HyperPayPayment({ selectedBrand, onPaymentReady }: Hyper
                 </div>
               )}
             </div>
-            <div className="col-lg-5 mt-md-30">
-              {/* Order summary */}
-            </div>
+       
           </div>
         </div>
       </div>

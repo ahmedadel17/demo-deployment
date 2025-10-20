@@ -43,7 +43,7 @@ function ProductVariations({
   console.log('product', product);
   console.log('variations', variations);
   const { loadCartFromStorage } = useCart();
-  const { token } = useAuth();
+  const { token, isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
 
   // Notify parent when variation is selected
@@ -117,6 +117,17 @@ function ProductVariations({
   };
 
   const handleAddToCart = async () => {
+    // Check authentication first
+    if (!isAuthenticated) {
+      toast.error('Please login first to add items to cart');
+      return;
+    }
+
+    if (!token) {
+      toast.error('Authentication required. Please login again.');
+      return;
+    }
+
     // If product has default_variation_id, skip color/size validation
     if (!product?.default_variation_id) {
       if (!state.selectedColor || !state.selectedSize) {
