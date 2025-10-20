@@ -9,15 +9,7 @@ import FreeShippingNotice from './cartSummary/freeShippingNotice'
 import WalletBallanceToggler from './cartSummary/walletBalanceToggler';
 
 function CartSummary() {
-  const { 
-    cartData, 
-    totalItems, 
-    totalPrice, 
-    subTotal, 
-    vatAmount, 
-    amountToPay,
-    orderAttributes 
-  } = useCart();
+ 
   return (
     <>
        <div className="lg:col-span-1">

@@ -21,34 +21,44 @@ interface CitySearchSelectProps {
   label?: string;
   error?: string;
   touched?: boolean;
+  countryId?: string | number; // Required to enable city search
 }
 
   const CitySearchSelect: React.FC<CitySearchSelectProps> = ({
   value = '',
   onChange,
-  placeholder = 'Select Country',
+  placeholder = 'Select City',
   className = '',
   disabled = false,
   required = false,
   label,
   error,
-  touched = false
+  touched = false,
+  countryId
 }) => {
   const t = useTranslations();
   const [cities, setCities] = useState<City[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  
+  // City search is disabled if no country is selected
+  const isDisabled = disabled || !countryId;
   
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch cities from API
-  const fetchCities = async () => {
+  // Fetch cities from API for a specific country
+  const fetchCities = async (countryId?: string | number) => {
+    if (!countryId) return;
+    
     setIsLoading(true);
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/core/countries/cities`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/core/countries/cities`, {
+        params: { country_id: countryId }
+      });
       console.log('Cities API response:', response.data.data.items);
       
       if (response.data.status && response.data.data) {
@@ -61,26 +71,49 @@ interface CitySearchSelectProps {
       }
     } catch (error) {
       console.error('Failed to fetch cities:', error);
-      // Fallback to a basic list if API fails
-      setCities([
-        { id: 1, title: 'Riyadh', country_id: 1 },
-        { id: 2, title: 'Jeddah', country_id: 1 },
-        { id: 3, title: 'Mecca', country_id: 1 },
-        { id: 4, title: 'Medina', country_id: 1 },
-        { id: 5, title: 'Dammam', country_id: 1 },
-        { id: 6, title: 'Khobar', country_id: 1 },
-        { id: 7, title: 'Taif', country_id: 1 },
-        { id: 8, title: 'Buraidah', country_id: 1 },
-      ]);
+      setCities([]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Load countries on component mount
+  // Search cities via API with country_id and keyword
+  const searchCities = async (keyword: string, countryId: string | number) => {
+    if (!keyword.trim() || !countryId) return;
+    
+    setIsSearching(true);
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/core/countries/cities`, {
+        params: { 
+          country_id: countryId,
+          keyword: keyword.trim() 
+        }
+      });
+      
+      if (response.data.status && response.data.data) {
+        const searchResults = Array.isArray(response.data.data.items) ? response.data.data.items : [];
+        // Merge with existing cities, avoiding duplicates
+        setCities(prevCities => {
+          const existingIds = new Set(prevCities.map(city => city.id));
+          const newCities = searchResults.filter((city: City) => !existingIds.has(city.id));
+          return [...prevCities, ...newCities];
+        });
+      }
+    } catch (error) {
+      console.error('Failed to search cities:', error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Load cities when countryId changes
   useEffect(() => {
-    fetchCities();
-  }, []);
+    if (countryId) {
+      fetchCities(countryId);
+    } else {
+      setCities([]);
+    }
+  }, [countryId]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -100,6 +133,17 @@ interface CitySearchSelectProps {
   const filteredCities = Array.isArray(cities) ? cities.filter(city =>
     city.title.toLowerCase().includes(searchQuery.toLowerCase())
   ) : []
+
+  // Trigger API search when no local results found and user is typing
+  useEffect(() => {
+    if (searchQuery.trim() && filteredCities.length === 0 && !isSearching && countryId) {
+      const timeoutId = setTimeout(() => {
+        searchCities(searchQuery, countryId);
+      }, 500); // Debounce search by 500ms
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchQuery, filteredCities.length, isSearching, countryId]);
 
   // Get selected city
   const selectedCity = Array.isArray(cities) ? cities.find(city => city.id.toString() === value?.toString()) : undefined;
@@ -177,9 +221,9 @@ interface CitySearchSelectProps {
       {/* Select Button */}
       <button
         type="button"
-        onClick={() => !disabled && setIsOpen(!isOpen)}
+        onClick={() => !isDisabled && setIsOpen(!isOpen)}
         onKeyDown={handleKeyDown}
-        disabled={disabled}
+        disabled={isDisabled}
         className={buttonClasses}
       >
         <div className="flex items-center space-x-2">
@@ -193,7 +237,7 @@ interface CitySearchSelectProps {
             </>
           ) : (
             <span className="text-gray-500 dark:text-gray-400">
-              {isLoading ? ('Loading...') : placeholder}
+              {!countryId ? ('Select country first') : isLoading ? ('Loading...') : placeholder}
             </span>
           )}
         </div>
@@ -209,14 +253,14 @@ interface CitySearchSelectProps {
       </button>
 
       {/* Dropdown */}
-      {isOpen && (
+      {isOpen && countryId && (
         <div className={dropdownClasses}>
           {/* Search Input */}
           <div className="p-3 border-b border-gray-200 dark:border-gray-600">
             <input
               ref={searchInputRef}
               type="text"
-              placeholder={t("Search countries")}
+              placeholder={t("Search cities")}
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -228,11 +272,18 @@ interface CitySearchSelectProps {
             />
           </div>
 
-          {/* Countries List */}
+          {/* Cities List */}
           <div className="max-h-48 overflow-auto">
             {isLoading ? (
               <div className="px-3 py-4 text-center text-gray-500 dark:text-gray-400 text-sm">
-                {("Loading countries...")}
+                {("Loading cities...")}
+              </div>
+            ) : isSearching ? (
+              <div className="px-3 py-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-500"></div>
+                  <span>{("Searching...")}</span>
+                </div>
               </div>
             ) : filteredCities.length > 0 ? (
               filteredCities  .map((city, index) => (
@@ -255,7 +306,7 @@ interface CitySearchSelectProps {
               ))
             ) : (
               <div className="px-3 py-4 text-center text-gray-500 dark:text-gray-400 text-sm">
-                {t("No countries found")}
+                {t("No cities found")}
               </div>
             )}
           </div>

@@ -8,7 +8,6 @@ import { useSearchParams } from 'next/navigation';
 import {getCountryDialCodeFromCountryCodeOrNameOrFlagEmoji} from "country-codes-flags-phone-codes";
 import CountryPhoneInput from '../phone/countryphoneInput';
 function Registeration() {
-  
     interface RegisterFormValues {
         phone: string;
         countryCode: string;

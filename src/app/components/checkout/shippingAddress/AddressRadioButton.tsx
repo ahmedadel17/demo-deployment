@@ -12,6 +12,7 @@ interface Address {
   street: string;
   contact_phone: string;
   notes: string;
+  is_default?: boolean;
 }
 
 interface AddressRadioButtonProps {
@@ -60,9 +61,16 @@ const   AddressRadioButton: React.FC<AddressRadioButtonProps> = ({
       />
        <div className={contentClassName}>
          <div className="flex items-center justify-between">
-           <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-             {address.label}
-           </h4>
+           <div className="flex items-center">
+             <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+               {address.label}
+             </h4>
+             {address.is_default && (
+               <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                 Default
+               </span>
+             )}
+           </div>
            {showDeleteButton && onDelete && (
              <div 
                className="ml-2" 

@@ -26,7 +26,7 @@ function AppliedPromoCode() {
   return (
     <div>
       <div className="mb-6 mt-2">
-            <div className="flex items-center justify-between p-2 bg-green-100 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+            <div className="flex items-center justify-between p-2 bg-[#f0fdf4] dark:bg-gray-700 rounded-lg border border-[#f0fdf4] dark:border-gray-600">
               <div className="flex-1">
                 <div className='flex gap-2'>
 

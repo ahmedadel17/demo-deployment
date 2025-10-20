@@ -1,11 +1,11 @@
 'use client'
-import React, {  useEffect, useState } from 'react';
+import React, {  useEffect, useState, useCallback } from 'react';
 import AddressRadioButton from './AddressRadioButton';
 import { useAuth } from '@/app/hooks/useAuth';
-import DeleteButton from '@/app/components/DeleteButton';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setOrderStatus, setShippingAddressId } from '@/app/store/slices/orderSlice';
+import { toast } from 'react-hot-toast';
 
 
 interface Address {
@@ -19,6 +19,7 @@ interface Address {
   street: string;
   contact_phone: string;
   notes: string;
+  is_default?: boolean;
 }
 
 interface ChooseExistingAddressFormProps {
@@ -35,20 +36,37 @@ const ChooseExistingAddressForm: React.FC<ChooseExistingAddressFormProps> = ({
   const [selectedAddressId, setSelectedAddressId] = useState<string>();
   const { token } = useAuth();
   const dispatch = useDispatch();
-  useEffect(() => {
-
-    getExistingAddresses()
-  }, [])
-  const getExistingAddresses = async () => {
+  
+  const getExistingAddresses = useCallback(async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/addresses`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
-    console.log(response.data)
-    setLoading(false)
-    setExistingAddresses(response.data.data)
-  }
+    if(response.data.status){
+      setLoading(false)
+      const addresses = response.data.data
+      setExistingAddresses(addresses)
+      
+      // Auto-select the default address if one exists
+      const defaultAddress = addresses.find((addr: Address) => addr.is_default === true)
+      if (defaultAddress) {
+        setSelectedAddressId(defaultAddress.id.toString())
+        dispatch(setShippingAddressId(defaultAddress.id.toString()));
+        dispatch(setOrderStatus('shippingAddress'));
+        onAddressSelected?.(defaultAddress.id.toString());
+      }
+    }
+    else{
+      toast.error(response.data.message);
+      setLoading(false);
+    }
+   
+  }, [token, dispatch, onAddressSelected])
+
+  useEffect(() => {
+    getExistingAddresses()
+  }, [getExistingAddresses])
 
   const handleDeleteAddress = async (addressId: number) => {
     try {

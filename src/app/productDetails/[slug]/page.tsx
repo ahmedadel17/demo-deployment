@@ -9,12 +9,16 @@ import ProductMeta from '../../components/productDetails/productMeta';
 import Breadcrumb from '@/app/components/header/headerBreadcrumb';
 import axios from 'axios';
 import ProductDetailsWrapper from '@/app/components/productDetails/ProductDetailsWrapper';
+import { getLocale } from 'next-intl/server';
 async function ProductDetailsPage({ params }: { params: { slug: string } }) {
   const { slug } = await params;
-  
+  const locale = await getLocale();
 
-  const product = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/products/details-by-slug/${slug}`);
-  console.log(product.data.data);
+  const product = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/products/details-by-slug/${slug}`, {
+    headers: {
+      'Accept-Language': locale
+    }
+  });
   return (
     <>
       

@@ -37,6 +37,7 @@ const FormikCitySearchSelect: React.FC<FormikCitySearchSelectProps> = ({
           required={required}
           error={meta.touched && meta.error ? meta.error : undefined}
           touched={meta.touched}
+          countryId={form.values.country_id}
         />
       )}
     </Field>

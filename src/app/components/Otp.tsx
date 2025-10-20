@@ -1,15 +1,24 @@
 "use client"
-import React, {  useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {useRouter} from 'next/navigation';
 import axios from "axios";
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';
 import { useAppDispatch } from '../store/hooks';
 import { loginSuccess, setLoading, setError, clearError } from '../store/slices/authSlice';
+
+interface OtpState {
+  otp: string[];
+  registrationData: string | null;
+  isSubmitting: boolean;
+}
+
 export default function Otp2() {
-  const [otp, setOtp] = useState(Array(5).fill("")); // 6-digit OTP
-  const [registrationData, setRegistrationData] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [state, setState] = useState<OtpState>({
+    otp: Array(5).fill(""), // 5-digit OTP
+    registrationData: null,
+    isSubmitting: false
+  });
   const searchParams = useSearchParams();
   const phone = searchParams.get('phone');
   const router = useRouter();
@@ -21,14 +30,14 @@ export default function Otp2() {
     if (typeof window !== 'undefined') {
       const storedData = localStorage.getItem('registrationData');
       if (storedData) {
-        setRegistrationData(storedData);
+        setState(prev => ({ ...prev, registrationData: storedData }));
       }
     }
   }, []);
 
   
-const handleSubmit=async()=>{
-  setIsSubmitting(true);
+const handleSubmit = useCallback(async () => {
+  setState(prev => ({ ...prev, isSubmitting: true }));
   dispatch(setLoading(true));
   dispatch(clearError());
   
@@ -36,12 +45,12 @@ const handleSubmit=async()=>{
     let requestData;
     
     // Always use registration data from localStorage if available (complete registration flow)
-    if(registrationData){
-      requestData = {...JSON.parse(registrationData), otp_code:String(otp.join(''))};
+    if(state.registrationData){
+      requestData = {...JSON.parse(state.registrationData), otp_code:String(state.otp.join(''))};
       console.log('Sending complete registration data:', requestData);
     } else {
       // Fallback: if no registration data, use phone from URL (login flow)
-      requestData = {phone: `${phone}`, otp_code:String(otp.join(''))};
+      requestData = {phone: `${phone}`, otp_code:String(state.otp.join(''))};
       console.log('Sending login data:', requestData);
     }
 
@@ -79,14 +88,14 @@ const handleSubmit=async()=>{
     const errorMessage = error instanceof Error ? error.message : 'OTP verification failed';
     dispatch(setError(errorMessage));
   } finally {
-    setIsSubmitting(false);
+    setState(prev => ({ ...prev, isSubmitting: false }));
     dispatch(setLoading(false));
   }
-}
+}, [state.registrationData, state.otp, phone, dispatch, router]);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]); // Array of refs for each input field
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
       !/^[0-9]{1}$/.test(e.key) &&
       e.key !== "Backspace" &&
@@ -103,51 +112,60 @@ const handleSubmit=async()=>{
       
       // If current field has content, clear it
       if (target.value) {
-        setOtp((prevOtp) => [
-          ...prevOtp.slice(0, index),
-          "",
-          ...prevOtp.slice(index + 1),
-        ]);
+        setState(prev => ({
+          ...prev,
+          otp: [
+            ...prev.otp.slice(0, index),
+            "",
+            ...prev.otp.slice(index + 1),
+          ]
+        }));
       } else if (index > 0) {
         // If current field is empty and not the first field, move to previous field
-        setOtp((prevOtp) => [
-          ...prevOtp.slice(0, index - 1),
-          "",
-          ...prevOtp.slice(index),
-        ]);
+        setState(prev => ({
+          ...prev,
+          otp: [
+            ...prev.otp.slice(0, index - 1),
+            "",
+            ...prev.otp.slice(index),
+          ]
+        }));
         inputRefs.current[index - 1]?.focus();
       }
     }
-  };
+  }, []);
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
     const index = inputRefs.current.indexOf(target);
     if (target.value) {
-      setOtp((prevOtp) => [
-        ...prevOtp.slice(0, index),
-        target.value,
-        ...prevOtp.slice(index + 1),
-      ]);
-      if (index < otp.length - 1) {
+      setState(prev => ({
+        ...prev,
+        otp: [
+          ...prev.otp.slice(0, index),
+          target.value,
+          ...prev.otp.slice(index + 1),
+        ]
+      }));
+      if (index < state.otp.length - 1) {
         inputRefs.current[index + 1]?.focus();
       }
     }
-  };
+  }, [state.otp.length]);
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     e.target.select();
-  };
+  }, []);
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  const handlePaste = useCallback((e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const text = e.clipboardData.getData("text");
-    if (!new RegExp(`^[0-9]{${otp.length}}$`).test(text)) {
+    if (!new RegExp(`^[0-9]{${state.otp.length}}$`).test(text)) {
       return;
     }
     const digits = text.split("");
-    setOtp(digits);
-  };
+    setState(prev => ({ ...prev, otp: digits }));
+  }, [state.otp.length]);
 
   return (
     <>
@@ -156,7 +174,7 @@ const handleSubmit=async()=>{
         <div>
         <div id="otp-form" className="space-y-6">
         <div className="flex justify-center gap-2 sm:gap-3">
-            {otp.map((digit, index) => (
+            {state.otp.map((digit, index) => (
               <input
                 key={index}
                 type="text"
@@ -169,12 +187,12 @@ const handleSubmit=async()=>{
                 inputMode="numeric"
                 pattern="\\d*"
                 autoComplete="one-time-code"
-                disabled={isSubmitting || isLoading}
+                disabled={state.isSubmitting || isLoading}
                 ref={(el) => {
                   inputRefs.current[index] = el;
                 }}
                 className={`shadow-xs flex h-12 w-12 items-center justify-center rounded-lg border border-stroke bg-white p-2 text-center text-2xl font-medium text-gray-5 outline-none sm:h-14 sm:w-14 sm:text-3xl md:h-16 md:w-16 md:text-4xl dark:border-dark-3 dark:bg-white/5 ${
-                  (isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
+                  (state.isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
                 dir={'ltr'}
                 style={{ textAlign: 'center', direction: 'ltr' }}
@@ -200,7 +218,7 @@ const handleSubmit=async()=>{
                            type="button"
                            id="resend-otp"
                            className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                           disabled={isSubmitting || isLoading}>
+                           disabled={state.isSubmitting || isLoading}>
                            <span id="resend-text">{('Resend code in ')}</span>
                            <span id="countdown">60</span>s
                        </button>
@@ -210,20 +228,20 @@ const handleSubmit=async()=>{
                        <button
                            type="button"
                            id="back-to-phone-from-otp"
-                           disabled={isSubmitting || isLoading}
+                           disabled={state.isSubmitting || isLoading}
                            className={`te-btn te-btn-default sm:flex-1 ${
-                             (isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
+                             (state.isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
                            }`}>
                            {('Change Phone')}
                        </button>
                        <button
                            onClick={handleSubmit}
                            id="otp-submit"
-                           disabled={isSubmitting || isLoading}
+                           disabled={state.isSubmitting || isLoading}
                            className={`te-btn te-btn-primary flex-1 flex justify-center items-center ${
-                             (isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
+                             (state.isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
                            }`}>
-                           {(isSubmitting || isLoading) ? (
+                           {(state.isSubmitting || isLoading) ? (
                              <>
                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                                <span>{('Verifying')}</span>

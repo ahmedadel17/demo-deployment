@@ -73,9 +73,8 @@ function FooterNav() {
 
   return (
     <div 
-      className="fixed block lg:hidden bottom-0 left-0 right-0 z-50 w-full bg-white border-t dark:border-gray-800 shadow-lg" 
+      className="fixed block lg:hidden bottom-0 left-0 right-0 z-50 w-full bg-white border-t dark:border-gray-800 shadow-lg dark:bg-gray-900" 
       style={{ 
-        backgroundColor: '#ffffff',
         position: 'fixed',
         bottom: '0',
         left: '0',
@@ -87,10 +86,15 @@ function FooterNav() {
         margin: '0',
         padding: '0',
         boxSizing: 'border-box',
-        transform: 'translateY(0)'
+        transform: 'translateY(0)',
+        maxHeight: 'calc(100vh - env(safe-area-inset-bottom, 0px))'
       }}
     >
-      <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium  dark:bg-gray-900">
+      <div className={`grid h-full mx-auto font-medium dark:bg-gray-900 ${
+        navItems.length === 3 
+          ? 'grid-cols-3 max-w-md' 
+          : 'grid-cols-4 max-w-lg'
+      }`}>
         {navItems.map((item) => {
           const isActive = pathname === item.href
           return (
@@ -101,7 +105,7 @@ function FooterNav() {
                 isActive ? 'bg-blue-50' : ''
               }`}
               style={{
-                color: isActive ? '#2563eb' : '#6b7280'
+                color: isActive ? '#2563eb' : 'dark:text-gray-300'
               }}
             >
               <div 

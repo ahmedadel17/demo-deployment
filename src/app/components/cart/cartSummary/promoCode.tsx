@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import AppliedPromoCode from './appliedPromoCode';
 import { useAuth } from '@/app/hooks/useAuth';
 import { useCart } from '@/app/hooks/useCart';
@@ -11,6 +11,7 @@ import postRequest from '../../../../../helpers/post';
     const t = useTranslations();
     const { token } = useAuth();
     const { cartData,setCartData } = useCart();
+    const locale = useLocale();
     const promoCodeSchema = Yup.object({
         promo_code_id: Yup.string()
           .min(3, 'Promo code must be at least 3 characters')
@@ -30,7 +31,7 @@ import postRequest from '../../../../../helpers/post';
           // Here you would typically make an API call to validate and apply the promo code
           // Get cart ID from the cart data structure
           const cartId = cartData?.id;
-          const response = await postRequest('/marketplace/cart/apply-voucher/'+cartId, { promo_code_id: values.promo_code_id }, {},token);
+          const response = await postRequest('/marketplace/cart/apply-voucher/'+cartId, { promo_code_id: values.promo_code_id }, {},token,locale);
           // toastHelper(response.data.status,response.data.message);
           setCartData(response.data.data);
           resetForm();

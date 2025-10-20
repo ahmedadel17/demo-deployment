@@ -4,8 +4,9 @@ import React, { useEffect } from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import CountryPhoneInput from '../phone/countryphoneInput';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/useAuth';
+import postRequest from '../../../../helpers/post';
 function Login() {
     interface PhoneFormValues {
         phone: string;
@@ -14,7 +15,7 @@ function Login() {
     const t = useTranslations();
     const router = useRouter();
     const {token} = useAuth()
-
+    const locale = useLocale();
     useEffect(() => {
       if(token){
         router.push('/')
@@ -59,7 +60,7 @@ function Login() {
             const phoneCode = country?.dialCode || '+966';
             const phoneData = { phone: `${phoneCode}${values.phone}` };
             
-            const response = await axios.post(process.env.NEXT_PUBLIC_API_BASE_URL+"/auth/send-otp", phoneData);            
+            const response = await postRequest(`/auth/send-otp`, phoneData, {}, null, locale);
             if(response.data.data.registered){
                router.push(`/auth/otp?phone=${values.phone}&country=${values.countryCode}`);
             }

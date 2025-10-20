@@ -4,40 +4,41 @@ import OrderAttribute from './orderAttribute';
 import Image from 'next/image';
 import { useCart } from '@/app/hooks/useCart';
 import { useOrder } from '@/app/hooks/useOrder';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/useAuth';
 import getRequest from '../../../../helpers/get';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+import postRequest from '../../../../helpers/post';
 function OrderSummary() {
-  const { cartData } = useCart();
+  const { cartData,setCartData } = useCart();
   const { order, updateOrderStatus } = useOrder();
   const { token } = useAuth();
   const t = useTranslations();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
-
+  const locale = useLocale(); 
   // Prevent hydration mismatch by only rendering after client mount
   useEffect(() => {
     setIsClient(true);
   }, []);
+  const settingShippingMethod = async () => {
+    const response = await postRequest('/marketplace/cart/cart-details/' + cartData?.id, { shipping_method_slug: order.shipping_method_slug,user_address_id: order.shipping_address_id }, {}, token, locale);
+
+    if(response.status){
+      toast.success(response.data.message);
+      setCartData(response.data.data);
+    }
+  }
  const  placeOrder = async () => {
-  try {
-    const response = await getRequest('/payment/cash-on-delivery/' + cartData?.id, { 'Content-Type': 'application/json' }, token, 'en');
-    console.log('Place order response:', response);
-    
-    if(response.status === 200 && response.data?.data?.id){
+    const response = await getRequest('/payment/cash-on-delivery/' + cartData?.id, { 'Content-Type': 'application/json' }, token, locale);
+    if(response.status){
       // Update order status to confirmation
       updateOrderStatus('PlaceOrder');
+      toast.success(response.data.message);
       // Navigate to confirmation page
-      router.push('/checkoutConfirmation?orderId=' + response.data.data.id);
-    } else {
-      console.error('Failed to place order:', response);
-      alert('Failed to place order. Please try again.');
+      router.push('/checkoutConfirmation?orderId='+cartData?.id );
     }
-  } catch (error) {
-    console.error('Error placing order:', error);
-    alert('An error occurred while placing your order. Please try again.');
-  }
 }
   // Show loading state during hydration
   if (!isClient) {
@@ -159,6 +160,7 @@ function OrderSummary() {
       {order.status == 'shippingMethod' && (
         <button
           onClick={() => {
+            settingShippingMethod();
             router.push('/checkout/paymentMethod');
             updateOrderStatus('Payment');
           }}

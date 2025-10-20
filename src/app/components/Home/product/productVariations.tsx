@@ -200,7 +200,7 @@ function ProductVariations({
         <div className="mt-2">
           <div className="flex items-center gap-2">
             {state.selectedVariation.price_after_discount && (
-              <span className="text-lg font-semibold text-primary-600">
+              <span className="text-lg font-semibold text-primary-600 dark:text-white">
                 <span className="icon-riyal-symbol text-xs"></span>
                 {state.selectedVariation.price_after_discount}
               </span>
@@ -248,7 +248,7 @@ function ProductVariations({
               onClick={() => handleSizeSelect(size.value, size.id)}
               className={`px-2 py-1 border rounded text-xs transition-colors ${
                 state.selectedSize === size.value
-                  ? 'border-primary-600 bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400'
+                  ? 'border-primary-600 bg-primary-50 text-primary-600 dark:bg-primary-50 dark:text-primary-400 '
                   : 'border-gray-300 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
               title={`Select ${size.value}`}

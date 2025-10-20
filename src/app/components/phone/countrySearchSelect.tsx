@@ -39,6 +39,7 @@ const CountrySearchSelect: React.FC<CountrySearchSelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,7 +51,6 @@ const CountrySearchSelect: React.FC<CountrySearchSelectProps> = ({
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/core/countries`);
       if (response.data.status && response.data.data) {
-        console.log(response.data.data);
         setCountries(response.data.data);
       }
     } catch (error) {
@@ -60,6 +60,32 @@ const CountrySearchSelect: React.FC<CountrySearchSelectProps> = ({
        
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Search countries via API with keyword
+  const searchCountries = async (keyword: string) => {
+    if (!keyword.trim()) return;
+    
+    setIsSearching(true);
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/core/countries`, {
+        params: { keyword: keyword.trim() }
+      });
+      
+      if (response.data.status && response.data.data) {
+        const searchResults = response.data.data;
+        // Merge with existing countries, avoiding duplicates
+        setCountries(prevCountries => {
+          const existingIds = new Set(prevCountries.map(country => country.id));
+          const newCountries = searchResults.filter((country: Country) => !existingIds.has(country.id));
+          return [...prevCountries, ...newCountries];
+        });
+      }
+    } catch (error) {
+      console.error('Failed to search countries:', error);
+    } finally {
+      setIsSearching(false);
     }
   };
 
@@ -86,6 +112,17 @@ const CountrySearchSelect: React.FC<CountrySearchSelectProps> = ({
   const filteredCountries = countries.filter(country =>
     country.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Trigger API search when no local results found and user is typing
+  useEffect(() => {
+    if (searchQuery.trim() && filteredCountries.length === 0 && !isSearching) {
+      const timeoutId = setTimeout(() => {
+        searchCountries(searchQuery);
+      }, 500); // Debounce search by 500ms
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchQuery, filteredCountries.length, isSearching]);
 
   // Get selected country
   const selectedCountry = countries.find(country => country.id.toString() === value);
@@ -221,6 +258,13 @@ const CountrySearchSelect: React.FC<CountrySearchSelectProps> = ({
             {isLoading ? (
               <div className="px-3 py-4 text-center text-gray-500 dark:text-gray-400 text-sm">
                 {("Loading countries...")}
+              </div>
+            ) : isSearching ? (
+              <div className="px-3 py-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-500"></div>
+                  <span>{("Searching...")}</span>
+                </div>
               </div>
             ) : filteredCountries.length > 0 ? (
               filteredCountries.map((country, index) => (

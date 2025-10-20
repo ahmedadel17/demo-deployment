@@ -9,7 +9,7 @@ function ProductPrice({ old_price, price_after_discount, price }: { old_price: s
                 <span className="icon-riyal-symbol text-xs"></span>
               </p>
             )}
-            <p className="text-sm font-semibold text-primary-600">
+            <p className="text-sm font-semibold text-primary-600 dark:text-white">
               {price_after_discount || price}
               <span className="icon-riyal-symbol text-xs"></span>
             </p>

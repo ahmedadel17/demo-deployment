@@ -36,21 +36,23 @@ export default async function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={` relative font-inter antialiased bg-white min-h-screen dark:bg-gray-900 ${isRTL ? 'rtl' : 'ltr'}`}
+        className={`relative font-inter antialiased bg-white min-h-screen dark:bg-gray-900 flex flex-col ${isRTL ? 'rtl' : 'ltr'}`}
       >
         <NextIntlClientProvider messages={messages}>
           <ReduxProvider>
-            <CartInitializer />
-            <Suspense fallback={<div className="h-8 bg-primary-500"></div>}>
-              <Marquee/>
-            <HeaderTopBar />  
-
-            </Suspense>
-            <HeaderStyle1 />
-            {children}
+            <div className="flex flex-col min-h-screen">
+              <CartInitializer />
+              <Suspense fallback={<div className="h-8 bg-primary-500"></div>}>
+                <Marquee/>
+                <HeaderTopBar />  
+              </Suspense>
+              <HeaderStyle1 />
+              <main className="flex-1 pb-16 lg:pb-0">
+                {children}
+              </main>
+              <FooterStyle1 />
+            </div>
             <FooterNav />
-            <FooterStyle1 />
-          
           </ReduxProvider>
           <Toaster position="top-center" /> 
         </NextIntlClientProvider>

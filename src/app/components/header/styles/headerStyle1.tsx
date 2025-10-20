@@ -9,7 +9,7 @@ import HeaderCart from '../headerCart'
 import HeaderMobileMenu from '../headerMobileMenu'
 import LanguageToggle from '../LanguageToggle'
 import { useAuth } from '@/app/hooks/useAuth'
-
+import Logo from '../logo'
 // Dynamically import HeaderDarkMode to prevent hydration issues
 const HeaderDarkMode = dynamic(() => import('../headerDarkMode'), {
   loading: () => (
@@ -41,13 +41,8 @@ function HeaderStyle1() {
         <div className="te-navbar-content flex justify-between items-center min-h-20 relative">
 
             {/* <!-- Logo/Brand Section --> */}
-            <div className="te-navbar-brand">
-                <a href="index.php" className="flex items-center gap-3 no-underline">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">T</div><span className="text-xl font-bold text-gray-600 dark:text-white">Naseem</span>
-                </a>
-            </div>
-<HeaderSearch />
-
+             <Logo />
+              <HeaderSearch />
             {/* <!-- Header Actions --> */}
             <div className="header-actions flex items-center gap-1 lg:gap-6 w-auto shrink-0">
 
@@ -101,6 +96,7 @@ function HeaderStyle1() {
                 <HeaderMobileMenu />
 
             </div>
+
             {/* <!-- header-actions --> */}
 
         </div>
