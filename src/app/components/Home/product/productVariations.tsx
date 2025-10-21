@@ -19,6 +19,7 @@ interface Product {
   old_price?: string | null | undefined;
   price_after_discount?: string | undefined;
   default_variation_id?: string | number;
+  is_favorite?: boolean;
 }
 
 interface ProductVariationsProps {

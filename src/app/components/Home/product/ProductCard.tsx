@@ -20,7 +20,7 @@ interface Product {
   price: string;
   image?: string;
   hover?: string;
-  category?: string;
+  category: string;
   old_price?: string | null;
   colors?: string[];
   sizes?: string[];

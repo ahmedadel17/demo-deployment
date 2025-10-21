@@ -14,7 +14,16 @@ function OrderDetailsPage() {
   
   // Consolidated state with loading
   const [state, setState] = useState({
-    orderData: null as {data?: unknown} | null,
+    orderData: null as {
+      data?: {
+        order_num?: string;
+        created_at?: string;
+        estimated_delivery?: string;
+        products?: any[];
+        order_attributes?: any[];
+        total_amount?: string | number;
+      }
+    } | null,
     isLoading: true,
     error: null as string | null
   })
@@ -86,7 +95,7 @@ function OrderDetailsPage() {
   return (
     <div className='container mx-auto mt-6 mb-4'>
       <SuccessHeader />
-      <OrderDetails orderData={state.orderData as {data?: unknown} | null} />
+      <OrderDetails orderData={state.orderData} />
     </div>
   )
 }
