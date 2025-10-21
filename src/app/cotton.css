@@ -1,65 +1,62 @@
-@layer utilities {
-    .custom-site {
-        /* Custom Css Start */
-
-        & .marquee-container {
-            @apply bg-[#0f1340];
-        }
-
-        & .hs-btn,
-        & .te-btn-primary {
-            @apply bg-[#CAA34E];
-
-            &:hover {
-                @apply bg-[#b58b38];
-            }
-        }
-
-        & .header-cart-item,
-        & .header-wishlist-item,
-        & .header-notification-item {
-            @apply bg-[#1F2784];
-        }
-
-        & .te-navbar-link:hover,
-        & .topbar-contact .text-primary-500 {
-            @apply text-[#CAA34E];
-        }
-
-        & .te-navbar-link {
-            @apply py-[0.7rem];
-
-            &:hover {
-                @apply bg-[#fbf9f5] text-[#CAA34E] dark:bg-gray-900 dark:text-[#CAA34E] rounded-none;
-            }
-        }
-
-        & .te-navbar-link-active {
-            @apply bg-[#fbf9f5] dark:bg-gray-900 text-[#CAA34E] dark:text-[#CAA34E] rounded-none;
-        }
-
-        & .product-add-to-wishlist.active {
-            @apply bg-[#f6f1e5] border-[#CAA34E];
-        }
-        & .wishlist-active {
-            @apply text-[#CAA34E];
-        }
-
-        & .footer-box {
-            @apply bg-white dark:bg-gray-800;
-
-            & .box-icon {
-                @apply bg-[#f6f1e5] dark:bg-gray-900;
-            }
-        }
-
-        & .te-footer {
-            @apply bg-[#0f1340] dark:bg-gray-800;
-
-            & .te-footer-app-download a {
-                @apply bg-[#131851] hover:bg-[#171d60] dark:bg-gray-900 dark:hover:bg-gray-700; 
-            }
-        }
-        /* Custom Css End */
-    }
+/* Custom Css Start */
+.custom-site .marquee-container {
+    @apply bg-[#0f1340];
 }
+
+.custom-site .hs-btn,
+.custom-site .te-btn-primary {
+    @apply bg-[#CAA34E];
+}
+
+.custom-site .hs-btn:hover,
+.custom-site .te-btn-primary:hover {
+    @apply bg-[#b58b38];
+}
+
+.custom-site .header-cart-item,
+.custom-site .header-wishlist-item,
+.custom-site .header-notification-item {
+    @apply bg-[#1F2784];
+}
+
+.custom-site .te-navbar-link:hover,
+.custom-site .topbar-contact .text-primary-500 {
+    @apply text-[#CAA34E];
+}
+
+.custom-site .te-navbar-link {
+    @apply py-[0.7rem];
+}
+
+.custom-site .te-navbar-link:hover {
+    @apply bg-[#fbf9f5] text-[#CAA34E] dark:bg-gray-900 dark:text-[#CAA34E] rounded-none;
+}
+
+.custom-site .te-navbar-link-active {
+    @apply bg-[#fbf9f5] dark:bg-gray-900 text-[#CAA34E] dark:text-[#CAA34E] rounded-none;
+}
+
+.custom-site .product-add-to-wishlist.active {
+    @apply bg-[#f6f1e5] border-[#CAA34E];
+}
+
+.custom-site .wishlist-active {
+    @apply text-[#CAA34E];
+}
+
+.custom-site .footer-box {
+    @apply bg-white dark:bg-gray-800;
+}
+
+.custom-site .footer-box .box-icon {
+    @apply bg-[#f6f1e5] dark:bg-gray-900;
+}
+
+.custom-site .te-footer {
+    @apply bg-[#0f1340] dark:bg-gray-800;
+}
+
+.custom-site .te-footer .te-footer-app-download a {
+    @apply bg-[#131851] hover:bg-[#171d60] dark:bg-gray-900 dark:hover:bg-gray-700; 
+}
+/* Custom Css End */

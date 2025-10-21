@@ -36,7 +36,7 @@ export default async function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={`relative font-inter antialiased bg-white min-h-screen dark:bg-gray-900 flex flex-col ${isRTL ? 'rtl' : 'ltr'}`}
+        className={`relative ${isRTL ? 'font-rtl' : 'font-inter'} antialiased bg-white min-h-screen dark:bg-gray-900 flex flex-col ${isRTL ? 'rtl' : 'ltr'}`}
       >
         <NextIntlClientProvider messages={messages}>
           <ReduxProvider>

@@ -8,6 +8,7 @@ import { useOrder } from '@/app/hooks/useOrder';
 import { useAuth } from '@/app/hooks/useAuth';
 import postRequest from '../../../../../helpers/post';
 import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 interface ShippingMethod {
   id: number;
@@ -19,6 +20,7 @@ interface ShippingMethod {
 }
 
 const ShippingMethod = () => {
+  const t = useTranslations();
   const { cartData } = useCart();
   const { order, updateShippingMethod } = useOrder();
   const { token } = useAuth();
@@ -58,7 +60,7 @@ const ShippingMethod = () => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 my-4">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{('Shipping Method')}</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('Shipping Method')}</h2>
 
       <Formik
         key={shippingMethods.length > 0 ? shippingMethods[0].slug : 'default'}

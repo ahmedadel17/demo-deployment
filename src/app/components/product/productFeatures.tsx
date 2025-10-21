@@ -42,7 +42,7 @@ function ProductFeatures() {
             {/* <!-- Bundle Item 1 --> */}
             <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded border">
                 <input type="checkbox" id="bundle1" checked/>
-                <img src="https://placehold.co/40x40" alt="Belt" className="w-10 h-10 rounded object-cover"/>
+                <img src="https://placehold.co/40x40" alt="Belt" className="w-10 h-10 rounded objectCover"/>
                 <div className="flex-1">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">Leather Belt</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">Perfect match for these shorts</p>
@@ -60,7 +60,7 @@ function ProductFeatures() {
             {/* <!-- Bundle Item 2 --> */}
             <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded border">
                 <input type="checkbox" id="bundle2" checked/>
-                <img src="https://placehold.co/40x40" alt="T-shirt" className="w-10 h-10 rounded object-cover"/>
+                <img src="https://placehold.co/40x40" alt="T-shirt" className="w-10 h-10 rounded objectCover"/>
                 <div className="flex-1">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">Cotton T-Shirt</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">Complete the look</p>

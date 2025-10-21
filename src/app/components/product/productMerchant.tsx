@@ -12,7 +12,7 @@ function ProductMerchant() {
             <div className="w-8 h-8 flex-shrink-0 mt-1">
                 <img src="https://placehold.co/32x32"
                     alt="The Style Hub Logo"
-                    className="w-full h-full rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"/>
+                    className="w-full h-full rounded-full objectCover border-2 border-gray-200 dark:border-gray-600"/>
             </div>
             <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">

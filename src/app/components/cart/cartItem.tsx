@@ -7,7 +7,7 @@ import axios from 'axios';
 import { setCartData } from '@/app/store/slices/cartSlice';
 import { useAppDispatch } from '@/app/store/hooks';
 import { toast } from 'react-hot-toast';
-
+import { useTranslations } from 'next-intl';
 interface CartItemProps {
   item: {
     id: string;
@@ -29,7 +29,7 @@ function CartItem({item}: CartItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const { cartData } = useCart();
   const { token } = useAuth();
- 
+  const t = useTranslations();
   const handleIncrement = () => {
     const newQuantity =  localQuantity + 1;
     setLocalQuantity(newQuantity);
@@ -113,7 +113,7 @@ function CartItem({item}: CartItemProps) {
                   height={600}
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover rounded-md"
+                  className="w-full h-full objectCover rounded-md"
                   />
               </div>
 
@@ -150,8 +150,8 @@ function CartItem({item}: CartItemProps) {
 
                 {/* Color & Size */}
                 <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  <span>Color: {item.color}</span>
-                  <span>Size: {item.size}</span>
+                  <span>{t("Color")}: {item.color}</span>
+                  <span>{t("Size")}: {item.size}</span>
                   
                   {/* Mobile Price Display */}
                   <div className="md:hidden flex items-center space-x-2">
@@ -171,7 +171,7 @@ function CartItem({item}: CartItemProps) {
                   {/* Quantity Controls */}
                   <div className="flex items-center space-x-3">
                     <span className="text-sm text-gray-600 dark:text-gray-400">
-                      Qty:
+                      {t("Qty")}:
                     </span>
                     <div className="flex items-center space-x-3 rtl:space-x-reverse">
                         <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-md">
@@ -205,10 +205,10 @@ function CartItem({item}: CartItemProps) {
                           {isUpdating ? (
                             <>
                               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                              Updating...
+                              {t("Updating")} ...
                             </>
                           ) : (
-                            'Update'
+                            t("Update")
                           )}
                         </button>
                     </div>
@@ -228,7 +228,7 @@ function CartItem({item}: CartItemProps) {
                     </div>
                     {item.priceEach && (
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {item.priceEach.toFixed(2)} each
+                        {item.priceEach.toFixed(2)} {t("each")}
                       </p>
                     )}
                   </div>

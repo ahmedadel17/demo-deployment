@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import ChooseExistingAddressForm from './ChooseExistingAddressForm';
 import CreateNewAddressForm from './CreateNewAddressForm';
-
+import { useTranslations } from 'next-intl';
 type AddressFormType = 'existing' | 'new';
 
 const ShippingAddressManager: React.FC = () => {
   const [formType, setFormType] = useState<AddressFormType>('existing');
   const [refreshKey, setRefreshKey] = useState(0);
-
+  const t = useTranslations();
   const handleAddressCreated = () => {
     // Trigger refresh of existing addresses by updating the key
     setRefreshKey(prev => prev + 1);
@@ -26,7 +26,7 @@ const ShippingAddressManager: React.FC = () => {
     <div className="space-y-6">
       {/* Form Type Selector */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{('Shipping Address')}</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('Shipping Address')}</h2>
         
         <div className="flex space-x-4 rtl:space-x-reverse mb-4">
           <label className="flex items-center">
@@ -39,7 +39,7 @@ const ShippingAddressManager: React.FC = () => {
               className="text-primary-600 focus:ring-primary-500"
             />
             <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              {('Use Existing Address')}
+              {t('Use Existing Address')}
             </span>
           </label>
           
@@ -53,7 +53,7 @@ const ShippingAddressManager: React.FC = () => {
               className="text-primary-600 focus:ring-primary-500"
             />
             <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              {('Add New Address')}
+              {t('Add New Address')}
             </span>
           </label>
         </div>

@@ -7,15 +7,15 @@ import CheckoutButton from './cartSummary/checkoutButton'
 import SecurityNotice from './cartSummary/securityNotice'
 import FreeShippingNotice from './cartSummary/freeShippingNotice'
 import WalletBallanceToggler from './cartSummary/walletBalanceToggler';
-
+import { useTranslations } from 'next-intl';
 function CartSummary() {
- 
+  const t = useTranslations();
   return (
     <>
        <div className="lg:col-span-1">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-4">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-            Order Summary
+            {t("Order Summary")}
           </h2>
 
           <WalletBallanceToggler />
@@ -32,7 +32,7 @@ function CartSummary() {
             href="/paypal"
             className="w-full py-3 bg-yellow-400 text-gray-900 rounded-md hover:bg-yellow-500 transition-colors font-medium mb-4 text-center block"
           >
-            PayPal Express Checkout
+            {t("PayPal Express Checkout")}
           </a> */}
 
           {/* Security Notice */}

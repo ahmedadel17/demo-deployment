@@ -123,7 +123,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             alt={product.name}
             width={300}
             height={320}
-            className="w-full h-full object-cover transition-all duration-500 ease-in-out transform"
+            className="w-full h-full objectCover transition-all duration-500 ease-in-out transform"
           />
 
           {/* Hover Image */}
@@ -131,7 +131,7 @@ const ProductItem: React.FC<Props> = ({ product }) => {
             <img
               src={product.thumbnail}
               alt={`${product.name} hover`}
-              className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-in-out transform scale-105 opacity-0 group-hover:scale-100 group-hover:opacity-100"
+              className="absolute inset-0 w-full h-full objectCover transition-all duration-500 ease-in-out transform scale-105 opacity-0 group-hover:scale-100 group-hover:opacity-100"
             />
           )}
         </Link>

@@ -13,7 +13,7 @@ import axios from 'axios';
 import { useAuth } from '@/app/hooks/useAuth';
 import FormikCitySearchSelect from '../../phone/formikCitySearchSelect';
 import toast from 'react-hot-toast';
-
+import { useTranslations } from 'next-intl';
 interface CreateAddressData {
   name: string;
   address: string;
@@ -36,6 +36,7 @@ interface CreateNewAddressFormProps {
 const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCreated }) => {
   const { token } = useAuth()
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations();
   const initialValues: CreateAddressData = {
     name: '',
     address: '',
@@ -55,13 +56,13 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
     name: Yup.string().required(('Name is required')).min(2, ('Name must be at least 2 characters')),
     contact_phone: Yup.string().required(('Phone number is required')).matches(/^[0-9]+$/, ('Phone number must contain only digits')).min(7, ('Phone number must be at least 7 digits')).max(15, ('Phone number must not exceed 15 digits')),
     country: Yup.string().required(('Country is required')),
-    address: Yup.string().required(('Address is required')).min(5, ('Address must be at least 5 characters')),
-    street: Yup.string().required(('Street address is required')).min(5, ('Street address must be at least 5 characters')),
-    house: Yup.string().notRequired(),
-    notes: Yup.string().notRequired().max(500, ('Notes must not exceed 500 characters')),
+    address: Yup.string().notRequired().nullable(),
+    street: Yup.string().notRequired().nullable(),
+    house: Yup.string().notRequired().nullable(),
+    notes: Yup.string().notRequired().nullable().max(500, ('Notes must not exceed 500 characters')),
   });
 
-  const onSubmit = async(values: CreateAddressData, { resetForm, setFieldTouched }: FormikHelpers<CreateAddressData>) => {
+  const onSubmit = async(values: CreateAddressData, { resetForm, setFieldTouched, }: FormikHelpers<CreateAddressData>) => {
     // Check if location is selected
     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/create-address`, values, {
       headers: {
@@ -82,7 +83,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
   return (
     <ClientOnly fallback={
       <div className="bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{('Create New Address')}</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('Create New Address')}</h2>
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
         </div>
@@ -93,6 +94,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
+          validationSchema={validationSchema}
         >
           {({ values, setFieldValue, handleChange, handleBlur, errors, touched, isSubmitting }) => {
             // Debug: Log validation errors
@@ -133,7 +135,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
                       <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
-                          {('Please select a location on the map')}
+                          {t('Please select a location on the map')}
                     </div>
                   )}
                   {values.lat && values.lng && !errors.lat && !errors.lng && (
@@ -141,28 +143,28 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
                       <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
-                      {('Location selected successfully')}
+                      {t('Location selected successfully')}
                     </div>
                   )}
                 </div>
 
                 <FormikInput
                   name="name"
-                  label={('Name')}
+                  label={t('Name')}
                   placeholder="Enter your name"
                   required
                 />
 
                 <FormikCountrySearchSelect
                   name="country_id"
-                  label="Country"
+                  label={t("Country")}
                   placeholder="Select your country"
                   required
                 />
                 
                 <FormikCitySearchSelect
                   name="city_id"
-                  label="City"
+                  label={t("City")}
                   placeholder="Select your city"
                   required
                 />    
@@ -186,7 +188,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
                   error={errors.contact_phone}
                   touched={touched.contact_phone}
                   disabled={isSubmitting}
-                  label={('Phone Number')}
+                  label={t('Phone Number')}
                   required
                   initialCountryCode="SA"
                 />
@@ -200,21 +202,21 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
                   />
                   <FormikInput
                     name="street"
-                    label={('Street Address')}
+                    label={t('Street Address')}
                     placeholder="123 Main Street"
                     required
                   />
                   <FormikInput
                     name="house"
-                    label={('Apartment, suite, etc. (optional)')}
+                    label={t('Apartment, suite, etc. (optional)')}
                     placeholder="Apt 4B"
                   />
                 </div>
                 
                 <TextArea
                   name="notes"
-                  label={('Notes') as string}
-                  placeholder={('Add any delivery notes (optional)') as string}
+                  label={t('Notes') as string}
+                  placeholder={t('Add any delivery notes (optional)') as string}
                   rows={4}
                 />
 
@@ -223,7 +225,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
                 <input type="hidden" name="lng" value={values.lng} />
 
                 <button type="submit" className="te-btn te-btn-primary w-full" disabled={isSubmitting}>
-                  {isSubmitting ?   ('Saving...') : ('Save Address')}
+                  {isSubmitting ?   t('Saving...') : t('Save Address')}
                 </button>
               </div>
             </Form>

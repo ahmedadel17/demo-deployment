@@ -1,6 +1,8 @@
+'use client'
 import React from 'react'
-
+import { useTranslations } from 'next-intl';  
 function FreeShippingNotice() {
+  const t = useTranslations();
   return (
     <>
       <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
@@ -19,7 +21,7 @@ function FreeShippingNotice() {
                 />
               </svg>
               <span className="text-sm text-green-700 dark:text-green-300">
-                You qualify for free shipping!
+                {t("You qualify for free shipping")}!
               </span>
             </div>
           </div>

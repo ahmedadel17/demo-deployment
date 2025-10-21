@@ -7,7 +7,6 @@ import HeaderWishList from '../headerWishlist'
 import HeaderAccount from '../headerAccount'
 import HeaderCart from '../headerCart'
 import HeaderMobileMenu from '../headerMobileMenu'
-import LanguageToggle from '../LanguageToggle'
 import { useAuth } from '@/app/hooks/useAuth'
 import Logo from '../logo'
 // Dynamically import HeaderDarkMode to prevent hydration issues
@@ -34,19 +33,22 @@ function HeaderStyle1() {
   const { isAuthenticated } = useAuth();
   return (
     <div>
-      <nav className="te-navbar whitespace-nowrap mx-auto shadow-sm w-full relative bg-white dark:bg-gray-800" role="navigation" aria-label="Main Navigation">
+      <nav className="te-navbar flex rtl:flex-row-reverse whitespace-nowrap mx-auto shadow-sm w-full relative bg-white dark:bg-gray-800" role="navigation" aria-label="Main Navigation">
 
-    <div className="te-navbar-container container">
+    <div className="te-navbar-container container rtl:flex-row-reverse">
 
-        <div className="te-navbar-content flex justify-between items-center min-h-20 relative">
+        <div className="te-navbar-content flex justify-between items-center min-h-20 relative  rtl:flex-row-reverse">
 
-            {/* <!-- Logo/Brand Section --> */}
-             <Logo />
-              <HeaderSearch />
+            {/* <!-- Logo and Search Section --> */}
+            <div className="flex items-center gap-4">
+                <Logo />
+            </div>
+                <HeaderSearch />
+
             {/* <!-- Header Actions --> */}
-            <div className="header-actions flex items-center gap-1 lg:gap-6 w-auto shrink-0">
+            <div className="header-actions flex items-center gap-1 lg:gap-6 w-auto shrink-0 rtl:flex-row-reverse">
 
-                <div className="items-center hidden lg:flex gap-2">
+                <div className="items-center hidden lg:flex gap-2 rtl:flex-row-reverse">
 
                     {/* <!-- Notification --> */}
                    {isAuthenticated && <HeaderNotification />}
@@ -87,7 +89,7 @@ function HeaderStyle1() {
                 </div>
 
                 {/* <!-- Language Toggle Button --> */}
-                {isAuthenticated && <LanguageToggle className="" />}
+                {/* {isAuthenticated && <LanguageToggle className="" />} */}
 
                 {/* <!-- Dark Mode Toggle Button --> */}
                 <HeaderDarkMode />
@@ -103,8 +105,8 @@ function HeaderStyle1() {
         {/* <!-- te-navbar-content --> */}
 
         {/* <!-- Desktop Navigation Menu --> */}
-        <HeaderDesktopMenu/>
 
+        <HeaderDesktopMenu/>
     </div>
 </nav>
     </div>

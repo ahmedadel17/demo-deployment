@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRTL } from '@/app/hooks/useRTL';
-
+import { useTranslations } from 'next-intl';
 interface ProductPaginationProps {
   currentPage: number;
   totalPages: number;
@@ -22,7 +22,7 @@ function ProductPagination({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isRTL } = useRTL();
-
+  const t = useTranslations();
   // Debug logging
   console.log('ProductPagination props:', {
     currentPage,
@@ -111,20 +111,18 @@ function ProductPagination({
       <div className="te-table-pagination flex justify-between items-center flex-wrap gap-4 max-md:justify-center max-md:text-center">
         <div className="te-pagination-info flex items-center max-md:order-2 max-md:w-full max-md:justify-center">
           <span className="te-pagination-info-text text-sm text-gray-600 dark:text-gray-400">
-            Showing
+            {t('Showing')}
             <span className="te-pagination-info-number font-semibold text-gray-900 dark:text-gray-100 mx-1">
               {startItem}
             </span>
-            to 
+            {t('to')}
             <span className="te-pagination-info-number font-semibold text-gray-900 dark:text-gray-100 mx-1">
               {endItem}
-            </span>
-            of 
+            </span>{t('of')}
             <span className="te-pagination-info-number font-semibold text-gray-900 dark:text-gray-100 mx-1">
               {totalItems}
-            </span>
-            result{totalItems !== 1 ? 's' : ''}
-          </span>
+            </span>{t('result')}{totalItems !== 1 ? t('s') : ''}
+          </span>{t('results')}
         </div>
 
         <nav className="te-pagination te-pagination-responsive flex justify-center items-center">
@@ -144,7 +142,7 @@ function ProductPagination({
                 <svg className={`w-4 h-4 ${isRTL ? 'rtl:rotate-180' : ''}`} width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="m15 18-6-6 6-6"></path>
                 </svg>
-                <span className="te-pagination-nav-text inline max-sm:hidden">Previous</span>
+                <span className="te-pagination-nav-text inline max-sm:hidden">{t('Previous')}</span>
               </button>
             </li>
 
@@ -191,7 +189,7 @@ function ProductPagination({
                 }`}
                 aria-label="Next page"
               >
-                <span className="te-pagination-nav-text inline max-sm:hidden">Next</span>
+                <span className="te-pagination-nav-text inline max-sm:hidden">{t("Next")}</span>
                 <svg className={`w-4 h-4 ${isRTL ? 'rtl:rotate-180' : ''}`} width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="m9 18 6-6-6-6"></path>
                 </svg>

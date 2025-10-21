@@ -57,6 +57,11 @@ export default function MapComponent({ onLocationSelect, searchInputRef }: MapCo
 
     // Move marker on map click
     mapInstance.addListener("click", (e: any) => {
+      if (!e.latLng || typeof e.latLng.lat !== 'function' || typeof e.latLng.lng !== 'function') {
+        console.error("Invalid latLng object:", e.latLng);
+        return;
+      }
+      
       const newPos = { lat: e.latLng.lat(), lng: e.latLng.lng() };
       markerInstance.setPosition(newPos);
       mapInstance.panTo(newPos);
@@ -69,6 +74,11 @@ export default function MapComponent({ onLocationSelect, searchInputRef }: MapCo
 
     // Update position when marker dragged
     markerInstance.addListener("dragend", (e: any) => {
+      if (!e.latLng || typeof e.latLng.lat !== 'function' || typeof e.latLng.lng !== 'function') {
+        console.error("Invalid latLng object:", e.latLng);
+        return;
+      }
+      
       const newPos = { lat: e.latLng.lat(), lng: e.latLng.lng() };
       setPosition(newPos);
       console.log("Marker dragged to:", newPos);

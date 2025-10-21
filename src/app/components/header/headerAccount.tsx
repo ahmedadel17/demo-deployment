@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { usePathname } from "next/navigation"; // Remove if not using Next.js
 import { useAuth } from "../../hooks/useAuth";
+import { useTranslations } from 'next-intl';
 interface MenuItem {
   title: string;
   //@ts-ignore
@@ -11,6 +12,7 @@ interface MenuItem {
 
 const AccountDropdown: React.FC = () => {
   const { user, logout: logoutUser } = useAuth();
+  const t = useTranslations();
   console.log(user);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -26,7 +28,7 @@ const AccountDropdown: React.FC = () => {
 
   const menuItems: MenuItem[] = [
     {
-      title: "Dashboard",
+      title: t("Dashboard"),
       icon: (
         <path
           strokeLinecap="round"
@@ -38,7 +40,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard",
     },
     {
-      title: "My Rewards",
+      title: t("My Rewards"),
       icon: (
         <>
           <path d="M11.051 7.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.867l-1.156-1.152a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"></path>
@@ -48,7 +50,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard-points",
     },
     {
-      title: "My Orders",
+      title: t("My Orders"),
       icon: (
         <path
           strokeLinecap="round"
@@ -60,7 +62,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard-orders",
     },
     {
-      title: "Track Order",
+      title: t("Track Order"),
       icon: (
         <path
           strokeLinecap="round"
@@ -72,7 +74,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard-track",
     },
     {
-      title: "Return Items",
+      title: t("Return Items"),
       icon: (
         <path
           strokeLinecap="round"
@@ -84,7 +86,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard-returns",
     },
     {
-      title: "Wishlist",
+      title: t("Wishlist"),
       icon: (
         <path
           strokeLinecap="round"
@@ -96,7 +98,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard-wishlist",
     },
     {
-      title: "Addresses",
+      title: t("Addresses"),
       icon: (
         <>
           <path
@@ -116,7 +118,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard-addresses",
     },
     {
-      title: "Account Settings",
+      title: t("Account Settings"),
       icon: (
         <>
           <path
@@ -136,7 +138,7 @@ const AccountDropdown: React.FC = () => {
       url: "/dashboard-settings",
     },
     {
-      title: "Logout",
+      title: t("Logout"),
       icon: (
         <path
           strokeLinecap="round"
@@ -177,10 +179,10 @@ const AccountDropdown: React.FC = () => {
 
         <div className="grid">
           <span className="text-gray-600 dark:text-gray-400 text-sm">
-            My Account
+            {t("My Account")} 
           </span>
           <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
-            Hi, {user?.first_name}
+           {t("Hi")}, {user?.first_name}
           </span>
         </div>
       </div>

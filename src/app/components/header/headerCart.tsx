@@ -7,6 +7,8 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { setCartData } from "@/app/store/slices/cartSlice";
 import { useAppDispatch } from "@/app/store/hooks"; 
 import toast from "react-hot-toast";
+import { useTranslations } from 'next-intl';
+import Link from "next/link";
 interface CartItem {
   title: string;
   qty: number;
@@ -19,7 +21,7 @@ const CartDropdown: React.FC = () => {
   const { cartData, loadCartFromStorage } = useCart();
   const { token } = useAuth();
   const dispatch = useAppDispatch();
-
+  const t = useTranslations();
   // Close dropdown when clicking outside (using React patterns)
   const handleBackdropClick = () => {
     setIsOpen(false);
@@ -84,7 +86,7 @@ const CartDropdown: React.FC = () => {
         {/* Text */}
         <div className="grid">
           <span className="text-gray-600 dark:text-gray-400 text-sm">
-            My Cart
+            {t("My Cart")}
           </span>
           <span className="text-gray-900 dark:text-gray-100 text-sm font-medium">
             {cartData?.amount_to_pay || 0}
@@ -103,7 +105,7 @@ const CartDropdown: React.FC = () => {
       {/* Dropdown Content */}
       <div className={`cart-drop-down te-navbar-dropdown-content px-4 py-4 bg-white dark:bg-gray-800 max-w-[250px] absolute top-full right-0 mt-2 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 ${isOpen ? 'te-dropdown-show' : ''}`}>
         <div className="text-sm font-medium text-gray-900 dark:text-white mb-3">
-          Shopping Cart
+          {t("Shopping Cart")}
         </div>
 
         {/* Items */}
@@ -125,7 +127,7 @@ const CartDropdown: React.FC = () => {
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-full h-full object-cover rounded-md"
+                  className="w-full h-full objectCover rounded-md"
                 />
               )}
             </div>
@@ -154,23 +156,23 @@ const CartDropdown: React.FC = () => {
         {/* Cart Total */}
         <div className="mt-6">
           <div className="flex justify-between items-center font-medium mb-3 text-gray-900 dark:text-white">
-            <span>Total:</span>
+            <span>{t("Total")}:</span>
             <span>{cartData?.total_amount}</span>
           </div>
 
           <div className="grid gap-2">
-            <a
+            <Link
               href="/cart"
               className="w-full te-btn te-btn-default text-center block"
             >
-              View Cart
-            </a>
-            <a
+              {t("View Cart")}
+            </Link>
+            <Link
               href="/checkout"
               className="w-full te-btn te-btn-primary text-center block"
             >
-              Checkout
-            </a>
+             {t("Checkout")}
+            </Link>
           </div>
         </div>
       </div>

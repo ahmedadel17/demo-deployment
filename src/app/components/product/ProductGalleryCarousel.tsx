@@ -137,7 +137,7 @@ const ProductGalleryCarousel: React.FC<ProductGalleryCarouselProps> = ({
                     src={image}
                     alt={`Product ${index + 1}`}
                     fill
-                    className="zoom-image object-cover transition-transform duration-300"
+                    className="zoom-image objectCover transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div
@@ -154,7 +154,7 @@ const ProductGalleryCarousel: React.FC<ProductGalleryCarouselProps> = ({
                             src={image}
                             alt={`Product ${index + 1}`}
                             fill
-                            className="zoom-image object-cover transition-transform duration-300"
+                            className="zoom-image objectCover transition-transform duration-300"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     </div>
@@ -251,7 +251,7 @@ const ProductGalleryCarousel: React.FC<ProductGalleryCarouselProps> = ({
                   alt={`Thumbnail ${index + 1}`}
                   width={80}
                   height={80}
-                  className="embla-thumbs__slide__img w-20 aspect-square object-cover rounded-md"
+                  className="embla-thumbs__slide__img w-20 aspect-square objectCover rounded-md"
                 />
               </button>
             </div>

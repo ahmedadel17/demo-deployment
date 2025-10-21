@@ -65,7 +65,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="w-full h-48 object-cover rounded"
+                  className="w-full h-48 objectCover rounded"
                 />
                 <h3 className="mt-2 font-semibold text-gray-800 dark:text-white text-sm">
                   {product.title}

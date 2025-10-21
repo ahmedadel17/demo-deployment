@@ -8,7 +8,7 @@ import { useAuth } from '@/app/hooks/useAuth';
 import { useOrder } from '@/app/hooks/useOrder';
 import postRequest from '../../../../../helpers/post';
 import HyperPayPayment from './hyperpay';
-
+import { useTranslations } from 'next-intl';
 interface PaymentMethodsProps {
   allowedPaymentMethods?: string[];
 }
@@ -21,7 +21,7 @@ const { cartData } = useCart();
 const {token}= useAuth()
   const [showPaymentOptions, setShowPaymentOptions] = useState(true);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-
+  const t = useTranslations();
   // Check if browser is Safari
   const isSafari = () => {
     if (typeof window === 'undefined') return false;
@@ -264,7 +264,7 @@ const {token}= useAuth()
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
                 <span className="text-gray-600 dark:text-gray-400">
-                  {('Preparing payment with')} {order.payment_method_id?.toUpperCase()}...
+                  {t('Preparing payment with')} {order.payment_method_id?.toUpperCase()}...
                   </span>
               </div>
             </div>
@@ -287,7 +287,7 @@ const {token}= useAuth()
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
                 <span className="text-gray-600 dark:text-gray-400">
-                  {('Preparing Tamara payment...')}
+                  {t('Preparing Tamara payment')}
                 </span> 
               </div>
             </div>
@@ -301,7 +301,7 @@ const {token}= useAuth()
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
                 <span className="text-gray-600 dark:text-gray-400">
-                  {('Preparing Tabby payment...')}
+                  {t('Preparing Tabby payment')}
                 </span>
               </div>
             </div>

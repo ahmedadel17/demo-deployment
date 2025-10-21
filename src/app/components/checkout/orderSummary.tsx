@@ -45,7 +45,7 @@ function OrderSummary() {
     return (
       <div className="lg:col-span-1">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{('Order Summary')}</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('Order Summary')}</h2>
           <div className="animate-pulse">
             <div className="space-y-4 mb-6">
               <div className="flex items-center space-x-4">
@@ -66,7 +66,7 @@ function OrderSummary() {
   return (
     <div className="lg:col-span-1">
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-4">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{('Order Summary')}</h2>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{t('Order Summary')}</h2>
 
       {/* Order Items */}
       <div className="space-y-4 mb-6">
@@ -77,14 +77,14 @@ function OrderSummary() {
               alt={item.name || 'Product'} 
               width={100} 
               height={100} 
-              className="w-16 h-16 object-cover rounded-md" 
+              className="w-16 h-16 objectCover rounded-md" 
             />
             <div className="flex-1">
               <h3 className="font-medium text-gray-900 dark:text-white">{item.name}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {typeof item.variations === 'string' ? item.variations : ''}
               </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{('Qty')}: {item.qty}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('Qty')}: {item.qty}</p>
             </div>
             <div className="text-right">
               <p className="font-medium text-gray-900 dark:text-white">
@@ -103,7 +103,7 @@ function OrderSummary() {
       {/* Order Totals */}
       <div className="border-t border-gray-200 dark:border-gray-600 pt-4 space-y-2">
         <div className="flex justify-between">
-          <span className="text-gray-600 dark:text-gray-400">{('Subtotal')}</span>
+          <span className="text-gray-600 dark:text-gray-400">{t('Subtotal')}</span>
             <span className="text-gray-900 dark:text-white">
               <span className="icon-riyal-symbol text-xs"></span>
               <span>{(cartData as { sub_total?: string })?.sub_total || '0'}</span>
@@ -114,7 +114,7 @@ function OrderSummary() {
       ))}
         <div className="border-t border-gray-200 dark:border-gray-600 pt-2">
           <div className="flex justify-between">
-            <span className="text-lg font-semibold text-gray-900 dark:text-white">{('Total')}</span>
+            <span className="text-lg font-semibold text-gray-900 dark:text-white">{t('Total')}</span>
             <span className="text-lg font-semibold text-gray-900 dark:text-white">
               <span className="icon-riyal-symbol"></span>
               <span>{(cartData as { total_amount?: string })?.total_amount || '0'}</span>
@@ -178,7 +178,7 @@ function OrderSummary() {
           disabled={!order.shipping_address_id || !order.shipping_method_slug}
           className="w-full mt-6 py-3 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors font-medium text-center disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
-          Place Order
+          {t('Place Order')}
         </button>
       )}
 

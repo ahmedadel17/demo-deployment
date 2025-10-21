@@ -112,7 +112,7 @@ export default function HyperPayPayment({ selectedBrand, onPaymentReady }: Hyper
                   </div>
                   
                   <form
-                      action={`${url}/checkoutConfirmation?orderId=${cartData?.id}`}
+                      action={`${url}/checkoutConfirmation/pending?orderId=${cartData?.id}`}
                    
                     className="paymentWidgets"
                     data-brands={selectedBrand ? selectedBrand.toUpperCase() : "VISA MASTER MADA"}

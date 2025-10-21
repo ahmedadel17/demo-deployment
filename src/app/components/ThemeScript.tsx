@@ -9,7 +9,7 @@ export default function ThemeScript() {
             try {
               const theme = localStorage.getItem('theme');
               const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-              const shouldBeDark = theme === 'dark' || (!theme && prefersDark);
+              const shouldBeDark = theme === 'dark';
               
               if (shouldBeDark) {
                 document.documentElement.classList.add('dark');
@@ -25,7 +25,9 @@ export default function ThemeScript() {
             } catch (e) {
               // Fallback to light mode if there's an error
               document.documentElement.classList.add('light');
+              document.documentElement.classList.remove('dark');
               document.body.classList.add('light');
+              document.body.classList.remove('dark');
             }
           })();
         `,

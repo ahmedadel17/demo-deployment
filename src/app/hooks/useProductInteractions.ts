@@ -148,7 +148,7 @@ export function useProductInteractions() {
         <div class="quickViewContent p-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="product-image">
-              <img src="${product.image}" alt="${product.title}" class="w-full h-64 object-cover rounded-lg">
+              <img src="${product.image}" alt="${product.title}" class="w-full h-64 objectCover rounded-lg">
             </div>
             <div class="product-details">
               <h3 class="text-lg font-semibold mb-2">${product.title}</h3>

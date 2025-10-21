@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setOrderStatus, setShippingAddressId } from '@/app/store/slices/orderSlice';
 import { toast } from 'react-hot-toast';
-
+import { useTranslations } from 'next-intl';
 
 interface Address {
   id: number;
@@ -36,7 +36,7 @@ const ChooseExistingAddressForm: React.FC<ChooseExistingAddressFormProps> = ({
   const [selectedAddressId, setSelectedAddressId] = useState<string>();
   const { token } = useAuth();
   const dispatch = useDispatch();
-  
+  const t = useTranslations();
   const getExistingAddresses = useCallback(async () => {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/addresses`, {
       headers: {
@@ -145,7 +145,7 @@ const ChooseExistingAddressForm: React.FC<ChooseExistingAddressFormProps> = ({
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
             <span className="text-green-800 dark:text-green-200 font-medium">
-              {('Address selected successfully')}
+              {t('Address selected successfully')}
             </span>
           </div>
         </div>

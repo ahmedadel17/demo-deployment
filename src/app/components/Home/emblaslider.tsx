@@ -110,7 +110,7 @@ export function EmblaCarousel({ slides }: EmblaCarouselProps) {
                   src={slide.image}
                   alt=""
                   fill
-                  className={`object-cover ${isRTL ? 'scale-x-[-1]' : ''}`}
+                  className={`objectCover ${isRTL ? 'scale-x-[-1]' : ''}`}
                   priority={index === 0}
                 />
 

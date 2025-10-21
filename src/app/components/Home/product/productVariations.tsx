@@ -8,6 +8,9 @@ import { setCartData } from '@/app/store/slices/cartSlice';
 import { useAppDispatch } from '@/app/store/hooks';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import postRequest from '../../../../../helpers/post';
+import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 interface Product {
   id: number;
@@ -38,14 +41,16 @@ function ProductVariations({
     variationId: null as number | null,
     isAddingToCart: false,
     isLoadingVariation: false,
-    selectedVariation: null as any
+    selectedVariation: null as any,
+    isFavorite: product?.is_favorite,
+    isFavoriteLoading: false
   });
-  console.log('product', product);
-  console.log('variations', variations);
+  
   const { loadCartFromStorage } = useCart();
   const { token, isAuthenticated } = useAuth();
   const dispatch = useAppDispatch();
-
+  const locale = useLocale();   
+  const t = useTranslations();
   // Notify parent when variation is selected
   useEffect(() => {
     onVariationSelected?.(state.selectedVariation !== null);
@@ -113,6 +118,28 @@ function ProductVariations({
     setState(prev => ({ ...prev, selectedSize: size, selectedSizeId: sizeId }));
     if (state.selectedColorId) {
       fetchVariationId(state.selectedColorId, sizeId);
+    }
+  };
+
+  // Handle favorite toggle
+  const handleFavoriteToggle = async () => {
+    setState(prev => ({ ...prev, isFavoriteLoading: true }));
+    
+    try {
+      const response = await postRequest(`/catalog/favorites/products/${product.id}/toggle`, {  }, {}, token, locale);
+      console.log('fav', response.data.data);
+      
+      if (response.data.status) {
+        setState(prev => ({ ...prev, isFavorite: !prev.isFavorite }));
+        toast.success(state.isFavorite ? 'Product removed from favorites!' : 'Product added to favorites successfully!');
+      } else {
+        toast.error('Failed to update favorites');
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      toast.error('Failed to update favorites');
+    } finally {
+      setState(prev => ({ ...prev, isFavoriteLoading: false }));
     }
   };
 
@@ -291,22 +318,35 @@ function ProductVariations({
             <Handbag className="w-5 h-5" />
           )}
           <span className="text-sm font-medium lg:block hidden">
-            {state.isAddingToCart ? 'Adding...' : state.isLoadingVariation ? 'Loading...' : 'Add to Cart'}
+            {state.isAddingToCart ? t('Adding') : state.isLoadingVariation ? t('Loading') : t('Add to Cart')}
           </span>
         </button>
-        <button className="p-2 rounded-md border border-gray-300 hover:bg-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 transition-colors">
-          <svg
-            className="w-4 h-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            viewBox="0 0 24 24"
-          >
-            <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
-          </svg>
+        <button 
+          onClick={handleFavoriteToggle}
+          disabled={state.isFavoriteLoading}
+          className={`p-2 rounded-md border transition-colors ${
+            state.isFavorite 
+              ? 'border-pink-300 bg-pink-50 hover:bg-pink-100 text-pink-600 dark:border-pink-600 dark:bg-pink-900/20 dark:hover:bg-pink-900/30 dark:text-pink-400' 
+              : 'border-gray-300 hover:bg-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700'
+          } ${state.isFavoriteLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          title={state.isFavoriteLoading ? "Loading..." : state.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+        >
+          {state.isFavoriteLoading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent"></div>
+          ) : (
+            <svg
+              className="w-4 h-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill={state.isFavorite ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              viewBox="0 0 24 24"
+            >
+              <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+            </svg>
+          )}
         </button>
       </div>
     </>

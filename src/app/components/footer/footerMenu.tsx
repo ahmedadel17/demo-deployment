@@ -1,5 +1,6 @@
+'use client'
 import React from "react";
-
+import { useTranslations } from 'next-intl';
 interface FooterLink {
   name: string;
   url: string;
@@ -54,13 +55,14 @@ const footerMenus: FooterMenu[] = [
 ];
 
 const FooterMenus: React.FC = () => {
+  const t = useTranslations();
   return (
     <>
       {footerMenus.map((menu) => (
         <div key={menu.title} className="te-footer-widget footer-widget-1">
           <div className="footer-widget dark:text-white">
             <div className="te-footer-title text-white mb-3 font-semibold text-gray-900 ">
-              {menu.title}
+              {t(menu.title)}
             </div>
             <div className="menu-footer-container">
               <ul className="menu space-y-2">
@@ -70,7 +72,7 @@ const FooterMenus: React.FC = () => {
                       href={link.url}
                       className="te-footer-link text-gray-600 dark:text-gray-400 hover:text-primary-500 transition-colors"
                     >
-                      {link.name}
+                      {t(link.name)}
                     </a>
                   </li>
                 ))}

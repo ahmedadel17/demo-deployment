@@ -1,8 +1,12 @@
+'use client'
 import React from 'react'
 import FooterMenus from '../footerMenu'
 import FooterApp from '../footerApp'
 import FooterSocialMedia from '../footerSocialMedia'
+import { useTranslations } from 'next-intl'
 function footerStyle1() {
+
+    const t = useTranslations();
   return (
       <footer className="te-footer flex-shrink-0">
     <div className="container">
@@ -20,7 +24,7 @@ function footerStyle1() {
 
                 {/* <!-- Dynamic Copyright --> */}
                 <div className="te-footer-copyright">
-                    <p>© 2025 Naseem. All rights reserved. </p>
+                    <p>© 2025 Naseem. {t("All rights reserved")}. </p>
                 </div>
 
                 <div className="te-footer-bottom-links">

@@ -70,7 +70,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, discount }) => 
             ref={imageRef}
             src={selectedImage}
             alt="Product"
-            className="zoom-image w-full h-full object-cover transition-transform duration-300"
+            className="zoom-image w-full h-full objectCover transition-transform duration-300"
           />
           <div
             ref={lensRef}
@@ -121,7 +121,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, discount }) => 
               <img
                 src={img}
                 alt={`Thumbnail ${idx + 1}`}
-                className="w-20 aspect-square object-cover rounded-md"
+                className="w-20 aspect-square objectCover rounded-md"
               />
             </button>
           ))}

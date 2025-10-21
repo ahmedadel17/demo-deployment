@@ -1,6 +1,6 @@
 import React from 'react';
 import DeleteButton from '@/app/components/DeleteButton';
-
+import { useTranslations } from 'next-intl';
 interface Address {
   id: number;
   label: string;
@@ -42,6 +42,7 @@ const   AddressRadioButton: React.FC<AddressRadioButtonProps> = ({
   onChange,
   checked = false
 }) => {
+  const t = useTranslations();
   return (
     <label 
       key={address.id} 
@@ -67,7 +68,7 @@ const   AddressRadioButton: React.FC<AddressRadioButtonProps> = ({
              </h4>
              {address.is_default && (
                <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
-                 Default
+                 {t('Default')}
                </span>
              )}
            </div>

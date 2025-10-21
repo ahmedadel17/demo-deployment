@@ -106,7 +106,7 @@ function Slider({slides}: {slides: any[]}) {
                 <img
                   src={slide.image}
                   alt=""
-                  className={`absolute inset-0 w-full h-full object-cover ${isRTL ? 'scale-x-[-1]' : ''}`}
+                  className={`absolute inset-0 w-full h-full objectCover ${isRTL ? 'scale-x-[-1]' : ''}`}
                 />
 
                 {/* Overlay */}

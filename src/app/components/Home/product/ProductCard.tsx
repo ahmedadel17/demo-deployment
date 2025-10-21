@@ -1,11 +1,10 @@
-"use client";
 
 import { Handbag } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
 import ProductTitle from "./productTitle";
 import ProductPrice from "./productPrice";
 import ProductVariations from "./productVariations";
+import ProductInfo from "./productInfo";
 
 interface Badge {
   type: string;
@@ -46,11 +45,7 @@ const badgeClasses: Record<string, string> = {
 };
 
 const ProductCard: React.FC<Props> = ({ product, carousel = false }) => {
-  const [hasVariationSelected, setHasVariationSelected] = useState(false);
-
-  const handleVariationSelected = (hasVariation: boolean) => {
-    setHasVariationSelected(hasVariation);
-  };
+  
 
   return (
     <div
@@ -113,7 +108,6 @@ const ProductCard: React.FC<Props> = ({ product, carousel = false }) => {
             <button
               className="quick-view-btn w-8 h-8 bg-white text-gray-700 rounded-full shadow-lg hover:bg-primary-300 hover:text-white transition-colors duration-200 flex items-center justify-center"
               title="Quick View"
-              onClick={() => window.open(`/productDetails/${product.slug}`, '_blank')}
             >
               <svg
                 className="w-4 h-4"
@@ -136,7 +130,7 @@ const ProductCard: React.FC<Props> = ({ product, carousel = false }) => {
             alt={product.name}
             width={300}
             height={320}
-            className="w-full h-48 object-cover transition-all duration-500 ease-in-out transform"
+            className="w-full h-48 objectCover transition-all duration-500 ease-in-out transform"
             style={{ minHeight: '192px' }}
           />
 
@@ -145,7 +139,7 @@ const ProductCard: React.FC<Props> = ({ product, carousel = false }) => {
             <img
               src={product.hover}
               alt={`${product.name} hover`}
-              className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-in-out transform scale-105 opacity-0 group-hover:scale-100 group-hover:opacity-100"
+              className="absolute inset-0 w-full h-full objectCover transition-all duration-500 ease-in-out transform scale-105 opacity-0 group-hover:scale-100 group-hover:opacity-100"
             />
           )}
         </Link>
@@ -186,19 +180,11 @@ const ProductCard: React.FC<Props> = ({ product, carousel = false }) => {
           <ProductTitle name={product?.name} slug={product?.slug} />
 
           {/* Price - Show initially, hide when variation is selected */}
-          {!hasVariationSelected && (
-            <ProductPrice old_price={product?.old_price} price_after_discount={product?.price_after_discount} price={product?.price} />
-          )}
+          
         </div>
-
+         <ProductInfo product={product} />
         {/* Product Variations with Add to Cart Logic - Always at bottom */}
-        <div className="mt-auto">
-          <ProductVariations 
-            product={product}
-            variations={product?.variations}
-            onVariationSelected={handleVariationSelected}
-          />
-        </div>
+       
       </div>
     </div>
   );

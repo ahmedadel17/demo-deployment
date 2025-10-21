@@ -18,20 +18,9 @@ import { useOrder } from "@/app/hooks/useOrder";
     const [orderData, setOrderData] = useState<{data?: unknown} | null>(null);
     const searchParams = useSearchParams();
     const orderId = searchParams.get('orderId');
-    const paymentId=searchParams.get('id');
     
     // Check if status has already been checked for this payment ID
-    const getStatusCheckKey = useCallback(() => `payment_status_checked_${paymentId}`, [paymentId]);
-    const hasStatusBeenChecked = useCallback(() => {
-        if (!paymentId) return false;
-        return localStorage.getItem(getStatusCheckKey()) === 'true';
-    }, [paymentId, getStatusCheckKey]);
-    const markStatusAsChecked = useCallback(() => {
-        if (paymentId) {
-            localStorage.setItem(getStatusCheckKey(), 'true');
-        }
-    }, [paymentId, getStatusCheckKey]);
-
+ 
     const getOrderData = useCallback(async () => {
         try {
             // Check if token exists and is valid
@@ -46,20 +35,7 @@ import { useOrder } from "@/app/hooks/useOrder";
             const orderData = await getRequest(`/order/orders/${orderId}`, { 'Content-Type': 'application/json' }, token, locale);
             setOrderData(orderData);
             
-            // Only check payment status once and if paymentId exists
-            if(paymentId && !hasStatusBeenChecked()){
-                markStatusAsChecked();
-                const paymentData = await getRequest(`/payment/hyper-pay/check-status?id=${paymentId}`, { 'Content-Type': 'application/json' }, token, locale);
-                console.log('Payment Status Response:', paymentData);
-                
-                // Log the status specifically if it exists
-                if (paymentData?.status) {
-                    console.log('Payment Status:', paymentData.status);
-                }
-                if (paymentData?.data?.status) {
-                    console.log('Payment Data Status:', paymentData.data.status);
-                }
-            }
+       
                setCartData({
                  id: '',
                  products: [],
@@ -72,7 +48,7 @@ import { useOrder } from "@/app/hooks/useOrder";
                 console.error('Authentication failed - token may be invalid or expired');
             }
         }
-    }, [token, orderId, paymentId, locale, setCartData, hasStatusBeenChecked, markStatusAsChecked]);
+    }, [token, orderId, locale, setCartData ]);
     useEffect(() => {
         if (token && orderId) {
             getOrderData();
