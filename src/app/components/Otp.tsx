@@ -7,7 +7,8 @@ import { useAuth } from '../hooks/useAuth';
 import { useAppDispatch } from '../store/hooks';
 import { loginSuccess, setLoading, setError, clearError } from '../store/slices/authSlice';
 import { saveAuthToken, saveUserData } from '../utils/authStorage';
-
+import { useTranslations } from 'next-intl';
+import { useRTL } from '../hooks/useRTL';  
 interface OtpState {
   otp: string[];
   registrationData: string | null;
@@ -25,7 +26,8 @@ export default function Otp2() {
   const router = useRouter();
   const { isLoading, error } = useAuth();
   const dispatch = useAppDispatch();
-
+  const t = useTranslations();
+  const { isRTL, direction } = useRTL();
   // Load registration data from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -123,38 +125,43 @@ const handleSubmit = useCallback(async () => {
             ...prev.otp.slice(index + 1),
           ]
         }));
-      } else if (index > 0) {
-        // If current field is empty and not the first field, move to previous field
-        setState(prev => ({
-          ...prev,
-          otp: [
-            ...prev.otp.slice(0, index - 1),
-            "",
-            ...prev.otp.slice(index),
-          ]
-        }));
-        inputRefs.current[index - 1]?.focus();
+      } else {
+        // If current field is empty, move to the appropriate field based on direction
+        const prevIndex = isRTL ? index + 1 : index - 1;
+        if (isRTL ? prevIndex < state.otp.length : prevIndex >= 0) {
+          setState(prev => ({
+            ...prev,
+            otp: [
+              ...prev.otp.slice(0, prevIndex),
+              "",
+              ...prev.otp.slice(prevIndex + 1),
+            ]
+          }));
+          inputRefs.current[prevIndex]?.focus();
+        }
       }
     }
-  }, []);
+  }, [isRTL, state.otp.length]);
 
   const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
     const index = inputRefs.current.indexOf(target);
-    if (target.value) {
-      setState(prev => ({
-        ...prev,
-        otp: [
-          ...prev.otp.slice(0, index),
-          target.value,
-          ...prev.otp.slice(index + 1),
-        ]
-      }));
-      if (index < state.otp.length - 1) {
-        inputRefs.current[index + 1]?.focus();
+      if (target.value) {
+        setState(prev => ({
+          ...prev,
+          otp: [
+            ...prev.otp.slice(0, index),
+            target.value,
+            ...prev.otp.slice(index + 1),
+          ]
+        }));
+        // In RTL, move to the left (previous index), in LTR move to the right (next index)
+        const nextIndex = isRTL ? index - 1 : index + 1;
+        if (isRTL ? nextIndex >= 0 : nextIndex < state.otp.length) {
+          inputRefs.current[nextIndex]?.focus();
+        }
       }
-    }
-  }, [state.otp.length]);
+  }, [state.otp.length, isRTL]);
 
   const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     e.target.select();
@@ -197,15 +204,15 @@ const handleSubmit = useCallback(async () => {
                 className={`shadow-xs flex h-12 w-12 items-center justify-center rounded-lg border border-stroke bg-white p-2 text-center text-2xl font-medium text-gray-5 outline-none sm:h-14 sm:w-14 sm:text-3xl md:h-16 md:w-16 md:text-4xl dark:border-dark-3 dark:bg-white/5 ${
                   (state.isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
-                dir={'ltr'}
-                style={{ textAlign: 'center', direction: 'ltr' }}
+                dir={direction as 'ltr' | 'rtl'}
+                style={{ textAlign: 'center', direction: direction as 'ltr' | 'rtl' }}
               />
             ))}
           </div>
                    <div className="text-center">
    
                         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 text-center">
-                            {('Enter the 6-digit code sent to your phone')}
+                            {t('Enter the 6-digit code sent to your phone')}
                        </p>
                        
                        {/* Show Redux auth error */}
@@ -222,7 +229,7 @@ const handleSubmit = useCallback(async () => {
                            id="resend-otp"
                            className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 disabled:opacity-50 disabled:cursor-not-allowed"
                            disabled={state.isSubmitting || isLoading}>
-                           <span id="resend-text">{('Resend code in ')}</span>
+                           <span id="resend-text">{t('Resend code in ')}</span>
                            <span id="countdown">60</span>s
                        </button>
                    </div>
@@ -235,7 +242,7 @@ const handleSubmit = useCallback(async () => {
                            className={`te-btn te-btn-default sm:flex-1 ${
                              (state.isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
                            }`}>
-                           {('Change Phone')}
+                           {t('Change Phone')}
                        </button>
                        <button
                            onClick={handleSubmit}
@@ -247,10 +254,10 @@ const handleSubmit = useCallback(async () => {
                            {(state.isSubmitting || isLoading) ? (
                              <>
                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                               <span>{('Verifying')}</span>
+                               <span>{t('Verifying')}</span>
                              </>
                            ) : (
-                             <span>{('Verify & Sign In')}</span>
+                             <span>{t('Verify & Sign In')}</span>
                            )}
                        </button>
                    </div>

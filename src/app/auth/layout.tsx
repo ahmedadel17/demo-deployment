@@ -1,5 +1,7 @@
-
-function authLayout({children}: {children: React.ReactNode}) {
+'use client'
+import { useTranslations } from 'next-intl';
+export default function AuthLayout({children}: {children: React.ReactNode}) {
+  const t = useTranslations();
   return (
       <>
     
@@ -10,10 +12,10 @@ function authLayout({children}: {children: React.ReactNode}) {
             {/* Logo/Header */}
             <div className="text-center">
               <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
-                {("Welcome Back")}
+                {t("Welcome Back")}
               </h2>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                {("Sign in to your account or create a new one")}
+                {t("Sign in to your account or create a new one")}
               </p>
             </div>
             {children}
@@ -23,5 +25,3 @@ function authLayout({children}: {children: React.ReactNode}) {
       </>
   )
 }
-
-export default authLayout
