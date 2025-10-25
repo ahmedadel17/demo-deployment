@@ -6,6 +6,7 @@ import { BoxIcon } from 'lucide-react'
 import { useAppSelector } from '@/app/store/hooks'
 import { useAuth } from '@/app/hooks/useAuth'
 import { useTranslations } from 'next-intl'
+import { useWishlist } from '@/app/hooks/useWishlist'
 function FooterNav() {
   const pathname = usePathname()
   const { cartData } = useAppSelector((state) => state.cart)
@@ -13,7 +14,8 @@ function FooterNav() {
   const t = useTranslations()
   // Get total items in cart from cart_count or calculate from products
   const totalItems = cartData?.cart_count || cartData?.products?.reduce((total, item) => total + (item.qty || 0), 0) || 0
-
+  const { products } = useWishlist();
+  const wishlistCount = products.length;
   const navItems = [
     {
       href: '/',
@@ -37,6 +39,22 @@ function FooterNav() {
           {totalItems > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
               {totalItems > 99 ? '99+' : totalItems}
+            </span>
+          )}
+        </div>
+      )
+    }] : []),
+    ...(isAuthenticated ? [{
+      href: '/wishlist',
+      label: 'Wishlist',
+      icon: (
+        <div className="relative">
+              <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+              </svg>
+          {wishlistCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+              {wishlistCount > 99 ? '99+' : wishlistCount}
             </span>
           )}
         </div>
@@ -90,18 +108,14 @@ function FooterNav() {
         maxHeight: 'calc(100vh - env(safe-area-inset-bottom, 0px))'
       }}
     >
-      <div className={`grid h-full mx-auto font-medium dark:bg-gray-900 ${
-        navItems.length === 3 
-          ? 'grid-cols-3 max-w-md' 
-          : 'grid-cols-4 max-w-lg'
-      }`}>
+      <div className="flex h-full mx-auto font-medium dark:bg-gray-900 justify-center items-center">
         {navItems.map((item) => {
           const isActive = pathname === item.href
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 group   ${
+              className={`flex flex-col items-center justify-center px-3 py-2 hover:bg-gray-50 group flex-1 ${
                 isActive ? 'bg-blue-50' : ''
               }`}
               style={{
