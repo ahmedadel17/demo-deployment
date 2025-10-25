@@ -66,13 +66,13 @@ export default function WishlistPage() {
     name: product.name,
     thumbnail: product.thumbnail || '',
     slug: product.slug || '',
-    price: product.price_after_discount,
+    price: product.price_after_discount.toString(),
     image: product.thumbnail || '', // Ensure image property is always available
     category: product.category || '',
-    old_price: product.discount > 0 ? product.min_price : null,
-    min_price: product.min_price,
-    price_after_discount: product.price_after_discount,
-    is_favorite: product.is_favourite,
+    old_price: product.discount > 0 ? product.min_price.toString() : null,
+    min_price: product.min_price.toString(),
+    price_after_discount: product.price_after_discount.toString(),
+    is_favourite: product.is_favourite,
     variations: product.variations || []
   }));
 

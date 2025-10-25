@@ -53,7 +53,7 @@ const wishlistSlice = createSlice({
       const existingIndex = state.products.findIndex(p => p.id === product.id);
       
       if (existingIndex === -1) {
-        state.products.push({ ...product, is_favorite: true });
+        state.products.push({ ...product, is_favourite: true });
         state.lastUpdated = new Date().toISOString();
         
         // Update localStorage
@@ -84,7 +84,7 @@ const wishlistSlice = createSlice({
       
       if (existingIndex === -1) {
         // Add to wishlist
-        state.products.push({ ...product, is_favorite: true });
+        state.products.push({ ...product, is_favourite: true });
         console.log('💾 Product added to wishlist:', product);
       } else {
         // Remove from wishlist
