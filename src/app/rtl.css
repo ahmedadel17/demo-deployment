@@ -81,13 +81,13 @@
 
 /* Mobile menu RTL adjustments */
 [dir="rtl"] .te-navbar-nav-mobile {
-  right: 0;
-  left: auto;
-  transform: translateX(100%);
+  left: 0;
+  right: auto;
+  transform: translateY(-20px);
 }
 
 [dir="rtl"] .te-navbar-nav-mobile.te-navbar-nav-mobile-show {
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 /* Dropdown RTL adjustments */
@@ -207,8 +207,8 @@
 /* Responsive RTL adjustments */
 @media (max-width: 768px) {
   [dir="rtl"] .te-navbar-nav-mobile {
-    right: 0;
-    left: auto;
+    left: 0;
+    right: auto;
   }
   
   [dir="rtl"] .mobile-menu-toggle {

@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl';
 function OrderItem({order}: {order: any}) {
+  const t = useTranslations();
   return (
     <>
              <tr key={order.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -18,7 +20,7 @@ function OrderItem({order}: {order: any}) {
                     </td>
                     <td className="px-6 py-4">
                       <Link href={`/order/${order?.id}`} className="font-medium text-primary-600 dark:text-primary-100 hover:underline">
-                        View
+                        {t('View')}
                       </Link>
                     </td>
                   </tr>

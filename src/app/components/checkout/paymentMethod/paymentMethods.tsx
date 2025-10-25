@@ -202,8 +202,8 @@ const {token}= useAuth()
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 my-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-          {showPaymentOptions ? ('Payment Method') : ('Processing Payment')}
-        </h2>
+            {showPaymentOptions ? t('Payment Method') : t('Processing Payment')}
+          </h2>
         
         {/* Back button - only show when payment options are hidden */}
         {!showPaymentOptions && (
@@ -214,7 +214,7 @@ const {token}= useAuth()
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span className='hidden lg:block'>{('Change Payment Method')}</span>
+            <span className='hidden lg:block'>{t('Change Payment Method')}</span>
           </button>
         )}
       </div>
@@ -244,8 +244,8 @@ const {token}= useAuth()
                     <div className="flex items-center">
                       {option.icon}
                       <div>
-                        <span className="font-medium text-gray-900 dark:text-white">{option.label}</span>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{option.description}</p>
+                        <span className="font-medium text-gray-900 dark:text-white">{t(option.label)}</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t(option.description)}</p>
                       </div>
                     </div>
                   </div>

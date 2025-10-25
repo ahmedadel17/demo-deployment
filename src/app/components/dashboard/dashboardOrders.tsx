@@ -5,7 +5,7 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import OrderItem from "./dashboardOrdersComponents/orderItem";
-
+import { useTranslations } from "next-intl";
 interface Order {
   id: string;
   date: string;
@@ -17,6 +17,7 @@ interface Order {
 }
 
 const OrdersPage: React.FC = () => {
+  const t = useTranslations();
   const { token } = useAuth();
   const locale = useLocale();
   const [ordersNew,setOrdersNew]=useState<Order[]>([]);
@@ -70,7 +71,7 @@ const OrdersPage: React.FC = () => {
       <div className="lg:col-span-3 space-y-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="p-6 border-b border-gray-200 dark:border-gray-600">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Orders</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('My Orders')}</h1>
           </div>
 
           <div className="p-6 overflow-x-auto">
@@ -79,7 +80,7 @@ const OrdersPage: React.FC = () => {
                 <tr>
                   <th className="px-6 py-3">
                     <div className="flex flex-col space-y-2">
-                      <span>Order ID</span>
+                      <span>{t('Order ID')}</span>
                       <input
                         type="text"
                         placeholder="Filter..."
@@ -92,13 +93,13 @@ const OrdersPage: React.FC = () => {
 
                   <th className="px-6 py-3">
                     <div className="flex flex-col space-y-2">
-                      <span>Date</span>
+                      <span>{t('Date')}</span>
                       <select
                         className="border border-gray-300 rounded-md px-2 py-1 text-sm"
                         value={filters.date}
                         onChange={(e) => setFilters({ ...filters, date: e.target.value })}
                       >
-                        <option value="">All Dates</option>
+                        <option value="">{t('All Dates')}</option>
                         <option value="September">September 2025</option>
                         <option value="August">August 2025</option>
                       </select>
@@ -107,37 +108,37 @@ const OrdersPage: React.FC = () => {
 
                   <th className="px-6 py-3">
                     <div className="flex flex-col space-y-2">
-                      <span>Status</span>
+                      <span>{t('Status')}</span>
                       <select
                         className="border border-gray-300 rounded-md px-2 py-1 text-sm"
                         value={filters.status}
                         onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                       >
-                        <option value="">All Status</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="">{t('All Status')}  </option>
+                        <option value="Delivered">{t('Delivered')}</option>
+                        <option value="Shipped">{t('Shipped')}</option>
+                        <option value="Processing">{t('Processing')}</option>
+                        <option value="Cancelled">{t('Cancelled')}</option>
                       </select>
                     </div>
                   </th>
 
                   <th className="px-6 py-3">
                     <div className="flex flex-col space-y-2">
-                      <span>Total</span>
+                      <span>{t('Total')}</span>
                       <select
                         className="border border-gray-300 rounded-md px-2 py-1 text-sm"
                         value={filters.total}
                         onChange={(e) => setFilters({ ...filters, total: e.target.value })}
                       >
-                        <option value="">All Amounts</option>
+                        <option value="">{t('All Amounts')}</option>
                         <option value="0-50">0 - 50</option>
                         <option value="50-100">50 - 100</option>
                         <option value="100+">100+</option>
                       </select>
                     </div>
                   </th>
-                  <th className="px-6 py-3">Actions</th>
+                  <th className="px-6 py-3">{t('Actions')}</th>
                 </tr>
               </thead>
 

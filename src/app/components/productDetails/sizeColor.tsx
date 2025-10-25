@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-
+import { useTranslations } from 'next-intl';
 interface SizeColorProps {
   variations: Array<{
     id: number;
@@ -15,6 +15,7 @@ interface SizeColorProps {
 }
 
 function SizeColor({ variations, onSelectionChange }: SizeColorProps) {
+  const t = useTranslations();
   const [selectedSizeId, setSelectedSizeId] = useState<number | null>(null);
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
 
@@ -38,7 +39,7 @@ function SizeColor({ variations, onSelectionChange }: SizeColorProps) {
   return (
     <>
       <div className="product-size mt-4">
-        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Size</h4>
+        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">{t('Size')}</h4>
         <div className="grid grid-cols-4 gap-2">
           { (variations[0] as any)?.[0]?.values?.map((size: {
             id: number;
@@ -60,7 +61,7 @@ function SizeColor({ variations, onSelectionChange }: SizeColorProps) {
 
       {/* <!-- Color Selection --> */}
       <div className="product-color mt-4">
-        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Color</h4>
+        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">{t("Color")}</h4>
         <div className="flex flex-wrap gap-3">
         {(variations[0] as any)?.[1]?.values?.map((color: {
             id: number;

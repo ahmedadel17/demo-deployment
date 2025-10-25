@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { setCartData, setCartLoading, setCartError } from '@/app/store/slices/cartSlice'
 import { toast } from 'react-hot-toast';
-
+import { useTranslations } from 'next-intl';
 interface AddToCartButtonProps {
   productId?: string;
   productTitle?: string;
@@ -28,7 +28,7 @@ function AddToCartButton({
   const dispatch = useAppDispatch();
   const { isAuthenticated, token } = useAuth();
   const router = useRouter();
-  
+  const t = useTranslations();
   // Get data from Redux
   const { selectedSizeId, selectedColorId, variationData } = useAppSelector((state) => state.product);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -123,7 +123,7 @@ function AddToCartButton({
         {isAddingToCart ? (
           <>
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-            Adding to Cart...
+            {t('Adding to Cart')}...
           </>
         ) : (
           <>
@@ -131,7 +131,7 @@ function AddToCartButton({
               <path d="M2.048 18.566A2 2 0 0 0 4 21h16a2 2 0 0 0 1.952-2.434l-2-9A2 2 0 0 0 18 8H6a2 2 0 0 0-1.952 1.566z" />
               <path d="M8 11V6a4 4 0 0 1 8 0v5" />
             </svg>
-            Add to Cart
+            {t('Add to Cart')}
           </>
         )}
       </button>

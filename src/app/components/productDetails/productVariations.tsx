@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react'
 import SizeColor from './sizeColor'
-
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
@@ -12,6 +11,7 @@ import {
   setVariationError, 
   clearVariationError 
 } from '@/app/store/slices/productSlice'
+import { useTranslations } from 'next-intl';
 
 interface ProductVariationsProps {
   variations: {
@@ -33,7 +33,7 @@ interface ProductVariationsProps {
 function ProductVariations({ variations, hasVariations, productId, onDataChange }: ProductVariationsProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  
+  const t = useTranslations();
   // Get product state from Redux
   const { selectedSizeId, selectedColorId, variationData, isLoadingVariation, error } = useAppSelector((state) => state.product);
   
@@ -130,7 +130,7 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
     <div>
     <div className="product-variations">
     <div className="product-quantity">
-    <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Quantity</h3>
+    <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">{t('Quantity')}</h3>
     <div className="flex items-center space-x-3 rtl:space-x-reverse">
         <div className="flex items-center rtl:flex-row-reverse border border-gray-300 dark:border-gray-600 rounded-md">
             {/* <!-- Decrease Button --> */}
@@ -168,7 +168,7 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
                 </svg>
             </button>
         </div>
-        <span className="text-sm text-gray-600 dark:text-gray-400">Only {(variationData?.data as { stock?: number })?.stock || 5} left in stock</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">{t('Only')} {(variationData?.data as { stock?: number })?.stock || 5} {t('left in stock')}</span>
     </div>
 </div>
 
@@ -184,7 +184,7 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
 {hasVariations && (
   <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
     <div className="text-sm text-blue-800 dark:text-blue-200">
-      <p><strong>Current Selection:</strong></p>
+      <p><strong>{t('Current Selection')}:</strong></p>
       <p>Size: {selectedSizeId ? `Selected (ID: ${selectedSizeId})` : 'Not selected'}</p>
       <p>Color: {selectedColorId ? `Selected (ID: ${selectedColorId})` : 'Not selected'}</p>
     </div>
@@ -236,7 +236,7 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
 
 
 <div className="space-y-2 mt-4">
-  <label htmlFor="customer_note" className="block text-sm font-medium text-gray-900 dark:text-white">Do you have another comment?</label>
+  <label htmlFor="customer_note" className="block text-sm font-medium text-gray-900 dark:text-white">{t('Do you have another comment')}</label>
   <textarea 
     id="customer_note" 
     name="customer_note" 
@@ -244,7 +244,7 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
     onChange={(e) => setCustomerNote(e.target.value)}
     rows={3} 
     className="w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-primary-500 focus:border-primary-500" 
-    placeholder="Enter your comment here..."
+    placeholder={t('Enter your comment here')}
   ></textarea>
 </div>
 </div>

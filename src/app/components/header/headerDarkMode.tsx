@@ -7,9 +7,19 @@ function HeaderDarkMode() {
 
   // Load theme from localStorage on component mount
   useEffect(() => {
-    // Check the current theme state from the DOM (set by ThemeScript)
+    // First check localStorage, then DOM as fallback
+    const storedTheme = localStorage.getItem('theme');
     const hasDarkClass = document.documentElement.classList.contains('dark');
-    setIsDark(hasDarkClass);
+    
+    if (storedTheme === 'dark') {
+      setIsDark(true);
+    } else if (storedTheme === 'light') {
+      setIsDark(false);
+    } else {
+      // Fallback to DOM state
+      setIsDark(hasDarkClass);
+    }
+    
     setIsLoading(false);
   }, []);
 

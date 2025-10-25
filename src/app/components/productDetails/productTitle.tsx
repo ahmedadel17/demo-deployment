@@ -1,9 +1,11 @@
 'use client';
 import { useAppSelector } from '@/app/store/hooks';
 import React from 'react'
+import { useTranslations } from 'next-intl';
 import VariationTitle from './productVariationData/variationTitle'
 function ProductTitle({ name, rate, rate1, rate2, rate3, rate4, rate5,out_of_stock }: { name: string, rate: number, rate1: number, rate2: number, rate3: number, rate4: number, rate5: number,out_of_stock: boolean }) {
   const { variationData } = useAppSelector((state) => state.product);
+  const t = useTranslations();
   console.log('variationData', variationData);
   return (
     <>
@@ -28,10 +30,10 @@ function ProductTitle({ name, rate, rate1, rate2, rate3, rate4, rate5,out_of_sto
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                 </svg>}
             </div>
-            <span className="text-sm text-gray-600 dark:text-gray-400 ml-2 rtl:ml-0 rtl:mr-2">{rate} (89 reviews)</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400 ml-2 rtl:ml-0 rtl:mr-2">{rate} ( {t('reviews')})</span>
         </div>
-        {variationData && <span className={`product-stock text-sm ${out_of_stock ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>{(variationData?.data as any)?.out_of_stock ? 'Out of Stock' : 'In Stock'}</span>}
-        {!variationData && <span className={`product-stock text-sm ${out_of_stock ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>{out_of_stock ? 'Out of Stock' : 'In Stock'}</span>}
+        {variationData && <span className={`product-stock text-sm ${out_of_stock ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>{(variationData?.data as any)?.out_of_stock ? t('Out of Stock') : t('In Stock')}</span>}
+        {!variationData && <span className={`product-stock text-sm ${out_of_stock ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>{out_of_stock ? t('Out of Stock') : t('In Stock')}</span>}
     </div>
 </>
   )

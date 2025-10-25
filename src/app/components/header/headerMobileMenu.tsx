@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import LanguageToggle from './LanguageToggle'
 import { useRTL } from '@/app/hooks/useRTL'
 import { useAuth } from '@/app/hooks/useAuth'
-
+import { useTranslations } from 'next-intl'
 function HeaderMobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState<Set<string>>(new Set());
@@ -14,7 +14,7 @@ function HeaderMobileMenu() {
   const router = useRouter();
   const { isRTL } = useRTL();
   const { isAuthenticated, logout: logoutUser } = useAuth();
-
+  const t = useTranslations()
   const handleLogout = () => {
     logoutUser();
     setIsOpen(false);
@@ -89,7 +89,7 @@ function HeaderMobileMenu() {
 <div className={`te-navbar-nav-mobile ${isOpen ? 'te-navbar-nav-mobile-show' : ''} z-50 ${isRTL ? 'rtl' : 'ltr'}`} id="mobile-navigation" aria-label="Mobile Navigation" ref={dropdownRef}>
     <div className="flex flex-col">
 
-        <Link href="/" className={`te-navbar-link-mobile dark:text-white ${pathname === '/' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>Home</Link>
+        <Link href="/" className={`te-navbar-link-mobile dark:text-white ${pathname === '/' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>{t('Home')}</Link>
         
         {/* Language Toggle for Mobile */}
         {/* <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
@@ -104,7 +104,7 @@ function HeaderMobileMenu() {
             toggleSubmenu('men');
           }}
         >
-          Men
+          {t('Men')}
         </a>
         <div className={`te-navbar-submenu-mobile  ${openSubmenus.has('men') ? 'te-submenu-mobile-open ' : ' '}`}>
             <a href="#" className="te-navbar-submenu-mobile-link" onClick={closeMenu}>Menu Link 1</a>
@@ -123,7 +123,7 @@ function HeaderMobileMenu() {
             toggleSubmenu('women');
           }}
         >
-          Women
+          {t('Women')}
         </a>
         <div className={`te-navbar-submenu-mobile ${openSubmenus.has('women') ? 'te-submenu-mobile-open' : ''}`}>
             <a href="#" className="te-navbar-submenu-mobile-link" onClick={closeMenu}>Menu Link 1</a>
@@ -142,7 +142,7 @@ function HeaderMobileMenu() {
             toggleSubmenu('kids');
           }}
         >
-          Kids
+          {t('Kids')}
         </a>
         <div className={`te-navbar-submenu-mobile ${openSubmenus.has('kids') ? 'te-submenu-mobile-open' : ''}`}>
             <a href="#" className="te-navbar-submenu-mobile-link" onClick={closeMenu}>Menu Link 1</a>
@@ -161,7 +161,7 @@ function HeaderMobileMenu() {
             toggleSubmenu('accessories');
           }}
         >
-          Accessories
+          {t('Accessories')}
         </a>
         <div className={`te-navbar-submenu-mobile dark:text-white ${openSubmenus.has('accessories') ? 'te-submenu-mobile-open dark:text-white' : ''}`}>
             <a href="#" className="te-navbar-submenu-mobile-link" onClick={closeMenu}>Menu Link 1</a>
@@ -171,22 +171,22 @@ function HeaderMobileMenu() {
         </div>
 
 
-        <Link href="/products" className={`te-navbar-link-mobile dark:text-white ${pathname.startsWith('/products') ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>Products</Link>
-        <a href="#" className={`te-navbar-link-mobile dark:text-white ${pathname === '/new-arrivals' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>New Arrivals</a>
-        <a href="blog.php" className={`te-navbar-link-mobile dark:text-white ${pathname === '/blog.php' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>Blog</a>
-        <a href="contact.php" className={`te-navbar-link-mobile dark:text-white ${pathname === '/contact.php' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>Contact Us</a>
+        <Link href="/products" className={`te-navbar-link-mobile dark:text-white ${pathname.startsWith('/products') ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>{t('Products')}</Link>
+        <a href="#" className={`te-navbar-link-mobile dark:text-white ${pathname === '/new-arrivals' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>{t('New Arrivals')}</a>
+        <a href="blog.php" className={`te-navbar-link-mobile dark:text-white ${pathname === '/blog.php' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>{t('Blog')}</a>
+        <a href="contact.php" className={`te-navbar-link-mobile dark:text-white ${pathname === '/contact.php' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>{t('Contact Us')}</a>
         
         {/* Cart Link - Only show if authenticated */}
         {isAuthenticated && (
           <Link href="/cart" className={`te-navbar-link-mobile dark:text-white ${pathname === '/cart' ? 'te-navbar-link-active' : ''}`} onClick={closeMenu}>
-            Cart
+            {t('Cart')}   
           </Link>
         )}
         
         {/* Login Link - Only show if NOT authenticated */}
         {!isAuthenticated && (
           <Link href="/auth/login" className="te-navbar-link-mobile dark:text-white" onClick={closeMenu}>
-            Login
+            {t('Login')}
           </Link>
         )}
         
@@ -196,7 +196,7 @@ function HeaderMobileMenu() {
             onClick={handleLogout}
             className="te-navbar-link-mobile dark:text-white"
           >
-            Logout
+            {t('Logout')}
           </button>
         )}
 

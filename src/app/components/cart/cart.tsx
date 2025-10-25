@@ -30,7 +30,7 @@ function Cart() {
 
   return (
     <>
-     {/* Error Display */}
+     {/* Error Display
      {error && (
        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
@@ -41,9 +41,9 @@ function Cart() {
            Dismiss
          </button>
        </div>
-     )}
+     )} */}
 
-     {/* Debug: Redux Cart State Display */}
+     {/* Debug: Redux Cart State Display
      {cartData && (
        <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
          <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3">
@@ -87,7 +87,7 @@ function Cart() {
          <div className="mt-3">
            <p><strong>Order Attributes:</strong></p>
            <div className="flex flex-wrap gap-2">
-             {cartData.order_attributes.map((attr, index) => (
+             {cartData?.order_attributes?.map((attr, index) => (
                <span 
                  key={index} 
                  className="px-2 py-1 rounded text-xs"
@@ -99,7 +99,7 @@ function Cart() {
            </div>
          </div>
        </div>
-     )}
+     )} */}
 
      <div className="flex justify-between items-center mb-8 my-2">
     <div>

@@ -26,8 +26,14 @@ const LanguageToggle: React.FC<LanguageToggleProps> = ({ className = '' }) => {
     setIsOpen(false);
 
     try {
+      // Preserve current theme
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      
       // Set the locale cookie
       document.cookie = `locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+      
+      // Ensure theme is preserved in localStorage
+      localStorage.setItem('theme', currentTheme);
       
       // Reload the page to apply the new locale
       window.location.reload();

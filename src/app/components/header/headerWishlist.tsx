@@ -3,7 +3,7 @@ import React from 'react'
 function HeaderWishList() {
   return (
     <div className="te-navbar-dropdown">
-    <a href="wishlist.php" className="header-wishlist relative flex items-center gap-3 cursor-pointer">
+    <a href="/wishlist" className="header-wishlist relative flex items-center gap-3 cursor-pointer">
         <div className="cart-icon">
             <div className="w-10 h-10 bg-gray-100 dark:text-white dark:bg-gray-900 flex justify-center items-center rounded-full relative">
                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

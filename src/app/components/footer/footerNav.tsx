@@ -5,12 +5,12 @@ import { usePathname } from 'next/navigation'
 import { BoxIcon } from 'lucide-react'
 import { useAppSelector } from '@/app/store/hooks'
 import { useAuth } from '@/app/hooks/useAuth'
-
+import { useTranslations } from 'next-intl'
 function FooterNav() {
   const pathname = usePathname()
   const { cartData } = useAppSelector((state) => state.cart)
   const { isAuthenticated } = useAuth()
-  
+  const t = useTranslations()
   // Get total items in cart from cart_count or calculate from products
   const totalItems = cartData?.cart_count || cartData?.products?.reduce((total, item) => total + (item.qty || 0), 0) || 0
 
@@ -50,7 +50,7 @@ function FooterNav() {
       )
     },
     ...(isAuthenticated ? [{
-      href: '/profile',
+      href: '/dashboard',
       label: 'Profile',
       icon: (
         <svg className="w-5 h-5 mb-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -122,7 +122,7 @@ function FooterNav() {
                   color: isActive ? '#2563eb' : '#6b7280'
                 }}
               >
-                {item.label}
+                {t(item.label)}
               </span>
             </Link>
           )

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/hooks/useAuth";
+import { useTranslations } from "next-intl";
 interface MenuItem {
   title: string;
   icon: React.ReactNode;
@@ -22,16 +23,16 @@ const menuItems: MenuItem[] = [
     ),
     url: "/dashboard",
   },
-  {
-    title: "Notification",
-    icon: (
-      <>
-        <path d="M10.268 21a2 2 0 0 0 3.464 0" />
-        <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
-      </>
-    ),
-    url: "/dashboard/notification",
-  },
+  // {
+  //   title: "Notification",
+  //   icon: (
+  //     <>
+  //       <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+  //       <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
+  //     </>
+  //   ),
+  //   url: "/dashboard/notification",
+  // },
   {
     title: "My Rewards",
     icon: (
@@ -54,18 +55,18 @@ const menuItems: MenuItem[] = [
     ),
     url: "/dashboard/orders",
   },
-  {
-    title: "Track Order",
-    icon: (
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-      />
-    ),
-    url: "/dashboard/track",
-  },
+  // {
+  //   title: "Track Order",
+  //   icon: (
+  //     <path
+  //       strokeLinecap="round"
+  //       strokeLinejoin="round"
+  //       strokeWidth="2"
+  //       d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+  //     />
+  //   ),
+  //   url: "/dashboard/track",
+  // },
   {
     title: "Return Items",
     icon: (
@@ -148,7 +149,7 @@ const DashboardSidebar: React.FC = () => {
   const pathname = usePathname();
   const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
-
+  const t = useTranslations();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -205,7 +206,7 @@ const DashboardSidebar: React.FC = () => {
                   >
                     {item.icon}
                   </svg>
-                  {item.title}
+                  {t(item.title)}
                 </Link>
               );
             })}

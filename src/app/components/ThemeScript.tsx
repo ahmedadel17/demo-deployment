@@ -9,7 +9,17 @@ export default function ThemeScript() {
             try {
               const theme = localStorage.getItem('theme');
               const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-              const shouldBeDark = theme === 'dark';
+              
+              // If no theme is set, use system preference
+              let shouldBeDark = false;
+              if (theme === 'dark') {
+                shouldBeDark = true;
+              } else if (theme === 'light') {
+                shouldBeDark = false;
+              } else {
+                // No theme set, use system preference
+                shouldBeDark = prefersDark;
+              }
               
               if (shouldBeDark) {
                 document.documentElement.classList.add('dark');

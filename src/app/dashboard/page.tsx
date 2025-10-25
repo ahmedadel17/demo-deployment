@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import getRequest from "../../../helpers/get";
 import { useAuth } from "../hooks/useAuth";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface Order {
   id: string;
@@ -35,7 +35,7 @@ export default function Dashboard() {
   ];
   const { token,user } = useAuth();
   const locale = useLocale();
-  
+  const t = useTranslations();
   // Consolidated state for better performance and organization
   const [state, setState] = useState({
     wallet: null as {balance:number} | null,
@@ -110,8 +110,8 @@ export default function Dashboard() {
    <div className="lg:col-span-3 space-y-8">
         {/* Welcome Section */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome back, {user?.name}!</h1>
-          <p className="text-gray-600 dark:text-gray-400">Heres whats happening with your account</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('Welcome back')}, {user?.name}!</h1>
+          <p className="text-gray-600 dark:text-gray-400">{t('Heres whats happening with your account')}</p>
         </div>
 
         {/* Stats Cards */}
@@ -125,8 +125,8 @@ export default function Dashboard() {
                 <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
               </svg>
             }
-            value={state.isLoading.wallet ? "Loading..." : `$ ${state.wallet?.balance || '0'}`}
-            label="Wallet Balance"
+            value={state.isLoading.wallet ? "Loading" : `$ ${state.wallet?.balance || '0'}`}
+            label={t('Wallet Balance')}
             isLoading={state.isLoading.wallet}
           />
 
@@ -139,34 +139,34 @@ export default function Dashboard() {
                 <path d="M11.051 7.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.867l-1.156-1.152a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z" />
               </svg>
             }
-            value={state.isLoading.points ? "Loading..." : `${state.points?.current_points_int || '0'}`}
-            label="Reward Points"
+            value={state.isLoading.points ? t("Loading") : `${state.points?.current_points_int || '0'}`}
+            label={t('Reward Points')}
             isLoading={state.isLoading.points}
           />
 
           {/* Total Spent */}
-          <StatCard color="purple" icon={<span className="text-lg">﷼</span>} value="65.00" label="Total Spent" />
+          <StatCard color="purple" icon={<span className="text-lg">﷼</span>} value="65.00" label={t('Total Spent')} />
 
           {/* Wishlist */}
-          <StatCard color="red" icon={<HeartIcon />} value="12" label="Wishlist Items" />
+          <StatCard color="red" icon={<HeartIcon />} value="12" label={t('Wishlist Items')} />
 
           {/* Total Orders */}
-          <StatCard color="blue" icon={<BagIcon />} value="12" label="Total Orders" />
+          <StatCard color="blue" icon={<BagIcon />} value="12" label={t('Total Orders')} />
         </div>
 
         {/* Loyalty Level Section */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Loyalty Status</h2>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{t('Loyalty Status')} </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                You are currently a <span className="font-bold text-primary-600">Silver</span> member. You are only{" "}
-                <span className="font-bold">750 points</span> away from reaching{" "}
-                <span className="font-bold text-yellow-500">Gold</span>!
+                {t('You are currently a')} <span className="font-bold text-primary-600">Silver</span> {t('member')}. {t('You are only')} {" "}
+                <span className="font-bold">{750} {t('points')} </span> {t('away from reaching')} {" "}
+                <span className="font-bold text-yellow-500">{t('Gold')}</span>!
               </p>
             </div>
             <a href="/dashboard-points" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-              See Benefits
+              {t('See Benefits')}
             </a>
           </div>
 
@@ -179,7 +179,7 @@ export default function Dashboard() {
         {/* Recent Orders */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="p-6 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Orders</h2>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{t('Recent Orders')}</h2>
             <a href="/dashboard-orders" className="text-sm font-medium text-primary-600 hover:text-primary-700">
               View All
             </a>
@@ -188,10 +188,10 @@ export default function Dashboard() {
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th className="px-6 py-3">Order ID</th>
-                  <th className="px-6 py-3">Date</th>
-                  <th className="px-6 py-3">Status</th>
-                  <th className="px-6 py-3">Total</th>
+                  <th className="px-6 py-3">{t('Order ID')}</th>
+                  <th className="px-6 py-3">{t('Date')}</th>
+                  <th className="px-6 py-3">{t('Status')}</th>
+                  <th className="px-6 py-3">{t('Total')}</th>
                   <th className="px-6 py-3"></th>
                 </tr>
               </thead>
@@ -210,7 +210,7 @@ export default function Dashboard() {
                     <td className="px-6 py-4">﷼ {order.total}</td>
                     <td className="px-6 py-4">
                       <a href="#" className="font-medium text-primary-600 hover:underline">
-                        View
+                        {t('View')}
                       </a>
                     </td>
                   </tr>

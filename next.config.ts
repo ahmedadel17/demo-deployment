@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'ecommerce.demo.asol-tec.com',
+        hostname: process.env.NEXT_PUBLIC_HOSTNAME || '',
         pathname: '/**',
       },
       {
