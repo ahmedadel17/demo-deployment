@@ -84,7 +84,7 @@ function writeWishlistToStorage(ids: string[]) {
 // -----------------------------
 // Component
 // -----------------------------
-export default function WishlistPage(): JSX.Element {
+export default function WishlistPage() {
   const [products] = useState<Product[]>(DUMMY_PRODUCTS); // replace with fetch if needed
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [checkedIds, setCheckedIds] = useState<Record<string, boolean>>({});
