@@ -35,7 +35,7 @@ const {token}= useAuth()
       const response = await postRequest('/payment/tamara/prepare-checkout', {
         order_id: cartData?.id,
         success_url: window.location.origin + `/checkoutConfirmation?orderId=${cartData?.id}`,
-        cancel_url: window.location.origin + `/checkoutConfirmation?orderId=${cartData?.id}`,
+        cancel_url: window.location.origin + `/checkoutConfirmation/failed`,
       }, {}, token, 'en');
       
       console.log('Tamara response:', response);
@@ -62,7 +62,7 @@ const {token}= useAuth()
       const response = await postRequest('/payment/tabby/prepare-checkout', {
         order_id: cartData?.id,
         success_url: window.location.origin + `/checkoutConfirmation?orderId=${cartData?.id}`,
-        cancel_url: window.location.origin + `/checkoutConfirmation?orderId=${cartData?.id}`,
+        cancel_url: window.location.origin + `/checkoutConfirmation/failed`,
       }, {}, token, 'en');
       
       console.log('Tabby response:', response);
