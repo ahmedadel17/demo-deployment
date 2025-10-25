@@ -9,6 +9,7 @@ import Marquee from "./components/marquee";
 import FooterNav from "./components/footer/footerNav";
 import ReduxProvider from "./components/ReduxProvider";
 import CartInitializer from "./components/cart/CartInitializer";
+import WishlistInitializer from "./components/wishlist/WishlistInitializer";
 import { Toaster } from "react-hot-toast";
 import { Suspense } from "react";
 import { NextIntlClientProvider } from 'next-intl';
@@ -42,6 +43,7 @@ export default async function RootLayout({
           <ReduxProvider>
             <div className="flex flex-col min-h-screen">
               <CartInitializer />
+              <WishlistInitializer />
               <Suspense fallback={<div className="h-8 bg-primary-500"></div>}>
                 <Marquee/>
                 <HeaderTopBar />  

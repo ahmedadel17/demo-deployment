@@ -70,7 +70,7 @@ function HeaderRtl() {
              {isAuthenticated && <HeaderAccount   />}
 
              {/* <!-- Notification --> */}
-             {/* {isAuthenticated && <HeaderWishList />}  */}
+             {isAuthenticated && <HeaderWishList />} 
 
             {/* {isAuthenticated && <HeaderNotification />} */}
 

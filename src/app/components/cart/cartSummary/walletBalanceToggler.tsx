@@ -33,11 +33,12 @@ function WalletBallanceToggler() {
   return (
     <div>
         {/* Wallet Balance Toggle */}
-        <div className="mb-6">
+      { cartData?.user_balance && parseFloat(cartData?.user_balance) > 0 && <div className="mb-6">
             <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
               <div className="flex-1">
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">{t('Use Wallet Balance')}</h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400">                {cartData?.user_balance}
+                <p className="text-xs text-gray-600 dark:text-gray-400">           
+                       {cartData?.user_balance}
                 </p>
               </div>
               <div className="flex items-center">
@@ -56,7 +57,7 @@ function WalletBallanceToggler() {
                 </label>
               </div>
             </div>
-          </div>
+          </div>}
     </div>
   )
 }

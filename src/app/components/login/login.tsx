@@ -7,6 +7,7 @@ import CountryPhoneInput from '../phone/countryphoneInput';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAuth } from '@/app/hooks/useAuth';
 import postRequest from '../../../../helpers/post';
+import * as countriesData from 'country-codes-flags-phone-codes';
 function Login() {
     interface PhoneFormValues {
         phone: string;
@@ -53,20 +54,34 @@ function Login() {
       }}
       onSubmit={async (values: PhoneFormValues, { setSubmitting, setFieldError }: FormikHelpers<PhoneFormValues>) => {
         try {
+            // Clean the phone number by removing country code and leading zeros
+            let cleanedPhone = values.phone;
             
             // Get country data from the countries list
             const countries = (await import('country-codes-flags-phone-codes')).countries;
             const country = countries.find(c => c.code === values.countryCode);
             const phoneCode = country?.dialCode || '+966';
-            const phoneData = { phone: `${phoneCode}${values.phone}` };
+            
+            // Remove country code if phone starts with it
+            const countryCode = phoneCode.replace('+', '');
+            if (cleanedPhone.startsWith(countryCode)) {
+              cleanedPhone = cleanedPhone.substring(countryCode.length);
+            }
+            
+            // Remove leading zero if present
+            if (cleanedPhone.startsWith('0')) {
+              cleanedPhone = cleanedPhone.substring(1);
+            }
+            
+            const phoneData = { phone: `${phoneCode}${cleanedPhone}` };
             
             const response = await postRequest(`/auth/send-otp`, phoneData, {}, null, locale);
             if(response.data.data.registered){
-               router.push(`/auth/otp?phone=${values.phone}&country=${values.countryCode}`);
+               router.push(`/auth/otp?phone=${cleanedPhone}&country=${values.countryCode}`);
             }
             else{
                 console.log('User not registered, redirecting to registration');
-                router.push(`/auth/Register?phone=${values.phone}&country=${values.countryCode}`);
+                router.push(`/auth/Register?phone=${cleanedPhone}&country=${values.countryCode}`);
             }
         
           } catch (error) {

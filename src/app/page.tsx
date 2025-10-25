@@ -10,14 +10,21 @@ export default  async function Home() {
       'Accept-Language': locale
     }
   });
+  
+  // Add is_favourite property to featured products
+  const featuredProducts = home.data.data.sections.featured_products.data.map((product: any) => ({
+    ...product,
+    is_favourite: product.is_favourite || false
+  }));
+  
   return (
     <div className="" >
         <Breadcrumb />
         {home.data.data.sections.sliders.data.length > 0 && (
           <EmblaCarousel slides={home.data.data.sections.sliders.data} />
         )}
-        {home.data.data.sections.featured_products.data.length > 0 && (
-          <ProductSlider products={home.data.data.sections.featured_products.data} />
+        {featuredProducts.length > 0 && (
+          <ProductSlider products={featuredProducts} />
         )}
     </div>
 

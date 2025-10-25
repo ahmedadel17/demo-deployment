@@ -21,6 +21,7 @@ const OrdersPage: React.FC = () => {
   const { token } = useAuth();
   const locale = useLocale();
   const [ordersNew,setOrdersNew]=useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState({
     orderId: "",
     date: "",
@@ -58,9 +59,17 @@ const OrdersPage: React.FC = () => {
     });
   }, [filters, orders]);
   const getOrders=async()=>{
-    const response=await getRequest('/order/orders',{'Content-Type': 'application/json'},token,locale);
-    console.log('orders',response.data.my_orders.items);
-    setOrdersNew(response.data.my_orders.items);
+    try {
+      setIsLoading(true);
+      const response=await getRequest('/order/orders',{'Content-Type': 'application/json'},token,locale);
+      console.log('orders',response.data.my_orders.items);
+      setOrdersNew(response.data.my_orders.items);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      setOrdersNew([]);
+    } finally {
+      setIsLoading(false);
+    }
   }
   useEffect(()=>{
     getOrders();
@@ -143,16 +152,31 @@ const OrdersPage: React.FC = () => {
               </thead>
 
               <tbody>
-                {ordersNew.map((order) => (
-                 <OrderItem key={order?.id} order={order} />
-                ))}
-
-                {filteredOrders.length === 0 && (
+                {isLoading ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-6 text-gray-400">
-                      No orders found.
+                    <td colSpan={5} className="text-center py-12">
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mb-4"></div>
+                        <p className="text-gray-500 dark:text-gray-400">{t('Loading orders')}...</p>
+                      </div>
                     </td>
                   </tr>
+                ) : ordersNew.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="text-center py-12">
+                      <div className="flex flex-col items-center justify-center">
+                        <svg className="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">{t('No orders found')}</p>
+                        <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">{t('You haven\'t placed any orders yet')}</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  ordersNew.map((order) => (
+                    <OrderItem key={order?.id} order={order} />
+                  ))
                 )}
               </tbody>
             </table>

@@ -8,6 +8,7 @@ import HeaderMobileMenu from '../headerMobileMenu'
 import HeaderDesktopMenu from '../headerDesktopMenu'
 import { useAuth } from '@/app/hooks/useAuth'
 import LanguageToggleButton from '../LanguageToggleButton'
+import HeaderWishList from '../headerWishlist'
 
 function HeaderLtr() {
   const { isAuthenticated } = useAuth();
@@ -35,7 +36,7 @@ function HeaderLtr() {
                {/* {isAuthenticated && <HeaderNotification />} */}
 
                 {/* <!-- Wishlist --> */}
-                {/* {isAuthenticated && <HeaderWishList />}  */}
+                {isAuthenticated && <HeaderWishList />} 
 
                 {/* <!-- Account --> */}
                 {isAuthenticated && <HeaderAccount   />}

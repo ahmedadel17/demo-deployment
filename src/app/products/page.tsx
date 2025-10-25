@@ -9,6 +9,7 @@ import ProductSortControls from '../components/product/widgets/filterform';
 import ProductPagination from '../components/product/productPagination';
 import ProductCard from '../components/Home/product/ProductCard';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
 interface ProductsPageProps {
   searchParams: {
     page?: string;
@@ -24,6 +25,14 @@ interface ProductsPageProps {
 async function Products({ searchParams }: ProductsPageProps) {
   const locale = await getLocale();
   const t = await getTranslations();
+  
+  // Get token from cookies (preferred method)
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value || null;
+  
+  // Alternative: Get token from headers
+  // const headersList = await headers();
+  // const token = headersList.get('authorization')?.replace('Bearer ', '') || null;
   // Get pagination parameters from URL
   const currentPage = parseInt(searchParams.page || '1');
   const itemsPerPage = parseInt(searchParams.limit || '12');
@@ -53,19 +62,31 @@ async function Products({ searchParams }: ProductsPageProps) {
   console.log('API Query Parameters:', queryParams.toString());
 
   try {
+    // Prepare headers
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    
+    // Add authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/products?${queryParams.toString()}`,
       {
         headers: {
-          Authorization: `Bearer ${"47|rxMmn1NTKT6v7hPbLqUkKvPWVdLejbK5G2NZ8WK6c5561f6d"}`,
-          "Content-Type": "application/json",
+          ...headers,
           "Accept-Language": locale,
-        },
+        },  
       }
     );
 
     const productsData = response.data.data;
-    const products = productsData.items || [];
+    const products = (productsData.items || []).map((product: any) => ({
+      ...product,
+      is_favourite: product.is_favourite || false // Ensure is_favourite property exists
+    }));
     
     // Extract pagination data from the API response
     const paginationData = productsData.paginate || {};

@@ -11,6 +11,7 @@ import { toast } from 'react-hot-toast';
 import postRequest from '../../../../../helpers/post';
 import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
+import { useWishlist } from '@/app/hooks/useWishlist';
 
 interface Product {
   id: number;
@@ -19,7 +20,12 @@ interface Product {
   old_price?: string | null | undefined;
   price_after_discount?: string | undefined;
   default_variation_id?: string | number;
-  is_favorite?: boolean;
+  is_favourite?: boolean;
+  image?: string;
+  thumbnail?: string;
+  slug?: string;
+  category?: string;
+  variations?: any[];
 }
 
 interface ProductVariationsProps {
@@ -43,7 +49,7 @@ function ProductVariations({
     isAddingToCart: false,
     isLoadingVariation: false,
     selectedVariation: null as any,
-    isFavorite: product?.is_favorite,
+    isFavorite: product?.is_favourite,
     isFavoriteLoading: false
   });
   
@@ -52,6 +58,7 @@ function ProductVariations({
   const dispatch = useAppDispatch();
   const locale = useLocale();   
   const t = useTranslations();
+  const { toggleProduct } = useWishlist();
   // Notify parent when variation is selected
   useEffect(() => {
     onVariationSelected?.(state.selectedVariation !== null);
@@ -84,7 +91,7 @@ function ProductVariations({
           ...prev,
           variationId: response.data.data.id,
           selectedVariation: response.data.data,
-          isLoadingVariation: false
+          isLoadingVariation: false,
         }));
       } else {
         console.error('Failed to get variation ID:', response.data);
@@ -131,7 +138,27 @@ function ProductVariations({
       console.log('fav', response.data.data);
       
       if (response.data.status) {
-        setState(prev => ({ ...prev, isFavorite: !prev.isFavorite }));
+        const newFavoriteState = !state.isFavorite;
+        setState(prev => ({ ...prev, isFavorite: newFavoriteState }));
+        
+        // Update Redux wishlist store with complete product data
+        toggleProduct({
+          id: product.id,
+          name: product.name,
+          min_price: parseFloat(product.price) || 0,
+          price_after_discount: parseFloat(product.price_after_discount || product.price) || 0,
+          default_variation_id: product.default_variation_id || null,
+          discount: 0, // You may need to calculate this based on your data
+          is_favourite: newFavoriteState,
+          out_of_stock: false, // You may need to get this from product data
+          rate: "0.00", // You may need to get this from product data
+          short_description: product.name, // You may need to get this from product data
+          thumbnail: product.image || product.thumbnail || '',
+          slug: product.slug || '',
+          category: product.category || '',
+          variations: product.variations || []
+        });
+        
         toast.success(state.isFavorite ? 'Product removed from favorites!' : 'Product added to favorites successfully!');
       } else {
         toast.error('Failed to update favorites');

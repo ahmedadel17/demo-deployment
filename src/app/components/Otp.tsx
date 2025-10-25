@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../hooks/useAuth';
 import { useAppDispatch } from '../store/hooks';
 import { loginSuccess, setLoading, setError, clearError } from '../store/slices/authSlice';
+import { saveAuthToken, saveUserData } from '../utils/authStorage';
 
 interface OtpState {
   otp: string[];
@@ -60,11 +61,13 @@ const handleSubmit = useCallback(async () => {
     if (response.data && response.data.data.token) {
       const { token, user } = response.data.data;
       
-      // Store token and user data in localStorage
+      // Store token and user data in both localStorage and cookies
+      saveAuthToken(token);
+      saveUserData(user);
+      
+      // Clean up registration data
       if (typeof window !== 'undefined') {
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('userData', JSON.stringify(user));
-        localStorage.removeItem('registrationData'); // Clean up registration data
+        localStorage.removeItem('registrationData');
       }
       
       // Update Redux store with login success

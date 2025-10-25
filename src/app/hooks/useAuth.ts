@@ -12,6 +12,7 @@ import {
   initializeAuth 
 } from '../store/slices/authSlice';
 import { useEffect } from 'react';
+import { saveAuthToken, saveUserData, getAuthToken, getUserData, clearAuthData } from '../utils/authStorage';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -21,18 +22,16 @@ export const useAuth = () => {
   useEffect(() => {
     const initializeAuthFromStorage = () => {
       try {
-        const token = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('userData');
+        const token = getAuthToken();
+        const userData = getUserData();
         
         if (token && userData) {
-          const user = JSON.parse(userData);
-          dispatch(initializeAuth({ token, user }));
+          dispatch(initializeAuth({ token, user: userData }));
         }
       } catch (error) {
         console.error('Error initializing auth from storage:', error);
         // Clear invalid data
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userData');
+        clearAuthData();
       }
     };
 
@@ -60,9 +59,9 @@ export const useAuth = () => {
 
       const data = await response.json();
       
-      // Store token and user data in localStorage
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('userData', JSON.stringify(data.user));
+      // Store token and user data in both localStorage and cookies
+      saveAuthToken(data.token);
+      saveUserData(data.user);
       
       // Update Redux store
       dispatch(loginSuccess({
@@ -80,9 +79,8 @@ export const useAuth = () => {
 
   // Logout function
   const logoutUser = () => {
-    // Clear localStorage
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
+    // Clear both localStorage and cookies
+    clearAuthData();
     
     // Update Redux store
     dispatch(logout());
@@ -106,7 +104,7 @@ export const useAuth = () => {
 
   // Set token (for cases where you have token but no user data)
   const setAuthToken = (token: string) => {
-    localStorage.setItem('authToken', token);
+    saveAuthToken(token);
     dispatch(setToken(token));
   };
 

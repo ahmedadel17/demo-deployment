@@ -29,6 +29,7 @@ interface Product {
   min_price?: string;
   price_after_discount?: string;
   default_variation_id?: string | number;
+  is_favourite?: boolean;
 }
 
 interface Props {
