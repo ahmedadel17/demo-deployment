@@ -6,6 +6,7 @@ import { useAuth } from '@/app/hooks/useAuth';
 import { useLocale } from 'next-intl';
 import { useWishlist } from '@/app/hooks/useWishlist';
 import ProductCard2 from '../components/productCard2';
+import Breadcrumb from '../components/header/headerBreadcrumb';
 
 
 
@@ -123,7 +124,12 @@ export default function WishlistPage() {
   const allChecked = wishlistProducts.length > 0 && wishlistProducts.every(p => checkedIds[String(p.id)]);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="flex-1 mt-8 mb-8 site-content">
+    <div className="container">
+      <div className="main">
+
+     <Breadcrumb name="My Wishlist" />
+    
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Wishlist</h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">{wishlistProducts.length} items saved for later</p>
@@ -199,6 +205,8 @@ export default function WishlistPage() {
           </div>
         </div>
       )}
+    </div>
+    </div>
     </div>
   );
 }
