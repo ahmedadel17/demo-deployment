@@ -49,7 +49,7 @@ function ProductVariations({
     isAddingToCart: false,
     isLoadingVariation: false,
     selectedVariation: null as any,
-    isFavorite: product?.is_favourite,
+    isFavorite: product?.is_favorite,
     isFavoriteLoading: false
   });
   
@@ -270,6 +270,26 @@ function ProductVariations({
         </div>
       )}
 
+<div className="product-options space-y-4 !mt-4">
+<div className="product-colors">
+                            <div className="flex flex-wrap gap-1">
+                            {variations?.[1]?.values && variations?.[1]?.values.length > 0 && (
+        <div className="product-colors mt-3 flex flex-wrap gap-1">
+          {variations?.[1]?.values.slice(0, 4).map((color: any, i: number) => (
+                            <button onClick={() => handleColorSelect(color.color, color.id)} key={i} className="color-option" style={{ backgroundColor: color.color }} data-color={color.color} title={`Select ${color.color}`} aria-label={`Select ${color.color}`}>
+                            <span className="sr-only">{color.color}</span>
+                        </button>
+           
+          ))}
+          {variations[1].values.length > 4 && (
+            <span className="text-xs text-gray-500 ml-1">
+              +{variations[1].values.length - 4}
+            </span>
+          )}
+        </div>
+      )}
+      </div>
+      </div>
       {/* Colors */}
       {variations?.[1]?.values && variations?.[1]?.values.length > 0 && (
         <div className="product-colors mt-3 flex flex-wrap gap-1">
@@ -294,6 +314,22 @@ function ProductVariations({
         </div>
       )}
 
+<div className="product-sizes">
+                            <div className="flex flex-wrap gap-1 items-end">
+                            {variations?.[0]?.values.slice(0, 4).map((size: any, i: number) => (
+           <>
+            <button onClick={() => handleSizeSelect(size.value, size.id)} className="size-option" data-size={size.value} aria-label="Select size XS">
+            {size.value}
+
+                    </button>
+           </>
+          ))}
+                            
+                                                                 
+                                                                  
+                                                  
+                                                            </div>
+                        </div>
       {/* Sizes */}
       {variations?.[0]?.values && variations?.[0]?.values.length > 0 && (
         <div className="product-sizes mt-3 flex flex-wrap gap-1">
@@ -318,6 +354,8 @@ function ProductVariations({
           )}
         </div>
       )}
+</div>
+
 
       {/* Add to Cart Button */}
       <div className="product-footer mt-4 flex gap-2 items-stretch">

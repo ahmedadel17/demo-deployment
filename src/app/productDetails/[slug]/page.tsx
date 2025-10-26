@@ -1,13 +1,13 @@
 import React from 'react'
-import ProductGalleryCarousel from '../../components/product/ProductGalleryCarousel'
-import ProductMerchant from '../../components/product/productMerchant';
-import ProductShare from '../../components/product/productShare';
+// import ProductMerchant from '../../components/product/productMerchant';
+// import ProductShare from '../../components/product/productShare';
 import ProductTitle from '../../components/productDetails/productTitle';
 import ProductPrice from '../../components/productDetails/productPrice';
 import ProductDescription from '../../components/productDetails/productDescription';
-import ProductMeta from '../../components/productDetails/productMeta';
+// import ProductMeta from '../../components/productDetails/productMeta';
 import Breadcrumb from '@/app/components/header/headerBreadcrumb';
 import axios from 'axios';
+import ProductGallery2 from '@/app/components/product/productGallery2';
 import ProductDetailsWrapper from '@/app/components/productDetails/ProductDetailsWrapper';
 import { getLocale, getTranslations } from 'next-intl/server';
 async function ProductDetailsPage({ params }: { params: { slug: string } }) {
@@ -25,7 +25,7 @@ async function ProductDetailsPage({ params }: { params: { slug: string } }) {
       <div className=" container space-y-16 mb-8">
         <div className="my-8">
 
-        <Breadcrumb />
+        <Breadcrumb name={product.data.data.name} />
         </div>
 
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
@@ -34,7 +34,8 @@ async function ProductDetailsPage({ params }: { params: { slug: string } }) {
         <div>
             <div className="sticky top-8 space-y-6">
                 {/* <?php include 'template-parts/product/product-gallery.php'; ?> */}
-                <ProductGalleryCarousel images={[,product.data.data.thumbnail,...product.data.data.gallery]} discount="20% OFF" />
+                <ProductGallery2 images={[product.data.data.thumbnail,...product.data.data.gallery]} />
+                {/* <ProductGalleryCarousel images={[,product.data.data.thumbnail,...product.data.data.gallery]} discount="20% OFF" /> */}
             </div>
         </div>
 
@@ -89,19 +90,15 @@ async function ProductDetailsPage({ params }: { params: { slug: string } }) {
 
                 {/* <!-- Merchant Details --> */}
                 {/* <ProductMerchant /> */}
-                {/* <!-- <?php include 'template-parts/product/product-merchant.php'; ?> --> */}
 
                 {/* <!-- Product Share --> */}
                 {/* <ProductShare /> */}
-                {/* <?php include 'template-parts/product/product-share.php'; ?> */}
 
             </div>
         </div>
 
     </div>
-    {/* <!-- Grid --> */}
-
-    {/* <?php include 'template-parts/product/product-tabs.php'; ?> */}
+   
 
     </>
   )

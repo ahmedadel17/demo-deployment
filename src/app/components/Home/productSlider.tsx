@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from './product/ProductCard';
 import { Product } from '@/app/dummyData/products';
 import { useTranslations } from 'next-intl';
+import ProductCard2 from '../productCard2';
 export default function ProductSlider({ products }: { products: Product[] }) {
   console.log('products',products);
   const [isRTL, setIsRTL] = useState(false);
@@ -124,22 +125,30 @@ export default function ProductSlider({ products }: { products: Product[] }) {
                     >
                       {p1 && (
                         <div className="basis-1/2 lg:basis-1/4">
-                          <ProductCard product={p1} carousel={true} />
+                          <ProductCard2
+                            product={p1}
+                          />
                         </div>
                       )}
                       {p2 && (
                         <div className="basis-1/2 lg:basis-1/4">
-                          <ProductCard product={p2} carousel={true} />
+                          <ProductCard2
+                            product={p2}
+                          />
                         </div>
                       )}
                       {p3 && (
                         <div className="hidden lg:block lg:basis-1/4">
-                          <ProductCard product={p3} carousel={true} />
+                          <ProductCard2
+                            product={p3}
+                          />
                         </div>
                       )}
                       {p4 && (
                         <div className="hidden lg:block lg:basis-1/4">
-                          <ProductCard product={p4} carousel={true} />
+                          <ProductCard2
+                            product={p4}
+                          />
                         </div>
                       )}
                     </div>

@@ -1,9 +1,34 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
+interface MapOptions {
+  center: { lat: number; lng: number };
+  zoom: number;
+}
+
+interface MarkerOptions {
+  position: { lat: number; lng: number };
+  map: unknown;
+  draggable: boolean;
+}
+
+interface AutocompleteOptions {
+  fields: string[];
+}
+
+interface GoogleMapsAPI {
+  maps: {
+    Map: new (element: HTMLElement, options: MapOptions) => unknown;
+    Marker: new (options: MarkerOptions) => unknown;
+    places: {
+      Autocomplete: new (input: HTMLInputElement, options: AutocompleteOptions) => unknown;
+    };
+  };
+}
+
 declare global {
   interface Window {
-    google: any;
+    google: GoogleMapsAPI;
     initMap: () => void;
   }
 }
@@ -45,18 +70,18 @@ export default function MapComponent({ onLocationSelect, searchInputRef }: MapCo
     const mapInstance = new google.maps.Map(mapRef.current, {
       center: position,
       zoom: 10,
-    });
+    }) as any;
     setMap(mapInstance);
 
     const markerInstance = new google.maps.Marker({
       position,
       map: mapInstance,
       draggable: true, // allow manual drag
-    });
+    }) as { setPosition: (pos: { lat: number; lng: number }) => void; addListener: (event: string, callback: (e: any) => void) => void };
     setMarker(markerInstance);
 
     // Move marker on map click
-    mapInstance.addListener("click", (e: any) => {
+    mapInstance.addListener("click", (e: { latLng: { lat: () => number; lng: () => number } }) => {
       if (!e.latLng || typeof e.latLng.lat !== 'function' || typeof e.latLng.lng !== 'function') {
         console.error("Invalid latLng object:", e.latLng);
         return;
@@ -73,7 +98,7 @@ export default function MapComponent({ onLocationSelect, searchInputRef }: MapCo
     });
 
     // Update position when marker dragged
-    markerInstance.addListener("dragend", (e: any) => {
+    markerInstance.addListener("dragend", (e: { latLng: { lat: () => number; lng: () => number } }) => {
       if (!e.latLng || typeof e.latLng.lat !== 'function' || typeof e.latLng.lng !== 'function') {
         console.error("Invalid latLng object:", e.latLng);
         return;
@@ -88,9 +113,10 @@ export default function MapComponent({ onLocationSelect, searchInputRef }: MapCo
     });
 
     // Setup autocomplete
+    if (!inputRef.current) return;
     const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
       fields: ["geometry", "formatted_address"],
-    });
+    }) as any;
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();

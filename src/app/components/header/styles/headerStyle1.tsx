@@ -9,6 +9,7 @@ import HeaderCart from '../headerCart'
 import HeaderMobileMenu from '../headerMobileMenu'
 import { useAuth } from '@/app/hooks/useAuth'
 import Logo from '../logo'
+import { useLocale } from 'next-intl';
 // Dynamically import HeaderDarkMode to prevent hydration issues
 const HeaderDarkMode = dynamic(() => import('../headerDarkMode'), {
   loading: () => (
@@ -31,9 +32,9 @@ const HeaderDarkMode = dynamic(() => import('../headerDarkMode'), {
 import HeaderDesktopMenu from '../headerDesktopMenu'
 import HeaderLtr from './headerltr';
 import HeaderRtl from './headerRtl';
-import { useLocale } from 'next-intl';
 function HeaderStyle1() {
   const locale = useLocale();
+  console.log(locale);
   return (
     <div>
    {locale === 'ar' ? <HeaderRtl /> : <HeaderLtr />}

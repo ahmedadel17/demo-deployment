@@ -7,9 +7,9 @@ import CategoryWidget from '../components/product/widgets/categoryWidget';
 import SizeColorFilter from '../components/product/widgets/variableWidget';
 import ProductSortControls from '../components/product/widgets/filterform';
 import ProductPagination from '../components/product/productPagination';
-import ProductCard from '../components/Home/product/ProductCard';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
+import ProductCard2 from '../components/productCard2';
 interface ProductsPageProps {
   searchParams: {
     page?: string;
@@ -83,7 +83,7 @@ async function Products({ searchParams }: ProductsPageProps) {
     );
 
     const productsData = response.data.data;
-    const products = (productsData.items || []).map((product: any) => ({
+    const products = (productsData.items || []).map((product: Product & { is_favourite?: boolean }) => ({
       ...product,
       is_favourite: product.is_favourite || false // Ensure is_favourite property exists
     }));
@@ -95,20 +95,11 @@ async function Products({ searchParams }: ProductsPageProps) {
     const currentPageFromAPI = paginationData.current_page || currentPage;
     const itemsPerPageFromAPI = paginationData.per_page || itemsPerPage;
 
-    console.log('Products API Response:', {
-      searchQuery,
-      products: products.length,
-      totalItems,
-      currentPage: currentPageFromAPI,
-      totalPages,
-      itemsPerPage: itemsPerPageFromAPI,
-      paginationData,
-      apiUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/products?${queryParams.toString()}`
-    });
+   
 
     return (
       <div className="container my-12">
-        <Breadcrumb />
+        <Breadcrumb name="Products" />
         <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1 hidden xl:block">
@@ -130,18 +121,19 @@ async function Products({ searchParams }: ProductsPageProps) {
                
                 </div>
                 <ProductSortControls />
+             
               </div>
 
               {/* Products Grid */}
               <div className="te-products">
+
                 {products.length > 0 ? (
                   <div
                     id="products-grid"
                     className="grid gap-3 grid-cols-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-6"
                   >
                     {products?.map((product: Product) => (
-
-                      <ProductCard key={product.id} product={product} carousel={false} />
+                    <ProductCard2 key={product.id} product={product} />
                     ))}
                   </div>
                 ) : (
@@ -190,7 +182,7 @@ async function Products({ searchParams }: ProductsPageProps) {
     
     return (
       <div className="container my-12">
-        <Breadcrumb />
+        <Breadcrumb name="Products" />
         <div className="text-center py-12">
           <div className="text-red-500">
             <svg className="mx-auto h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

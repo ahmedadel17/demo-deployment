@@ -5,8 +5,7 @@ import getRequest from '../../../helpers/get';
 import { useAuth } from '@/app/hooks/useAuth';
 import { useLocale } from 'next-intl';
 import { useWishlist } from '@/app/hooks/useWishlist';
-import ProductCard from '../components/Home/product/ProductCard';
-
+import ProductCard2 from '../components/productCard2';
 
 
 
@@ -172,11 +171,10 @@ export default function WishlistPage() {
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {wishlistProducts.map(product => (
-           <ProductCard
+           <ProductCard2
            key={product.id}
-           product={product}
-           carousel={false}
-           />
+            product={product}
+            />
             ))}
           </div>
 

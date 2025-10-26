@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./style.css";
+import "./style.min.css"
 import "./embla-carousel.css";
 import "./rtl.css";
 import HeaderStyle1 from "./components/header/styles/headerStyle1";
@@ -16,6 +17,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import HeaderTopBar from "./components/header/headerTopBar";
 import ThemeScript from "./components/ThemeScript";
+import NavProgress from "./components/navProgress";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -37,11 +39,12 @@ export default async function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={`relative ${isRTL ? 'font-rtl' : 'font-inter'} antialiased bg-white min-h-screen dark:bg-gray-900 flex flex-col ${isRTL ? 'rtl' : 'ltr'}`}
+        className={`bg-gray-50 text-base font-ltr rtl:font-rtl dark:text-white dark:bg-gray-900 min-h-screen flex flex-col ${isRTL ? 'font-rtl' : 'font-inter'}  ${isRTL ? 'rtl' : 'ltr'}`}
       >
         <NextIntlClientProvider messages={messages}>
           <ReduxProvider>
             <div className="flex flex-col min-h-screen">
+              <NavProgress />
               <CartInitializer />
               <WishlistInitializer />
               <Suspense fallback={<div className="h-8 bg-primary-500"></div>}>
@@ -53,6 +56,13 @@ export default async function RootLayout({
                 {children}
               </main>
               <FooterStyle1 />
+              <button className="te-footer-back-to-top back-to-top hidden lg:flex show" aria-label="Back to top" fdprocessedid="w66kvf">
+    <svg className="te-footer-back-to-top-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m5 9 7-7 7 7"></path>
+        <path d="M12 16V2"></path>
+        <circle cx="12" cy="21" r="1"></circle>
+    </svg>
+</button>
             </div>
             <FooterNav />
           </ReduxProvider>

@@ -18,48 +18,27 @@ export default function ProductSortControls() {
 
   return (
     <div className="flex items-center space-x-1 rtl:space-x-reverse">
-      {/* Order Select */}
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className="flex items-center space-x-2 rtl:space-x-reverse"
-      >
-        <label htmlFor="order" className="sr-only">
-          Sort by:
-        </label>
-        <select
-          id="order"
-          name="order"
-          value={order}
-          onChange={(e) => setOrder(e.target.value)}
-          className="border rounded px-2 py-1"
-        >
-          <option value="default">Default</option>
-          <option value="price_asc">Price: Low to High</option>
-          <option value="price_desc">Price: High to Low</option>
-          <option value="newest">Newest</option>
-        </select>
-      </form>
+                    {/* <!-- Order Select --> */}
+                    <form method="GET" className="flex items-center space-x-2 rtl:space-x-reverse">
+                        <label htmlFor="order" className="sr-only">Sort by:</label>
+                        <select id="order" name="order" >
+                            <option value="default">Default</option>
+                            <option value="price_asc">Price: Low to High</option>
+                            <option value="price_desc">Price: High to Low</option>
+                            <option value="newest">Newest</option>
+                        </select>
+                    </form>
 
-      {/* Products Per Page / Grid Columns Select */}
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className="hidden lg:flex items-center space-x-2 rtl:space-x-reverse"
-      >
-        <label htmlFor="per_page" className="sr-only">
-          Products per page / grid columns:
-        </label>
-        <select
-          id="per_page"
-          name="per_page"
-          value={perPage}
-          onChange={(e) => setPerPage(e.target.value)}
-          className="border rounded px-2 py-1"
-        >
-          <option value="6">2 Columns</option>
-          <option value="9">3 Columns</option>
-          <option value="12">4 Columns</option>
-        </select>
-      </form>
-    </div>
+                    {/* <!-- Products Per Page / Grid Columns Select --> */}
+                    <form method="GET" className="hidden lg:flex items-center space-x-2 rtl:space-x-reverse">
+                        <label htmlFor="per_page" className="sr-only">Products per page / grid columns:</label>
+                        <select id="per_page" name="per_page" >
+                            <option value="6">2 Columns</option>
+                            <option value="9" >3 Columns</option>
+                            <option value="12">4 Columns</option>
+                        </select>
+                    </form>
+
+                </div>
   );
 }

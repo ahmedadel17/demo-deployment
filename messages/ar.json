@@ -354,5 +354,9 @@
    "Enter your comment here":"ادخل تعليقك هنا",
    "Heres whats happening with your account":"هنا ما يحدث في حسابك",
    "New Arrivals":"المنتجات الجديدة",
-   "Login":"تسجيل الدخول"
+   "Login":"تسجيل الدخول",
+   "Current Selection":"التحديد الحالي",
+   "Search Results":"نتائج البحث",
+   "No products found for your search":"لا يوجد منتجات للبحث عنها",
+   "Browse All Products":"تصفح جميع المنتجات"
 }

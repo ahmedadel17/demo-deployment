@@ -181,7 +181,7 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
 )}
 
 {/* Selection Status Display */}
-{hasVariations && (
+{/* {hasVariations && (
   <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
     <div className="text-sm text-blue-800 dark:text-blue-200">
       <p><strong>{t('Current Selection')}:</strong></p>
@@ -189,10 +189,10 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
       <p>Color: {selectedColorId ? `Selected (ID: ${selectedColorId})` : 'Not selected'}</p>
     </div>
   </div>
-)}
+)} */}
 
 {/* Variation Data Loading */}
-{isLoadingVariation && (
+{/* {isLoadingVariation && (
   <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
     <div className="flex items-center justify-center">
       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-yellow-600 mr-3"></div>
@@ -202,10 +202,10 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
       </div>
     </div>
   </div>
-)}
+)} */}
 
 {/* Variation Data Display */}
-{variationData && (
+{/* {variationData && (
   <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
     <div className="text-sm text-green-800 dark:text-green-200">
       <p><strong>Variation Found:</strong></p>
@@ -214,24 +214,24 @@ function ProductVariations({ variations, hasVariations, productId, onDataChange 
       </pre>
     </div>
   </div>
-)}
+)} */}
 
 {/* Error Display */}
-{error && (
+{/* {error && (
   <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
     <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
   </div>
-)}
+)} */}
 
 {/* Automatic Variation Loading Notice */}
-{hasVariations && selectedSizeId && selectedColorId && !variationData && !isLoadingVariation && (
+{/* {hasVariations && selectedSizeId && selectedColorId && !variationData && !isLoadingVariation && (
   <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
     <div className="text-sm text-blue-800 dark:text-blue-200">
       <p className="font-semibold">Variation Selection Complete!</p>
       <p className="text-xs mt-1">Fetching variation data automatically...</p>
     </div>
   </div>
-)}
+)} */}
 
 
 

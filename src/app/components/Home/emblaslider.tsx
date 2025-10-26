@@ -1,138 +1,81 @@
-'use client'
-import React, { useCallback, useEffect, useState } from 'react'
-import useEmblaCarousel from 'embla-carousel-react'
-import Autoplay from 'embla-carousel-autoplay'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import Image from 'next/image'
+"use client";
 
-interface Slide {
-  id: string | number
-  image: string
-  title: string
-  description: string
-  button_text?: string
-}
+import React, { useCallback, useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
 
-interface EmblaCarouselProps {
-  slides: Slide[]
-}
+const slides = [
+  {
+    id: 1,
+    image: "/assets/images/Slider-01.webp",
+    title: "Grace and Style For All Occasions",
+    text: "Exquisite pieces that embody elegance, and enduring beauty",
+    button: "Shop Collection",
+  },
+  {
+    id: 2,
+    image: "/assets/images/Slider-02.webp",
+    title: "Where Elegance Meets Craftsmanship",
+    text: "Each piece tells a story of artistry, sophistication, and everlasting beauty.",
+    button: "Shop the Collection",
+  },
+];
 
-export function EmblaCarousel({ slides }: EmblaCarouselProps) {
-  const [isRTL, setIsRTL] = useState(() => {
-    // Initialize with server-side value to prevent hydration mismatch
-    if (typeof window !== 'undefined') {
-      return document.documentElement.getAttribute('dir') === 'rtl';
-    }
-    return false;
-  });
+export default function HeroSlider() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 7000 })]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-  
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    containScroll: 'trimSnaps',
-    align: 'start',
-    skipSnaps: false,
-    dragFree: false,
-    direction: isRTL ? 'rtl' : 'ltr',
-  }, [Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: false })]);
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
-
-  const scrollTo = useCallback((index: number) => {
-    if (emblaApi) emblaApi.scrollTo(index);
-  }, [emblaApi]);
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
   }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
     onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
-  // Reinitialize Embla when direction changes so it flips correctly
-  useEffect(() => {
-    if (!emblaApi) return;
-    emblaApi.reInit({
-      loop: true,
-      containScroll: 'trimSnaps',
-      align: 'start',
-      skipSnaps: false,
-      dragFree: false,
-      direction: isRTL ? 'rtl' : 'ltr',
-    });
-  }, [emblaApi, isRTL]);
-
-  // RTL Detection
-  useEffect(() => {
-    const checkDirection = () => {
-      const htmlDir = document.documentElement.getAttribute('dir');
-      setIsRTL(htmlDir === 'rtl');
-    };
-
-    // Check on mount
-    checkDirection();
-
-    // Watch for changes
-    const observer = new MutationObserver(checkDirection);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['dir']
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="relative overflow-hidden group h-[450px] sm:h-[550px] md:h-[650px] lg:h-[650px] xl:h-[650px]">
-      {/* Embla Carousel */}
-      <div className="embla h-full" ref={emblaRef}>
-        <div className="embla__container flex h-full">
-          {slides?.map((slide, index) => (
-            <div key={slide.id} className="embla__slide flex-shrink-0 w-full h-full">
-              <div className="w-full h-full relative">
-                {/* Background image (mirrored in RTL) */}
-                <Image
-                  src={slide.image}
-                  alt=""
-                  fill
-                  className={`objectCover ${isRTL ? 'scale-x-[-1]' : ''}`}
-                  priority={index === 0}
-                />
+    <div
+      id="site-slider"
+      className="relative overflow-hidden group"
+      data-autoplay="true"
+      data-autoplay-speed="7000"
+    >
+      <div
+        ref={emblaRef}
+        className="overflow-hidden"
+      >
+        <div className="flex duration-700 ease-in-out relative z-10">
+          {slides.map((slide) => (
+            <div
+              key={slide.id}
+              className="slide-item w-full flex-shrink-0 relative bg-cover bg-center bg-no-repeat flex"
+              style={{ backgroundImage: `url(${slide.image})`, height: "100%", minHeight: "100%" }}
+            >
+              <div
+                className="absolute inset-0 z-10 hero-overlay"
+                style={{ backgroundColor: "#000", opacity: 0.2, pointerEvents: "none" }}
+              ></div>
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black bg-opacity-20 z-10"></div>
-
-                {/* Content */}
-                <div className="relative container z-20 h-full">
-                  <div className="container-wrapper h-full">
-                    <div className="te-hero-item grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1fr_1.618fr] items-center h-full">
-                      <div className="col-span-1">
-                        <div className="space-y-6 text-left rtl:text-right">
-                          <h2 className="slider-title text-3xl md:text-4xl lg:text-5xl font-bold leading-tight animated text-white">
-                            {slide.title}
-                          </h2>
-                          <p className="text-base lg:text-xl text-white animated">
-                            {slide.description}
-                          </p>
-                          <a href="#" className="te-btn te-btn-primary animated">
-                            {slide.button_text || 'Shop Collection'}
-                          </a>
-                        </div>
+              <div className="relative container z-20 flex items-center justify-center" style={{ height: "100%" }}>
+                <div className="container-wrapper">
+                  <div className="te-hero-item grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1fr_1.618fr] items-center gap-12">
+                    <div className="col-span-1">
+                      <div className="space-y-6">
+                        <h2 className="slider-title text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
+                          {slide.title}
+                        </h2>
+                        <p className="text-base lg:text-xl text-white">{slide.text}</p>
+                        <a href="#" className="te-btn te-btn-primary">
+                          {slide.button}
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -143,52 +86,62 @@ export function EmblaCarousel({ slides }: EmblaCarouselProps) {
         </div>
       </div>
 
-      {/* Navigation Buttons - Only show if there are multiple slides */}
-      {slides.length > 1 && (
-        <>
-          <button 
-            onClick={scrollPrev}
-            disabled={!canScrollPrev}
-            className={`absolute top-1/2 ${isRTL ? 'right-4' : 'left-4'} transform -translate-y-1/2 bg-black bg-opacity-20 text-white p-3 rounded-full hover:bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 focus:outline-none z-30 disabled:opacity-50 disabled:cursor-not-allowed`}
-            aria-label={isRTL ? "Next Slide" : "Previous Slide"}
-          >
-            {isRTL ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <ChevronLeft className="h-4 w-4" />
-            )}
-          </button>
+      {/* Prev Button */}
+      <button
+        id="prev-slide"
+        onClick={scrollPrev}
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-20 text-white p-3 rounded-full hover:bg-opacity-75 opacity-0 group-hover:opacity-100 ease-in-out duration-300 focus:outline-none z-30 flex"
+        aria-label="Previous Slide"
+      >
+        <svg
+          className="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
 
-          <button 
-            onClick={scrollNext}
-            disabled={!canScrollNext}
-            className={`absolute top-1/2 ${isRTL ? 'left-4' : 'right-4'} transform -translate-y-1/2 bg-black bg-opacity-20 text-white p-3 rounded-full hover:bg-opacity-75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 focus:outline-none z-30 disabled:opacity-50 disabled:cursor-not-allowed`}
-            aria-label={isRTL ? "Previous Slide" : "Next Slide"}
-          >
-            {isRTL ? (
-              <ChevronLeft className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
-            )}
-          </button>
-        </>
-      )}
+      {/* Next Button */}
+      <button
+        id="next-slide"
+        onClick={scrollNext}
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-20 text-white p-3 rounded-full hover:bg-opacity-75 opacity-0 group-hover:opacity-100 ease-in-out duration-300 focus:outline-none z-30 flex"
+        aria-label="Next Slide"
+      >
+        <svg
+          className="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
 
-      {/* Pagination Dots - Only show if there are multiple slides */}
-      {slides.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollTo(index)}
-              className={`h-4 w-4 rounded-full transition-colors duration-300 ${
-                index === selectedIndex ? 'bg-white' : 'bg-white bg-opacity-25'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-      )}
+      {/* Pagination */}
+      <div
+        id="pagination-dots"
+        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30"
+      >
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => scrollTo(index)}
+            className={`h-4 w-4 rounded-full transition-colors duration-300 ease-in-out ${
+              selectedIndex === index ? "bg-white" : "bg-white bg-opacity-25"
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          ></button>
+        ))}
+      </div>
     </div>
-  )
+  );
 }
