@@ -6073,8 +6073,8 @@ select {
 @font-face {
   font-family: "inter";
 
-  src: url("../../../my-app/public/fonts/ltr/inter/medium.woff2") format("woff2");
-
+  src: url("/fonts/ltr/inter/medium.woff2") format("woff2");
+    
   font-weight: 500;
 
   font-style: normal;
@@ -6087,7 +6087,7 @@ select {
 @font-face {
   font-family: "inter";
 
-  src: url("../../../my-app/public/fonts/ltr/inter/semibold.woff2") format("woff2");
+  src: url("/fonts/ltr/inter/semibold.woff2") format("woff2");
 
   font-weight: 600;
 
@@ -6101,7 +6101,7 @@ select {
 @font-face {
   font-family: "inter";
 
-  src: url("../../../my-app/public/fonts/ltr/inter/bold.woff2") format("woff2");
+  src: url("/fonts/ltr/inter/bold.woff2") format("woff2");
 
   font-weight: 700;
 
@@ -6115,7 +6115,7 @@ select {
 @font-face {
   font-family: "somarsans";
 
-  src: url("../../../my-app/public/fonts/rtl/somarsans/regular.woff2") format("woff2");
+  src: url("/fonts/rtl/somarsans/regular.woff2") format("woff2");
 
   font-weight: 400;
 
@@ -6129,7 +6129,7 @@ select {
 @font-face {
   font-family: "somarsans";
 
-  src: url("../../../my-app/public/fonts/rtl/somarsans/medium.woff2") format("woff2");
+  src: url("/fonts/rtl/somarsans/medium.woff2") format("woff2");
 
   font-weight: 500;
 
@@ -6143,7 +6143,7 @@ select {
 @font-face {
   font-family: "somarsans";
 
-  src: url("../../../my-app/public/fonts/rtl/somarsans/semibold.woff2") format("woff2");
+  src: url("/fonts/rtl/somarsans/semibold.woff2") format("woff2");
 
   font-weight: 600;
 
@@ -6157,7 +6157,7 @@ select {
 @font-face {
   font-family: "somarsans";
 
-  src: url("../../../my-app/public/fonts/rtl/somarsans/bold.woff2") format("woff2");
+  src: url("/fonts/rtl/somarsans/bold.woff2") format("woff2");
 
   font-weight: 700;
 
@@ -6169,7 +6169,7 @@ select {
 @font-face {
   font-family: "riyal-symbol";
 
-  src: url("../../../my-app/public/fonts/riyal-symbol.woff2") format("woff2");
+  src: url("/fonts/riyal-symbol.woff2") format("woff2");
 
   font-weight: normal;
 
