@@ -56,7 +56,7 @@ export default async function RootLayout({
                 {children}
               </main>
               <FooterStyle1 />
-              <button className="te-footer-back-to-top back-to-top hidden lg:flex show" aria-label="Back to top" fdprocessedid="w66kvf">
+              <button className="te-footer-back-to-top back-to-top hidden lg:flex show" aria-label="Back to top">
     <svg className="te-footer-back-to-top-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="m5 9 7-7 7 7"></path>
         <path d="M12 16V2"></path>

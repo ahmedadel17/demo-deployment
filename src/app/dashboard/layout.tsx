@@ -4,7 +4,7 @@ import Breadcrumb from '../components/header/headerBreadcrumb'
 
 function layout({children}: {children: React.ReactNode}) {
   return (
-      <div id="content" class="flex-1 mt-8 mb-8 site-content">
+      <div id="content" className="flex-1 mt-8 mb-8 site-content">
 
     <div className="container">
 

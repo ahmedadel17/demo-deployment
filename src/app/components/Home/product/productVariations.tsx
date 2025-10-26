@@ -49,7 +49,7 @@ function ProductVariations({
     isAddingToCart: false,
     isLoadingVariation: false,
     selectedVariation: null as any,
-    isFavorite: product?.is_favorite,
+    isFavorite: product?.is_favourite,
     isFavoriteLoading: false
   });
   

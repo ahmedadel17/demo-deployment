@@ -1,5 +1,4 @@
 import React from 'react'
-import ProductGalleryCarousel from '../components/product/ProductGalleryCarousel'
 import ProductMerchant from '../components/product/productMerchant';
 import ProductShare from '../components/product/productShare';
 import ProductInteractions from '../components/ProductInteractions';
@@ -32,7 +31,7 @@ function ProductDetails() {
         <div>
             <div className="sticky top-8 space-y-6">
                 {/* <?php include 'template-parts/product/product-gallery.php'; ?> */}
-                <ProductGalleryCarousel images={images} discount="20% OFF" />
+                {/* <ProductGalleryCarousel images={images} discount="20% OFF" /> */}
             </div>
         </div>
 
