@@ -1,10 +1,9 @@
-import React from 'react'
-import Cart from '../components/cart/cart'
-function CartPage() {
-  return (
+'use client';
+import React from 'react';
+import Cart from '../components/cart/cart';
 
-        <Cart/>
-  )
+function CartPage() {
+  return <Cart />;
 }
 
-export default CartPage
+export default CartPage;

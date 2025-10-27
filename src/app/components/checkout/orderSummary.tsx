@@ -31,15 +31,24 @@ function OrderSummary() {
     }
   }
  const  placeOrder = async () => {
-    const response = await getRequest('/payment/cash-on-delivery/' + cartData?.id, { 'Content-Type': 'application/json' }, token, locale);
+    if ( parseFloat(cartData?.amount_to_pay)==0){
+    const response = await postRequest(`/order/orders/change-cart-to-order/ ${cartData?.id}`,{},{},token,locale);
     if(response.status){
-      // Update order status to confirmation
-      updateOrderStatus('PlaceOrder');
-      toast.success(response.data.message);
-      // Navigate to confirmation page
       router.push('/checkoutConfirmation?orderId='+cartData?.id );
     }
+   
 }
+else{
+  const response = await getRequest('/payment/cash-on-delivery/' + cartData?.id, { 'Content-Type': 'application/json' }, token, locale);
+  if(response.status){
+    // Update order status to confirmation
+    updateOrderStatus('PlaceOrder');
+    toast.success(response.data.message);
+    // Navigate to confirmation page
+    router.push('/checkoutConfirmation?orderId='+cartData?.id );
+  }
+}
+ }
   // Show loading state during hydration
   if (!isClient) {
     return (
@@ -159,11 +168,11 @@ function OrderSummary() {
       {/* 2. Shipping Method page - Show Go to Payment button */}
       {order.status == 'shippingMethod' && (
         <button
-          onClick={() => {
-            settingShippingMethod();
-            router.push('/checkout/paymentMethod');
-            updateOrderStatus('Payment');
-          }}
+            onClick={() => {
+              settingShippingMethod();
+              router.push('/checkout/paymentMethod');
+              updateOrderStatus('Payment');
+            }}
           disabled={!order.shipping_method_slug}
           className="w-full mt-6 py-3 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors font-medium text-center disabled:bg-gray-400 disabled:cursor-not-allowed"
         >

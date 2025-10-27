@@ -4,20 +4,18 @@ import "./style.css";
 import "./style.min.css"
 import "./embla-carousel.css";
 import "./rtl.css";
-import HeaderStyle1 from "./components/header/styles/headerStyle1";
-import FooterStyle1 from "./components/footer/styles/footerStyle1";
-import Marquee from "./components/marquee";
 import FooterNav from "./components/footer/footerNav";
 import ReduxProvider from "./components/ReduxProvider";
 import CartInitializer from "./components/cart/CartInitializer";
 import WishlistInitializer from "./components/wishlist/WishlistInitializer";
 import { Toaster } from "react-hot-toast";
-import { Suspense } from "react";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
-import HeaderTopBar from "./components/header/headerTopBar";
 import ThemeScript from "./components/ThemeScript";
 import NavProgress from "./components/navProgress";
+import NetworkStatus from "./components/NetworkStatus";
+import NetworkManager from "./components/NetworkManager";
+import LayoutWithMenuData from "./components/LayoutWithMenuData";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -43,19 +41,17 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <ReduxProvider>
+            {/* <NetworkManager />
+            <NetworkStatus showDetails={true} autoHide={true} hideDelay={5000} /> */}
             <div className="flex flex-col min-h-screen">
               <NavProgress />
               <CartInitializer />
               <WishlistInitializer />
-              <Suspense fallback={<div className="h-8 bg-primary-500"></div>}>
-                <Marquee/>
-                <HeaderTopBar />  
-              </Suspense>
-              <HeaderStyle1 />
-              <main className="flex-1 pb-16 lg:pb-0">
-                {children}
-              </main>
-              <FooterStyle1 />
+              <LayoutWithMenuData>
+                <main className="flex-1 pb-16 lg:pb-0">
+                  {children}
+                </main>
+              </LayoutWithMenuData>
               <button className="te-footer-back-to-top back-to-top hidden lg:flex show" aria-label="Back to top">
     <svg className="te-footer-back-to-top-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="m5 9 7-7 7 7"></path>

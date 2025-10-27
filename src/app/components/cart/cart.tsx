@@ -1,24 +1,56 @@
 'use client';
 import { useCart } from "@/app/hooks/useCart";
-import React, { useState } from "react";
+import { useAuth } from "@/app/hooks/useAuth";
+import React, { useEffect, useCallback } from "react";
 import CartItem from "./cartItem";
 import CartSummary from "./cartSummary";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import getRequest from "../../../../helpers/get";
+import { useAppDispatch } from "@/app/store/hooks";
+import { setCartData, setCartLoading, setCartError } from "@/app/store/slices/cartSlice";
+import toast from "react-hot-toast";
 function Cart() {
   const { 
     cartData, 
     products: cartItems, 
     totalItems, 
     totalPrice, 
-    clearCart
+    clearCart,
+    isLoading,
+    error: cartError,
+    
   } = useCart();
-  const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
   const t = useTranslations();
-  // Debug: Log cart data from Redux
-  console.log('Cart data from Redux:', cartData);
-  console.log('Products:', cartItems);
-  console.log('Total items:', totalItems);
-  console.log('Total price:', totalPrice);
+  const locale = useLocale();
+  const dispatch = useAppDispatch();
+
+  const fetchCartData = useCallback(async () => {
+    if (!token) return;
+    dispatch(setCartLoading(true));
+    dispatch(setCartError(null));
+    try {
+      const response = await getRequest('/marketplace/cart/my-cart', {}, token, locale);
+      if (response.data) {
+        dispatch(setCartData(response.data));
+      } else {
+        toast.error('Invalid cart data received from API');
+        throw new Error('Invalid cart data received from API');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch cart data';
+      toast.error(errorMessage);
+      dispatch(setCartError(errorMessage));
+    } finally {
+      dispatch(setCartLoading(false));
+    }
+  }, [token, locale, dispatch]);
+  // Fetch cart data when component mounts
+  useEffect(() => {
+    fetchCartData();
+  }, [fetchCartData]);
+
+
 
 
 
@@ -27,6 +59,31 @@ function Cart() {
   };
 
   // Cart totals are managed by Redux
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <span className="ml-3 text-gray-600 dark:text-gray-400">{t('Loading cart...')}</span>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (cartError) {
+    return (
+      <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+        <p className="text-sm text-red-600 dark:text-red-400">{cartError}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="mt-2 text-xs text-red-500 hover:text-red-700"
+        >
+          {t('Retry')}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <>

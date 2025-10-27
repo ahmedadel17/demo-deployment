@@ -55,3 +55,4 @@ export const clearAuthData = () => {
 export const isAuthenticated = (): boolean => {
   return getAuthToken() !== null;
 };
+

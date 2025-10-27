@@ -1,7 +1,7 @@
 import React from 'react'
-import { useTranslations } from 'next-intl'
-function HeaderTopBar() {
-  const t = useTranslations()
+import TopBarLink from './TopBarLink';
+function HeaderTopBar({ menuData }: { menuData: { items: any[] } }) {
+  console.log('menuData ✅✅ headerTopBar', menuData.items);
   return (
     <div className="site-topbar bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 py-3 flex items-center text-sm hidden lg:flex">
     <div className="container">
@@ -28,15 +28,9 @@ function HeaderTopBar() {
             </div>
             <div>
                 <ul className="flex gap-4">
-                    <li>
-                        <a href="#" className="hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-200">{t('About')}</a>
-                    </li>
-                    <li>
-                        <a href="returns-page" className="hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-200">{t('Return & Exchange Policy')}</a>
-                    </li>
-                    <li>
-                        <a href="shipping-page" className="hover:text-gray-800 dark:hover:text-gray-400 transition-colors duration-200">{t('Shipping & Delivery')}</a>
-                    </li>
+                    {menuData?.items?.map((item: any) => (
+                        <TopBarLink key={item.id} url={item.url} label={item.label} />
+                    ))}
                 </ul>
 
             </div>

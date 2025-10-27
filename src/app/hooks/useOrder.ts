@@ -24,10 +24,19 @@ export const useOrder = () => {
 
  
 
-  const updateShippingMethod = (shippingMethodSlug: string) => {
+  const updateShippingMethod = (shippingMethodSlug: string, cartData?: { total_amount?: string }) => {
     dispatch(setShippingMethodSlug(shippingMethodSlug));
-    // Update order status when shipping method is selected
-    dispatch(setOrderStatus('shippingMethod'));
+    
+    // Check if total amount is zero
+    const amount_to_pay = parseFloat(cartData?.amount_to_pay );
+    console.log(cartData)
+    if (amount_to_pay == 0) {
+      // If amount is zero, set status to confirm order
+      dispatch(setOrderStatus('PlaceOrder'));
+    } else {
+      // If amount is not zero, continue with normal flow
+      dispatch(setOrderStatus('shippingMethod'));
+    }
   };
   const updatePaymentMethod = (paymentMethodId: string) => {
     dispatch(setPaymentMethodId(paymentMethodId));

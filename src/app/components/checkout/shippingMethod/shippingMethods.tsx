@@ -40,9 +40,9 @@ const ShippingMethod = () => {
   useEffect(() => {
     if (shippingMethods.length > 0 && !order.shipping_method_slug) {
       const firstMethod = shippingMethods[0];
-      updateShippingMethod(firstMethod.slug);
+      updateShippingMethod(firstMethod.slug, cartData);
     }
-  }, [shippingMethods, order.shipping_method_slug, updateShippingMethod]);
+  }, [shippingMethods, order.shipping_method_slug, updateShippingMethod, cartData]);
 
   const validationSchema = Yup.object({
     shipping: Yup.string().required('Please select a shipping method')
@@ -54,7 +54,7 @@ const ShippingMethod = () => {
   
   const onSubmit = (values: { shipping: string }) => {
     console.log('Shipping method selected:', values.shipping);
-    updateShippingMethod(values.shipping);
+    updateShippingMethod(values.shipping, cartData);
   }
 
   return (
@@ -72,7 +72,7 @@ const ShippingMethod = () => {
           <Form>
             <div className="space-y-3">
           
-              {shippingMethods?.map((shippingMethod: ShippingMethod) => {
+              {shippingMethods?.map((shippingMethod: ShippingMethod,index: number) => {
                 // Transform ShippingRate to ShippingOption format
                 const option = {
                   slug: shippingMethod.slug,
@@ -86,12 +86,12 @@ const ShippingMethod = () => {
                 
                 return (
                 <ShippingMethodRadioButton
-                  key={shippingMethod.id}
+                  key={index}
                   option={option}
                   name="shipping"
                   onChange={(value: string) => {
                     setFieldValue('shipping', value);
-                    updateShippingMethod(value);
+                    updateShippingMethod(value, cartData);
                   }}
                 />
                 );

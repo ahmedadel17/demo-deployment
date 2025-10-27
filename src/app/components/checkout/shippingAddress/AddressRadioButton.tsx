@@ -67,9 +67,9 @@ const   AddressRadioButton: React.FC<AddressRadioButtonProps> = ({
                {address.label}
              </h4>
              {address.is_default && (
-               <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
-                 {t('Default')}
-               </span>
+               <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+               Default
+             </span>
              )}
            </div>
            {showDeleteButton && onDelete && (

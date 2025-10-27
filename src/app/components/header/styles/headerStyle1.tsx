@@ -1,14 +1,8 @@
 "use client";
 import React from 'react'
 import dynamic from 'next/dynamic'
-import HeaderSearch from '../headerSearch'
-import HeaderNotification from '../headerNotification'
-import HeaderWishList from '../headerWishlist'
-import HeaderAccount from '../headerAccount'
-import HeaderCart from '../headerCart'
-import HeaderMobileMenu from '../headerMobileMenu'
-import { useAuth } from '@/app/hooks/useAuth'
-import Logo from '../logo'
+import HeaderLtr from './headerltr';
+import HeaderRtl from './headerRtl';
 import { useLocale } from 'next-intl';
 // Dynamically import HeaderDarkMode to prevent hydration issues
 const HeaderDarkMode = dynamic(() => import('../headerDarkMode'), {
@@ -29,15 +23,12 @@ const HeaderDarkMode = dynamic(() => import('../headerDarkMode'), {
   )
 })
 
-import HeaderDesktopMenu from '../headerDesktopMenu'
-import HeaderLtr from './headerltr';
-import HeaderRtl from './headerRtl';
-function HeaderStyle1() {
+
+function HeaderStyle1({ menuData }: { menuData: any }) {
   const locale = useLocale();
-  console.log(locale);
   return (
     <div>
-   {locale === 'ar' ? <HeaderRtl /> : <HeaderLtr />}
+   {locale === 'ar' ? <HeaderRtl menuData={menuData} /> : <HeaderLtr menuData={menuData} />}
     </div>
   )
 }

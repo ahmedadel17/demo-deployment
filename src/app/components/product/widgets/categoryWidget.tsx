@@ -1,175 +1,213 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, {useMemo, useState} from 'react'
+import {useRouter, useSearchParams} from 'next/navigation'
+import Image from 'next/image'
 
 type SubCategory = {
-  name: string;
-  slug: string;
-  count: number;
-};
+  id: number
+  name: string
+  slug: string
+  count: number
+  image: string
+}
 
 type Category = {
-  name: string;
-  count: number;
-  slug: string;
-  sub?: SubCategory[];
-};
+  id: number
+  name: string
+  slug: string
+  count: number
+  image: string
+  sub?: SubCategory[]
+}
 
-const categories: Category[] = [
+const DEFAULT_CATEGORIES: Category[] = [
   {
-    name: "Men",
+    id: 1,
+    name: 'Men',
     count: 45,
-    slug: "men",
+    slug: 'men',
+    image: '/images/men.jpg',
     sub: [
-      { name: "T-Shirts", slug: "t-shirts", count: 12 },
-      { name: "Jeans", slug: "jeans", count: 18 },
-      { name: "Shirts", slug: "shirts", count: 15 },
-    ],
+      {id: 11, name: 'T-Shirts', slug: 't-shirts', count: 12, image: '/images/t-shirts.jpg'},
+      {id: 12, name: 'Jeans', slug: 'jeans', count: 18, image: '/images/jeans.jpg'},
+      {id: 13, name: 'Shirts', slug: 'shirts', count: 15, image: '/images/shirts.jpg'}
+    ]
   },
   {
-    name: "Women",
+    id: 2,
+    name: 'Women',
     count: 31,
-    slug: "women",
+    slug: 'women',
+    image: '/images/women.jpg',
     sub: [
-      { name: "T-Shirts", slug: "t-shirts", count: 6 },
-      { name: "Jeans", slug: "jeans", count: 88 },
-      { name: "Shirts", slug: "shirts", count: 120 },
-    ],
+      {id: 21, name: 'T-Shirts', slug: 't-shirts', count: 6, image: '/images/t-shirts.jpg'},
+      {id: 22, name: 'Jeans', slug: 'jeans', count: 88, image: '/images/jeans.jpg'},
+      {id: 23, name: 'Shirts', slug: 'shirts', count: 120, image: '/images/shirts.jpg'}
+    ]
   },
   {
-    name: "Kids",
+    id: 3,
+    name: 'Kids',
     count: 69,
-    slug: "kid",
+    slug: 'kid',
+    image: '/images/kids.jpg',
     sub: [
-      { name: "T-Shirts", slug: "t-shirts", count: 45 },
-      { name: "Jeans", slug: "jeans", count: 21 },
-      { name: "Shirts", slug: "shirts", count: 10 },
-    ],
+      {id: 31, name: 'T-Shirts', slug: 't-shirts', count: 45, image: '/images/t-shirts.jpg'},
+      {id: 32, name: 'Jeans', slug: 'jeans', count: 21, image: '/images/jeans.jpg'},
+      {id: 33, name: 'Shirts', slug: 'shirts', count: 10, image: '/images/shirts.jpg'}
+    ]
   },
   {
-    name: "Accessories",
+    id: 4,
+    name: 'Accessories',
     count: 23,
-    slug: "accessories",
+    slug: 'accessories',
+    image: '/images/accessories.jpg',
     sub: [
-      { name: "Bags", slug: "bags", count: 8 },
-      { name: "Belts", slug: "belts", count: 9 },
-      { name: "Hats", slug: "hats", count: 6 },
-    ],
+      {id: 41, name: 'Bags', slug: 'bags', count: 8, image: '/images/bags.jpg'},
+      {id: 42, name: 'Belts', slug: 'belts', count: 9, image: '/images/belts.jpg'},
+      {id: 43, name: 'Hats', slug: 'hats', count: 6, image: '/images/hats.jpg'}
+    ]
   },
-  {
-    name: "Sports",
-    count: 22,
-    slug: "sports",
-  },
-];
+  {id: 5, name: 'Sports', count: 22, slug: 'sports', image: '/images/sports.jpg'}
+]
 
-const CategoryWidget: React.FC = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentCategory = searchParams.get("category") || "";
-  const [expanded, setExpanded] = useState<string | null>(null);
+type Props = {
+  categories?: Category[]
+}
 
-  const toggleExpand = (slug: string) => {
-    setExpanded((prev) => (prev === slug ? null : slug));
-  };
+export default function CategoryWidget({categories}: Props) {
+  const router = useRouter()
+  const params = useSearchParams()
+  
+  // Get all selected categories from URL
+  const selectedCategories = useMemo(() => {
+    const categoriesParam = params.getAll('categories[]')
+    return categoriesParam.map(id => parseInt(id)).filter(id => !isNaN(id))
+  }, [params])
+  
+  const data = useMemo(() => categories ?? DEFAULT_CATEGORIES, [categories])
+  const [open, setOpen] = useState<Record<string, boolean>>({})
 
-  const navigateToCategory = (slug: string) => {
-    router.push(`/products?category=${slug}`);
-  };
+  const toggle = (slug: string) => {
+    setOpen(prev => ({...prev, [slug]: !prev[slug]}))
+  }
+
+  const toggleCategory = (categoryId: number) => {
+    const search = new URLSearchParams(params.toString())
+    const currentCategories = selectedCategories
+    
+    if (currentCategories.includes(categoryId)) {
+      // Remove category if already selected
+      const newCategories = currentCategories.filter(id => id !== categoryId)
+      search.delete('categories[]')
+      newCategories.forEach(id => search.append('categories[]', id.toString()))
+    } else {
+      // Add category if not selected
+      currentCategories.push(categoryId)
+      search.delete('categories[]')
+      currentCategories.forEach(id => search.append('categories[]', id.toString()))
+    }
+    
+    // Keep current page when categories change
+    
+    router.push(`/products?${search.toString()}`)
+  }
 
   return (
     <div className="category-widget w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Categories
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Categories</h3>
+          {selectedCategories.length > 0 && (
+            <button
+              onClick={() => {
+                const search = new URLSearchParams(params.toString())
+                search.delete('categories[]')
+                // Keep current page
+                router.push(`/products?${search.toString()}`)
+              }}
+              className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-100 dark:hover:text-primary-300 font-medium transition-colors"
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+        {selectedCategories.length > 0 && (
+          <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            {selectedCategories.length} categor{selectedCategories.length === 1 ? 'y' : 'ies'} selected
+          </div>
+        )}
       </div>
 
       <div className="space-y-1">
-        {categories.map((cat) => {
-          const isExpanded = expanded === cat.slug;
-          const isActive = currentCategory === cat.slug;
-
+        {data.map(cat => {
+          const hasSub = Array.isArray(cat.sub) && cat.sub.length > 0
+          const isActive = selectedCategories.includes(cat.id)
+          const isOpen = open[cat.slug] ?? false
           return (
-            <div key={cat.slug} className="category-group">
+            <div key={cat.id} className="category-group">
               <div
-                className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md cursor-pointer ${
-                  isActive ? "bg-gray-50 dark:bg-gray-700" : ""
-                }`}
-                onClick={() => toggleExpand(cat.slug)}
+                className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md cursor-pointer ${isActive ? 'bg-gray-50 dark:bg-gray-700' : ''}`}
+                onClick={() => (hasSub ? toggle(cat.slug) : toggleCategory(cat.id))}
               >
-                <div
-                  className="flex items-center gap-3"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigateToCategory(cat.slug);
-                  }}
-                >
-                  <span className="text-sm font-medium text-gray-900 dark:text-white cursor-pointer">
-                    {cat.name}
-                  </span>
+                <div className="flex items-center gap-3" onClick={(e) => {e.stopPropagation(); toggleCategory(cat.id)}}>
+                  {cat.image && (
+                    <Image 
+                      src={cat.image} 
+                      alt={cat.name}
+                      width={24}
+                      height={24}
+                      className="w-6 h-6 rounded-full object-cover"
+                      onError={() => {}}
+                    />
+                  )}
+                  <span className="text-sm font-medium text-gray-900 dark:text-white cursor-pointer">{cat.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-                    {cat.count}
-                  </span>
-                  {cat.sub && (
-                    <svg
-                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                        isExpanded ? "rotate-90" : ""
-                      }`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">{cat.count}</span>
+                  {hasSub && (
+                    <svg className={`w-4 h-4 text-gray-400 transition-transform duration-200 rtl:scale-x-[-1] ${isOpen ? 'rotate-90' : 'rotate-0'}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                     </svg>
                   )}
                 </div>
               </div>
 
-              {cat.sub && (
-                <div
-                  className={`pl-6 space-y-1 overflow-hidden transition-all duration-300 ${
-                    isExpanded ? "max-h-96" : "max-h-0"
-                  }`}
-                >
-                  {cat.sub.map((sub) => {
-                    const isSubActive = currentCategory === sub.slug;
+              {hasSub && (
+                <div className={`pl-6 space-y-1 overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96' : 'max-h-0'}`}>
+                  {cat.sub!.map(sub => {
+                    const subActive = selectedCategories.includes(sub.id)
                     return (
-                      <div
-                        key={sub.slug}
-                        onClick={() => navigateToCategory(sub.slug)}
-                        className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md cursor-pointer ${
-                          isSubActive ? "bg-gray-50 dark:bg-gray-700" : ""
-                        }`}
-                      >
+                      <div key={sub.slug}
+                           className={`flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md cursor-pointer ${subActive ? 'bg-gray-50 dark:bg-gray-700' : ''}`}
+                           onClick={() => toggleCategory(sub.id)}>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
-                            {sub.name}
-                          </span>
+                          {sub.image && (
+                            <Image 
+                              src={sub.image} 
+                              alt={sub.name}
+                              width={20}
+                              height={20}
+                              className="w-5 h-5 rounded-full object-cover"
+                              onError={() => {}}
+                            />
+                          )}
+                          <span className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">{sub.name}</span>
                         </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-                          {sub.count}
-                        </span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">{sub.count}</span>
                       </div>
-                    );
+                    )
                   })}
                 </div>
               )}
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CategoryWidget;
+

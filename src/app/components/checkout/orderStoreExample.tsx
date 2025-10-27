@@ -28,7 +28,7 @@ export default function OrderStoreExample() {
   };
 
   const handleShippingMethodChange = (shippingMethodId: string) => {
-    updateShippingMethod(shippingMethodId);
+    updateShippingMethod(shippingMethodId, null); // Pass null for cartData in example
     console.log('Shipping method updated:', shippingMethodId);
   };
 

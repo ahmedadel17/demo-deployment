@@ -4,8 +4,9 @@ import FooterMenus from '../footerMenu'
 import FooterApp from '../footerApp'
 import FooterSocialMedia from '../footerSocialMedia'
 import { useTranslations } from 'next-intl'
-function FooterStyle1() {
-
+import FooterWidget from '../FooterWidget'
+function FooterStyle1({ menuData }: { menuData: any }) {
+console.log('menuData ✅✅ footerStyle1', menuData);
     const t = useTranslations();
   return (
   <>
@@ -14,13 +15,15 @@ function FooterStyle1() {
 
         <div className="te-footer-content">
             <div className="te-footer-grid te-footer-grid-5">
-                <div className="te-footer-widget footer-widget-1"> 
-                     <div className="footer-widget">    
-                          <div className="te-footer-title">{t("Company")}</div>  
-                              <div className="menu-footer-container">    
-                                      <ul className="menu"><li><a href="#about" className="te-footer-link">{t("About Us")}</a></li><li><a href="#careers" className="te-footer-link">{t("Careers")}</a></li><li><a href="#press" className="te-footer-link">{t("Press")}</a></li><li><a href="#blog" className="te-footer-link">{t("Blog")}</a></li><li><a href="#partners" className="te-footer-link">{t("Partners")}</a></li>          </ul>      </div>  </div></div><div className="te-footer-widget footer-widget-1">  <div className="footer-widget">      <div className="te-footer-title">{t("Support")}</div>      <div className="menu-footer-container">          <ul className="menu"><li><a href="#help" className="te-footer-link">{t("Help Center")}</a></li><li><a href="#contact" className="te-footer-link">{t("Contact")}</a></li><li><a href="#faqs" className="te-footer-link">{t("FAQs")}</a></li><li><a href="#chat" className="te-footer-link">{t("Live Chat")}</a></li><li><a href="#guides" className="te-footer-link">{t("Guides")}</a></li>          </ul>      </div>  </div></div><div className="te-footer-widget footer-widget-1">  <div className="footer-widget">      <div className="te-footer-title">{t("Legal")}</div>      <div className="menu-footer-container">          <ul className="menu"><li><a href="privacy-page.php" className="te-footer-link">{t("Privacy Policy")}</a></li><li><a href="terms-page.php" className="te-footer-link">{t("Terms of Service")}</a></li><li><a href="cookies-page.php" className="te-footer-link">{t("Cookies")}</a></li><li><a href="#disclaimer" className="te-footer-link">{t("Disclaimer")}</a></li><li><a href="#accessibility" className="te-footer-link">{t("Accessibility")}</a></li>          </ul>      </div>  </div></div><div className="te-footer-widget footer-widget-1">  <div className="footer-widget">      <div className="te-footer-title">{t("Social")}</div>      <div className="menu-footer-container">          <ul className="menu"><li><a href="#facebook" className="te-footer-link">Facebook</a></li><li><a href="#twitter" className="te-footer-link">{t("Twitter")}</a></li><li><a href="#instagram" className="te-footer-link">{t('Instagram')}</a></li><li><a href="#linkedin" className="te-footer-link">{t("LinkedIn")}</a></li><li><a href="#youtube" className="te-footer-link">{t("YouTube")}</a></li>          </ul>      </div>  </div></div>        
-                        {/* <!-- Footer Widget --> */}
-<div className="te-footer-widget footer-widget-1">
+               
+            {menuData.map((menu: any) => (
+                                            <FooterWidget key={menu.id} title={menu?.name} links={menu?.items} />
+                                          ))}              
+                                         
+                                         
+                                          
+                                                {/* <!-- Footer Widget --> */}
+{/* <div className="te-footer-widget footer-widget-1">
     <div className="footer-widget">
         <div className="te-footer-title">{t('Get the App')}</div>
         <p className="te-footer-description text-sm mb-4">{t('Download our app for the best experience and latest updates')}</p>
@@ -45,7 +48,8 @@ function FooterStyle1() {
             </a>
         </div>
     </div>
-</div>            </div>
+</div>       */}
+      </div>
         </div>
 
         {/* <!-- Footer Bottom --> */}

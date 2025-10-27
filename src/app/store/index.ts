@@ -4,6 +4,7 @@ import productReducer from './slices/productSlice';
 import cartReducer from './slices/cartSlice';
 import orderReducer from './slices/orderSlice';
 import wishlistReducer from './slices/wishlistSlice';
+import networkReducer from './slices/networkSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     cart: cartReducer,
     order: orderReducer,
     wishlist: wishlistReducer,
+    network: networkReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

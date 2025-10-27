@@ -10,15 +10,20 @@ import ProductPagination from '../components/product/productPagination';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import ProductCard2 from '../components/productCard2';
+import FilterSidebar from '../components/product/widgets/FilterSidebar';
 interface ProductsPageProps {
   searchParams: {
     page?: string;
     limit?: string;
     sort?: string;
     category?: string;
-    price_min?: string;
-    price_max?: string;
+    categories?: string;
+    min_price?: string;
+    max_price?: string;
     keyword?: string;
+    sizes?: string;
+    colors?: string;
+    attributes?: string;
   };
 }
 
@@ -38,12 +43,48 @@ async function Products({ searchParams }: ProductsPageProps) {
   const itemsPerPage = parseInt(searchParams.limit || '12');
   const sortBy = searchParams.sort || 'newest';
   const category = searchParams.category;
-  const priceMin = searchParams.price_min;
-  const priceMax = searchParams.price_max;
+  const categories = searchParams.categories;
+  
+  // Handle categories[] array parameter - extract from searchParams
+  const categoriesArray: string[] = [];
+  const searchParamsString = searchParams.toString();
+  if (searchParamsString) {
+    const urlParams = new URLSearchParams(searchParamsString);
+    const categoriesArrayFromUrl = urlParams.getAll('categories[]');
+    categoriesArray.push(...categoriesArrayFromUrl);
+  }
+
+  const priceMin = searchParams.min_price;
+  const priceMax = searchParams.max_price;
   const searchQuery = searchParams.keyword;
+  const sizes = searchParams.sizes;
+  const colors = searchParams.colors;
+  
+  // Handle nested attributes format (attributes[1]=3&attributes[2]=20)
+  const attributesObject: Record<string, string[]> = {};
+  if (searchParamsString) {
+    const urlParams = new URLSearchParams(searchParamsString);
+    for (const [key, value] of urlParams.entries()) {
+      if (key.startsWith('attributes[') && key.endsWith(']')) {
+        const attrId = key.slice(11, -1); // Extract attribute ID from "attributes[1]"
+        if (!attributesObject[attrId]) {
+          attributesObject[attrId] = [];
+        }
+        attributesObject[attrId].push(value);
+      }
+    }
+  }
 
   console.log('Search params received:', {
     searchQuery,
+    category,
+    categories,
+    categoriesArray,
+    priceMin,
+    priceMax,
+    sizes,
+    colors,
+    attributesObject,
     allSearchParams: searchParams
   });
 
@@ -54,13 +95,36 @@ async function Products({ searchParams }: ProductsPageProps) {
     sort: sortBy,
   });
 
-  if (category) queryParams.append('category', category);
-  if (priceMin) queryParams.append('price_min', priceMin);
-  if (priceMax) queryParams.append('price_max', priceMax);
+  // Handle both single category and multiple categories
+  if (categoriesArray && categoriesArray.length > 0) {
+    // Use categories[] array parameter
+    categoriesArray.forEach(catId => {
+      queryParams.append('categories[]', catId);
+    });
+  } else if (categories) {
+    queryParams.append('categories', categories);
+  } else if (category) {
+    queryParams.append('category', category);
+  }
+  
+  if (priceMin) queryParams.append('min_price', priceMin);
+  if (priceMax) queryParams.append('max_price', priceMax);
   if (searchQuery && searchQuery.trim()) queryParams.append('keyword', searchQuery.trim());
+  if (sizes) queryParams.append('sizes', sizes);
+  if (colors) queryParams.append('colors', colors);
+  
+  // Add nested attributes to query parameters
+  Object.entries(attributesObject).forEach(([attrId, values]) => {
+    values.forEach(value => {
+      queryParams.append(`attributes[${attrId}]`, value);
+    });
+  });
 
   console.log('API Query Parameters:', queryParams.toString());
-
+  console.log('Category parameters being sent to API:', { category, categories, categoriesArray });
+  console.log('Price parameters being sent to API:', { priceMin, priceMax });
+  console.log('Size and color parameters being sent to API:', { sizes, colors });
+  console.log('Attributes parameter being sent to API:', { attributesObject });
   try {
     // Prepare headers
     const headers: Record<string, string> = {
@@ -83,6 +147,7 @@ async function Products({ searchParams }: ProductsPageProps) {
     );
 
     const productsData = response.data.data;
+    console.log('productsData',productsData)
     const products = (productsData.items || []).map((product: Product & { is_favourite?: boolean }) => ({
       ...product,
       is_favourite: product.is_favourite || false // Ensure is_favourite property exists
@@ -102,13 +167,7 @@ async function Products({ searchParams }: ProductsPageProps) {
         <Breadcrumb name="Products" />
         <div className="grid grid-cols-1 md:grid-cols-1 xl:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1 hidden xl:block">
-            <div className="sticky top-8 space-y-6">
-              <PriceFilterWidget />
-              <CategoryWidget />
-              <SizeColorFilter />
-            </div>
-          </div>
+         <FilterSidebar/>
 
           {/* Main Content */}
           <div className="xl:col-span-3">

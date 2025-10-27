@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { usePathname } from "next/navigation"; // Remove if not using Next.js
 import { useAuth } from "../../hooks/useAuth";
 import { useTranslations } from 'next-intl';
+import Link from "next/link";
 interface MenuItem {
   title: string;
   //@ts-ignore
@@ -227,8 +228,8 @@ const AccountDropdown: React.FC = () => {
               }
 
               return (
-                <a
-                  key={item.title}
+                <Link
+                  key={item.url}
                   href={item.url}
                   className={`flex gap-2 items-center px-4 py-2 text-sm rounded-md transition ${activeClass}`}
                 >
@@ -241,7 +242,7 @@ const AccountDropdown: React.FC = () => {
                     {item.icon}
                   </svg>
                   {item.title}
-                </a>
+                </Link>
               );
             })}
           </div>

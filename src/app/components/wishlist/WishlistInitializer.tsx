@@ -18,3 +18,4 @@ function WishlistInitializer() {
 }
 
 export default WishlistInitializer;
+

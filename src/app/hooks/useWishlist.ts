@@ -11,6 +11,8 @@ import {
   setWishlistError,
   updateWishlistFromAPI,
 } from '@/app/store/slices/wishlistSlice';
+import getRequest from '../../../helpers/get';
+import toast from 'react-hot-toast';
 
 export const useWishlist = () => {
   const dispatch = useAppDispatch();
@@ -61,6 +63,35 @@ export const useWishlist = () => {
     dispatch(setWishlistError(error));
   }, [dispatch]);
 
+  // Fetch wishlist data from API
+  const fetchWishlistData = useCallback(async (token?: string, locale?: string) => {
+    if (!token) return;
+    
+    dispatch(setWishlistLoading(true));
+    dispatch(setWishlistError(null));
+
+    try {
+      const response = await getRequest('/catalog/favorites/products', { 'Content-Type': 'application/json' }, token, locale);
+      
+      if (response.data ) {
+        dispatch(updateWishlistFromAPI(response.data));
+      } else {
+        toast.error('Invalid wishlist data received from API');
+        throw new Error('Invalid wishlist data received from API');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch wishlist data';
+      toast.error(errorMessage);
+      console.error('❌ Failed to fetch wishlist data:', error);
+      dispatch(setWishlistError(errorMessage));
+      
+      // If API fails, try to load from localStorage as fallback
+      dispatch(loadWishlistFromStorage());
+    } finally {
+      dispatch(setWishlistLoading(false));
+    }
+  }, [dispatch]);
+
   // Check if product is in wishlist
   const isInWishlist = useCallback((productId: number) => {
     return wishlist.products.some(product => product.id === productId);
@@ -88,9 +119,11 @@ export const useWishlist = () => {
     updateFromAPI,
     setLoading,
     setError,
+    fetchWishlistData,
     
     // Helpers
     isInWishlist,
     getWishlistCount,
   };
 };
+

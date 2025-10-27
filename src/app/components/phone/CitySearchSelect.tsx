@@ -43,6 +43,7 @@ interface CitySearchSelectProps {
   const [isLoading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [searchedQueries, setSearchedQueries] = useState<Set<string>>(new Set());
   
   // City search is disabled if no country is selected
   const isDisabled = disabled || !countryId;
@@ -81,26 +82,46 @@ interface CitySearchSelectProps {
   const searchCities = async (keyword: string, countryId: string | number) => {
     if (!keyword.trim() || !countryId) return;
     
+    const trimmedKeyword = keyword.trim().toLowerCase();
+    const queryKey = `${countryId}-${trimmedKeyword}`;
+    
+    // Don't search if we already searched for this query and got empty results
+    if (searchedQueries.has(queryKey)) {
+      return;
+    }
+    
     setIsSearching(true);
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/core/countries/cities`, {
         params: { 
           country_id: countryId,
-          keyword: keyword.trim() 
+          keyword: trimmedKeyword 
         }
       });
       
       if (response.data.status && response.data.data) {
         const searchResults = Array.isArray(response.data.data.items) ? response.data.data.items : [];
+        
+        // If search results are empty, mark this query as searched
+        if (searchResults.length === 0) {
+          setSearchedQueries(prev => new Set([...prev, queryKey]));
+          return;
+        }
+        
         // Merge with existing cities, avoiding duplicates
         setCities(prevCities => {
           const existingIds = new Set(prevCities.map(city => city.id));
           const newCities = searchResults.filter((city: City) => !existingIds.has(city.id));
           return [...prevCities, ...newCities];
         });
+      } else {
+        // Mark as searched if API response is invalid
+        setSearchedQueries(prev => new Set([...prev, queryKey]));
       }
     } catch (error) {
       console.error('Failed to search cities:', error);
+      // Mark as searched on error to prevent repeated failed requests
+      setSearchedQueries(prev => new Set([...prev, queryKey]));
     } finally {
       setIsSearching(false);
     }
@@ -110,8 +131,11 @@ interface CitySearchSelectProps {
   useEffect(() => {
     if (countryId) {
       fetchCities(countryId);
+      // Clear searched queries when country changes since search context is different
+      setSearchedQueries(new Set());
     } else {
       setCities([]);
+      setSearchedQueries(new Set());
     }
   }, [countryId]);
 
@@ -136,14 +160,17 @@ interface CitySearchSelectProps {
 
   // Trigger API search when no local results found and user is typing
   useEffect(() => {
-    if (searchQuery.trim() && filteredCities.length === 0 && !isSearching && countryId) {
+    const trimmedQuery = searchQuery.trim().toLowerCase();
+    const queryKey = `${countryId}-${trimmedQuery}`;
+    
+    if (trimmedQuery && filteredCities.length === 0 && !isSearching && countryId && !searchedQueries.has(queryKey)) {
       const timeoutId = setTimeout(() => {
         searchCities(searchQuery, countryId);
       }, 500); // Debounce search by 500ms
       
       return () => clearTimeout(timeoutId);
     }
-  }, [searchQuery, filteredCities.length, isSearching, countryId]);
+  }, [searchQuery, filteredCities.length, isSearching, countryId, searchedQueries]);
 
   // Get selected city
   const selectedCity = Array.isArray(cities) ? cities.find(city => city.id.toString() === value?.toString()) : undefined;

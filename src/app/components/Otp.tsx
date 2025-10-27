@@ -9,6 +9,7 @@ import { loginSuccess, setLoading, setError, clearError } from '../store/slices/
 import { saveAuthToken, saveUserData } from '../utils/authStorage';
 import { useTranslations } from 'next-intl';
 import { useRTL } from '../hooks/useRTL';  
+import toast from "react-hot-toast";
 interface OtpState {
   otp: string[];
   registrationData: string | null;
@@ -86,12 +87,14 @@ const handleSubmit = useCallback(async () => {
       console.log('Login successful, token stored:', token);
       router.push("/");
     } else {
+      toast.error('No token received from server');
       throw new Error('No token received from server');
     }
   } catch (error: unknown) {
     console.error('OTP verification failed:', error);
     const errorMessage = error instanceof Error ? error.message : 'OTP verification failed';
     dispatch(setError(errorMessage));
+    toast.error('OTP verification failed');
   } finally {
     setState(prev => ({ ...prev, isSubmitting: false }));
     dispatch(setLoading(false));

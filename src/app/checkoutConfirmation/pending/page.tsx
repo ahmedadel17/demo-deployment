@@ -1,7 +1,6 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
-import { Clock, CreditCard } from "lucide-react";
-import { useOrder } from "@/app/hooks/useOrder";
+import { useCallback, useEffect } from "react";
+import { Clock } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import getRequest from "../../../../helpers/get";
 import { useCart } from "@/app/hooks/useCart";
@@ -9,8 +8,6 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 export default function PendingPayment() {
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
-  const { updateOrderStatus } = useOrder();
   const searchParams = useSearchParams();   
   const paymentId=searchParams.get('id');
   const { token } = useAuth();
@@ -70,48 +67,78 @@ const checkPaymentStatus = useCallback(async () => {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-yellow-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col justify-center items-center text-center px-6">
-      <Clock className="w-16 h-16 text-yellow-600 dark:text-yellow-400 mb-6 animate-pulse" />
-
-      <h1 className="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-4">
+    <div className="container mx-auto px-4 py-12">
+    {/* Pending Header */}
+    <div className="text-center mb-8">
+      <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-4">
+        <Clock className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+      </div>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
         Payment Pending
       </h1>
-
-      <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl mb-10">
-        Your order is currently awaiting payment confirmation. Please complete your
-        payment before the timer runs out.
+      <p className="text-lg text-gray-600 dark:text-gray-400">
+        Your order has been received but the payment is not yet confirmed.
       </p>
+    </div>
 
-      <div className="space-y-2 mb-10 text-gray-700 dark:text-gray-300">
-        <p>
-          <strong>Order ID:</strong> {order.id}
-        </p>
-        <p>
-          <strong>Amount:</strong> ${order.amount}
-        </p>
-        <p>
-          <strong>Payment Method:</strong> {order.method}
-        </p>
-        <p>
-          <strong>Date:</strong> {order.date}
-        </p>
+    {/* Info Box */}
+    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8">
+      <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+        What happens next?
+      </h3>
+      <div className="space-y-6">
+        <div className="flex items-start space-x-3 rtl:space-x-reverse">
+          <div className="w-6 h-6 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span className="text-xs font-semibold text-blue-600 dark:text-blue-300">
+              1
+            </span>
+          </div>
+          <div>
+            <p className="font-medium text-gray-900 dark:text-white">
+              Payment Verification
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              We are verifying your payment. This may take a few minutes.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-start space-x-3 rtl:space-x-reverse">
+          <div className="w-6 h-6 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span className="text-xs font-semibold text-blue-600 dark:text-blue-300">
+              2
+            </span>
+          </div>
+          <div>
+            <p className="font-medium text-gray-900 dark:text-white">
+              Confirmation
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Once payment is confirmed, you’ll receive a confirmation email.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-start space-x-3 rtl:space-x-reverse">
+          <div className="w-6 h-6 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span className="text-xs font-semibold text-blue-600 dark:text-blue-300">
+              3
+            </span>
+          </div>
+          <div>
+            <p className="font-medium text-gray-900 dark:text-white">
+              Shipping
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              After confirmation, we’ll process and ship your order.
+            </p>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div className="text-yellow-700 dark:text-yellow-400 font-bold text-2xl mb-8">
-        ⏳ Time Left: {formatTime(timeLeft)}
-      </div>
+    {/* Action Buttons */}
+ 
 
-      <button
-        onClick={handleRetry}
-        className="flex items-center gap-3 px-8 py-4 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full transition"
-      >
-        <CreditCard className="w-5 h-5" />
-        Retry Payment
-      </button>
-
-      <footer className="mt-16 text-sm text-gray-500 dark:text-gray-500">
-        You will be redirected automatically once payment is confirmed.
-      </footer>
-    </main>
+   
+  </div>
   );
 }

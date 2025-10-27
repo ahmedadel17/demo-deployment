@@ -1,7 +1,6 @@
 'use client'
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import getRequest from '../../../helpers/get';
 import { useAuth } from '@/app/hooks/useAuth';
 import { useLocale } from 'next-intl';
 import { useWishlist } from '@/app/hooks/useWishlist';
@@ -21,33 +20,12 @@ export default function WishlistPage() {
   const { 
     products: reduxWishlistProducts, 
     loadWishlist, 
-    updateFromAPI, 
-    setLoading, 
-    setError,
     removeProduct,
-    clearAll
+    clearAll,
+    isLoading,
+    error: wishlistError,
+    fetchWishlistData
   } = useWishlist();
-
-  // Function to fetch favorites from API
-  const fetchFavorites = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await getRequest('/catalog/favorites/products', { 'Content-Type': 'application/json' }, token, locale);
-      
-      console.log('Favorites API Response:', response.data);
-      
-      // Update Redux store with API response
-      if (response.data && response.data.products) {
-        updateFromAPI(response.data.products);
-      }
-    } catch (error) {
-      console.error('Error fetching favorites:', error);
-      setError('Failed to fetch wishlist items');
-    } finally {
-      setLoading(false);
-    }
-  }, [token, locale, setLoading, setError, updateFromAPI]);
 
   useEffect(() => {
     // Load wishlist from Redux store (which loads from localStorage)
@@ -55,9 +33,34 @@ export default function WishlistPage() {
 
     // Fetch favorites from API
     if (token) {
-      fetchFavorites();
+      fetchWishlistData(token, locale);
     }
-  }, [token, locale, loadWishlist, fetchFavorites]);
+  }, [token, locale, loadWishlist, fetchWishlistData]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <span className="ml-3 text-gray-600 dark:text-gray-400">Loading wishlist...</span>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (wishlistError) {
+    return (
+      <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+        <p className="text-sm text-red-600 dark:text-red-400">{wishlistError}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="mt-2 text-xs text-red-500 hover:text-red-700"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   // Transform Redux wishlist products to match ProductCard interface
   const wishlistProducts = reduxWishlistProducts.map(product => ({

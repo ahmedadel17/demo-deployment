@@ -8,6 +8,7 @@ import {
   setCartLoading, 
   setCartError 
 } from '@/app/store/slices/cartSlice';
+import axios from 'axios';
 
 export function useCart() {
   const dispatch = useAppDispatch();
@@ -16,6 +17,43 @@ export function useCart() {
   // Memoize the loadCartFromStorage function to prevent infinite loops
   const loadCartFromStorageCallback = useCallback(() => {
     dispatch(loadCartFromStorage());
+  }, [dispatch]);
+
+  // Fetch cart data from API
+  const fetchCartData = useCallback(async (token?: string) => {
+    dispatch(setCartLoading(true));
+    dispatch(setCartError(null));
+
+    try {
+      const authToken = token || localStorage.getItem('authToken');
+      
+      if (!authToken) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/marketplace/cart/my-cart`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+      console.log('🛒 Cart data fetched from API:', response.data);
+
+      if (response.data.status && response.data.data) {
+        dispatch(setCartData(response.data.data));
+        console.log('🛒 Cart data fetched from API:', response.data.data);
+      } else {
+        throw new Error('Invalid cart data received from API');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch cart data';
+      console.error('❌ Failed to fetch cart data:', error);
+      dispatch(setCartError(errorMessage));
+      
+      // If API fails, try to load from localStorage as fallback
+      dispatch(loadCartFromStorage());
+    } finally {
+      dispatch(setCartLoading(false));
+    }
   }, [dispatch]);
 
   return {
@@ -38,6 +76,7 @@ export function useCart() {
     updateCartData: (data: any) => dispatch(updateCartData(data)),
     clearCart: () => dispatch(clearCart()),
     loadCartFromStorage: loadCartFromStorageCallback,
+    fetchCartData,
     setLoading: (loading: boolean) => dispatch(setCartLoading(loading)),
     setError: (error: string | null) => dispatch(setCartError(error)),
   };

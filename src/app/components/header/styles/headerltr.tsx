@@ -10,7 +10,7 @@ import { useAuth } from '@/app/hooks/useAuth'
 import LanguageToggleButton from '../LanguageToggleButton'
 import HeaderWishList from '../headerWishlist'
 
-function HeaderLtr() {
+function HeaderLtr({ menuData }: { menuData: any }) {
   const { isAuthenticated } = useAuth();
 
   return (
@@ -90,7 +90,7 @@ function HeaderLtr() {
 
     {/* <!-- Desktop Navigation Menu --> */}
 
-    <HeaderDesktopMenu/>
+    <HeaderDesktopMenu menuData={menuData} />
 </div>
 </nav>
     </div>

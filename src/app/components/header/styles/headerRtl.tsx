@@ -11,7 +11,7 @@ import HeaderDesktopMenu from '../headerDesktopMenu'
 import { useAuth } from '@/app/hooks/useAuth'
 import LanguageToggle from '../LanguageToggle'
 import LanguageToggleButton from '../LanguageToggleButton'
-function HeaderRtl() {
+function HeaderRtl( { menuData }: { menuData: any } ) {
   const { isAuthenticated } = useAuth();
 
   return (
@@ -101,7 +101,7 @@ function HeaderRtl() {
 
     {/* <!-- Desktop Navigation Menu --> */}
 
-    <HeaderDesktopMenu/>
+    <HeaderDesktopMenu menuData={menuData} />
 </div>
 </nav>
     </div>

@@ -9,9 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useCart } from "@/app/hooks/useCart";
 import { useAuth } from "@/app/hooks/useAuth";
 import getRequest from "../../../helpers/get";
-import { useOrder } from "@/app/hooks/useOrder";
  function Confirmation() {
-  const { updateOrderStatus } = useOrder();
   const { setCartData } = useCart();
     const { token } = useAuth();
     const locale = useLocale();

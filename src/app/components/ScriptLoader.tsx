@@ -89,11 +89,6 @@ export default function ScriptLoader({ scripts = [] }: ScriptLoaderProps) {
     <>
       {/* Load essential scripts */}
       <Script
-        src="/js/darkmode.min.js"
-        strategy="afterInteractive"
-        onLoad={() => console.log('Dark mode script loaded')}
-      />
-      <Script
         src="/js/script.min.js"
         strategy="afterInteractive"
         onLoad={() => console.log('Main script loaded')}
