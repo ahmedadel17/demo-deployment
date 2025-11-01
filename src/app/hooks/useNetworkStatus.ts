@@ -130,3 +130,4 @@ export const useNetworkPing = (url: string = '/api/health', interval: number = 3
 
   return { isReachable, lastCheck };
 };
+

@@ -1,6 +1,6 @@
 import React from 'react'
-import DashboardSidebar from '../components/dashboard/dashboardSidebar'
-import Breadcrumb from '../components/header/headerBreadcrumb'
+import DashboardSidebar from '../../components/dashboard/dashboardSidebar'
+import Breadcrumb from '../../components/header/headerBreadcrumb'
 
 function layout({children}: {children: React.ReactNode}) {
   return (

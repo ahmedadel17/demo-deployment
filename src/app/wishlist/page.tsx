@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useAuth } from '@/app/hooks/useAuth';
 import { useLocale } from 'next-intl';
 import { useWishlist } from '@/app/hooks/useWishlist';
-import ProductCard2 from '../components/productCard2';
-import Breadcrumb from '../components/header/headerBreadcrumb';
+import ProductCard2 from '../../components/product/productCard2';
+import Breadcrumb from '../../components/header/headerBreadcrumb';
 
 
 

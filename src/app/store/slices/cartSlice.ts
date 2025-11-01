@@ -79,7 +79,7 @@ const cartSlice = createSlice({
       // Save to localStorage
       try {
         localStorage.setItem('cartData', JSON.stringify(action.payload));
-        console.log('💾 Cart data saved to localStorage:', action.payload);
+        // console.log('💾 Cart data saved to localStorage:', action.payload);
       } catch (error) {
         console.error('❌ Failed to save cart to localStorage:', error);
       }
@@ -90,7 +90,7 @@ const cartSlice = createSlice({
       // Update localStorage
       try {
         localStorage.setItem('cartData', JSON.stringify(action.payload));
-        console.log('💾 Cart data updated in localStorage:', action.payload);
+        // console.log('💾 Cart data updated in localStorage:', action.payload);
       } catch (error) {
         console.error('❌ Failed to update cart in localStorage:', error);
       }
@@ -101,7 +101,7 @@ const cartSlice = createSlice({
       // Clear from localStorage
       try {
         localStorage.removeItem('cartData');
-        console.log('🗑️ Cart data cleared from localStorage');
+        // console.log('🗑️ Cart data cleared from localStorage');
       } catch (error) {
         console.error('❌ Failed to clear cart from localStorage:', error);
       }
@@ -112,7 +112,7 @@ const cartSlice = createSlice({
         if (savedCart) {
           const cartData = JSON.parse(savedCart);
           state.cartData = cartData;
-          console.log('📦 Cart data loaded from localStorage:', cartData);
+          // console.log('📦 Cart data loaded from localStorage:', cartData);
         }
       } catch (error) {
         console.error('❌ Failed to load cart from localStorage:', error);

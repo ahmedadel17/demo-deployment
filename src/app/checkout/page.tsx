@@ -1,4 +1,4 @@
-import ShippingAddress from '../components/checkout/shippingAddress/shippingAddress'
+import ShippingAddress from '../../components/checkout/shippingAddress/shippingAddress'
 function page() {
   return (
     <>

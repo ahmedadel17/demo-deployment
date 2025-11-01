@@ -11,6 +11,7 @@ export interface OrderState {
   shipping_cost: number | null;
   tax_amount: number | null;
   discount_amount: number | null;
+  amount_to_pay: number | null;
   notes: string | null;
   created_at: string | null;
   updated_at: string | null;
@@ -27,6 +28,7 @@ const initialState: OrderState = {
   shipping_cost: null,
   tax_amount: null,
   discount_amount: null,
+  amount_to_pay: null,
   notes: null,
   created_at: null,
   updated_at: null,
@@ -67,6 +69,7 @@ const orderSlice = createSlice({
       shipping_cost?: number;
       tax_amount?: number;
       discount_amount?: number;
+      amount_to_pay?: number;
     }>) => {
       if (action.payload.total_amount !== undefined) {
         state.total_amount = action.payload.total_amount;
@@ -82,6 +85,9 @@ const orderSlice = createSlice({
       }
       if (action.payload.discount_amount !== undefined) {
         state.discount_amount = action.payload.discount_amount;
+      }
+      if (action.payload.amount_to_pay !== undefined) {
+        state.amount_to_pay = action.payload.amount_to_pay;
       }
       state.updated_at = new Date().toISOString();
     },

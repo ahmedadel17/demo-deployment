@@ -1,5 +1,5 @@
 import React from 'react'
-import MyWishlistPage from '@/app/components/dashboard/dashboardWishList'
+import MyWishlistPage from '@/components/dashboard/dashboardWishList'
 function WishListPage() {
   return (
     <>

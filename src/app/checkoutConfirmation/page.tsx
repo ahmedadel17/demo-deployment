@@ -1,10 +1,10 @@
 'use client'
 import { useLocale } from "next-intl";
 import { useEffect, useState, useCallback } from "react";
-import SuccessHeader from "@/app/components/checkoutConfirmation/successHeader";
-import OrderDetails from "@/app/components/checkoutConfirmation/orderDetails";
-import ShippingInfo from "@/app/components/checkoutConfirmation/shippingInfo";
-import ActionButtons from "@/app/components/checkoutConfirmation/actionButtons";
+import SuccessHeader from "@/components/checkoutConfirmation/successHeader";
+import OrderDetails from "@/components/checkoutConfirmation/orderDetails";
+import ShippingInfo from "@/components/checkoutConfirmation/shippingInfo";
+import ActionButtons from "@/components/checkoutConfirmation/actionButtons";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/app/hooks/useCart";
 import { useAuth } from "@/app/hooks/useAuth";
@@ -27,8 +27,8 @@ import getRequest from "../../../helpers/get";
                 return;
             }
             
-            console.log('Token:', token);
-            console.log('Order ID:', orderId);
+            // console.log('Token:', token);
+            // console.log('Order ID:', orderId);
             
             const orderData = await getRequest(`/order/orders/${orderId}`, { 'Content-Type': 'application/json' }, token, locale);
             setOrderData(orderData);

@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let wishlistCount = 0;
 
     // Initialize wishlist count
-    fetch('wishlist-handler.php?action=count')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                wishlistCount = data.count;
-                updateWishlistUI();
-            }
-        })
-        .catch(error => console.error('Error loading wishlist count:', error));
+    // fetch('wishlist-handler.php?action=count')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         if (data.success) {
+    //             wishlistCount = data.count;
+    //             updateWishlistUI();
+    //         }
+    //     })
+    //     .catch(error => console.error('Error loading wishlist count:', error));
 
     // Load existing wishlist items and update UI
     loadWishlistItems();
@@ -338,82 +338,82 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Wishlist functions
-    function loadWishlistItems() {
-        fetch('wishlist-handler.php?action=get')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const wishlistItems = data.wishlist;
-                    wishlistCount = data.count;
+    // function loadWishlistItems() {
+    //     fetch('wishlist-handler.php?action=get')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 const wishlistItems = data.wishlist;
+    //                 wishlistCount = data.count;
 
-                    // Update wishlist button states
-                    const allWishlistBtns = document.querySelectorAll('.product-add-to-wishlist');
-                    allWishlistBtns.forEach(function (btn) {
-                        const productCard = btn.closest('.product-item');
-                        if (productCard) {
-                            const productId = productCard.getAttribute('data-product-id');
-                            if (wishlistItems.includes(productId)) {
-                                btn.classList.add('active');
-                                const svg = btn.querySelector('svg');
-                                if (svg) {
-                                    svg.classList.add('wishlist-active');
-                                    svg.classList.remove('wishlist-inactive');
-                                }
-                            }
-                        }
-                    });
+    //                 // Update wishlist button states
+    //                 const allWishlistBtns = document.querySelectorAll('.product-add-to-wishlist');
+    //                 allWishlistBtns.forEach(function (btn) {
+    //                     const productCard = btn.closest('.product-item');
+    //                     if (productCard) {
+    //                         const productId = productCard.getAttribute('data-product-id');
+    //                         if (wishlistItems.includes(productId)) {
+    //                             btn.classList.add('active');
+    //                             const svg = btn.querySelector('svg');
+    //                             if (svg) {
+    //                                 svg.classList.add('wishlist-active');
+    //                                 svg.classList.remove('wishlist-inactive');
+    //                             }
+    //                         }
+    //                     }
+    //                 });
 
-                    updateWishlistUI();
-                }
-            })
-            .catch(error => console.error('Error loading wishlist:', error));
-    }
+    //                 updateWishlistUI();
+    //             }
+    //         })
+    //         .catch(error => console.error('Error loading wishlist:', error));
+    // }
 
-    function toggleWishlist(productId, button) {
-        fetch('wishlist-handler.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'toggle',
-                product_id: productId
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    wishlistCount = data.count;
+    // function toggleWishlist(productId, button) {
+    //     fetch('wishlist-handler.php', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             action: 'toggle',
+    //             product_id: productId
+    //         })
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 wishlistCount = data.count;
 
-                    // Update button state
-                    const svg = button.querySelector('svg');
+    //                 // Update button state
+    //                 const svg = button.querySelector('svg');
 
-                    if (data.action === 'added') {
-                        button.classList.add('active');
-                        if (svg) {
-                            svg.classList.add('wishlist-active');
-                            svg.classList.remove('wishlist-inactive');
-                        }
-                        showNotification('Added to wishlist!', 'success');
-                    } else {
-                        button.classList.remove('active');
-                        if (svg) {
-                            svg.classList.add('wishlist-inactive');
-                            svg.classList.remove('wishlist-active');
-                        }
-                        showNotification('Removed from wishlist!', 'info');
-                    }
+    //                 if (data.action === 'added') {
+    //                     button.classList.add('active');
+    //                     if (svg) {
+    //                         svg.classList.add('wishlist-active');
+    //                         svg.classList.remove('wishlist-inactive');
+    //                     }
+    //                     showNotification('Added to wishlist!', 'success');
+    //                 } else {
+    //                     button.classList.remove('active');
+    //                     if (svg) {
+    //                         svg.classList.add('wishlist-inactive');
+    //                         svg.classList.remove('wishlist-active');
+    //                     }
+    //                     showNotification('Removed from wishlist!', 'info');
+    //                 }
 
-                    updateWishlistUI();
-                } else {
-                    showNotification('Error updating wishlist', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Error updating wishlist', 'error');
-            });
-    }
+    //                 updateWishlistUI();
+    //             } else {
+    //                 showNotification('Error updating wishlist', 'error');
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             showNotification('Error updating wishlist', 'error');
+    //         });
+    // }
 
     function updateWishlistUI() {
         // Update wishlist counter in header/navigation if it exists

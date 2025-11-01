@@ -1,14 +1,14 @@
 import React from 'react'
 // import ProductMerchant from '../../components/product/productMerchant';
 // import ProductShare from '../../components/product/productShare';
-import ProductTitle from '../../components/productDetails/productTitle';
-import ProductPrice from '../../components/productDetails/productPrice';
-import ProductDescription from '../../components/productDetails/productDescription';
+import ProductTitle from '../../../components/productDetails/productTitle';
+import ProductPrice from '../../../components/productDetails/productPrice';
+import ProductDescription from '../../../components/productDetails/productDescription';
 // import ProductMeta from '../../components/productDetails/productMeta';
-import Breadcrumb from '@/app/components/header/headerBreadcrumb';
+import Breadcrumb from '@/components/header/headerBreadcrumb';
 import axios from 'axios';
-import ProductGallery2 from '@/app/components/product/productGallery2';
-import ProductDetailsWrapper from '@/app/components/productDetails/ProductDetailsWrapper';
+import ProductGallery2 from '@/components/product/productGallery2';
+import ProductDetailsWrapper from '@/components/productDetails/ProductDetailsWrapper';
 import { getLocale, getTranslations } from 'next-intl/server';
 async function ProductDetailsPage({ params }: { params: { slug: string } }) {
   const { slug } = await params;

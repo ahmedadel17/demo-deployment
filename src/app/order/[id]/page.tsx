@@ -4,8 +4,8 @@ import { useParams } from 'next/navigation'
 import getRequest from '../../../../helpers/get'
 import { useAuth } from '@/app/hooks/useAuth'
 import { useLocale } from 'next-intl'
-import OrderDetails from '@/app/components/checkoutConfirmation/orderDetails'
-import SuccessHeader from '@/app/components/checkoutConfirmation/successHeader'
+import OrderDetails from '@/components/checkoutConfirmation/orderDetails'
+import SuccessHeader from '@/components/checkoutConfirmation/successHeader'
 
 function OrderDetailsPage() {
   const { token } = useAuth()
@@ -32,7 +32,7 @@ function OrderDetailsPage() {
     setState(prev => ({ ...prev, isLoading: true, error: null }))
     try {
       const response = await getRequest(`/order/orders/${id}`, { 'Content-Type': 'application/json' }, token, locale)
-      console.log('orderData', response.data)
+      // console.log('orderData', response.data)
       setState(prev => ({ 
         ...prev, 
         orderData: response,

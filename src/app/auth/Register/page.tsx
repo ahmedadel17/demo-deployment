@@ -1,5 +1,5 @@
 import React from 'react'
-import Registeration from '../../components/login/registeration'
+import Registeration from '../../../components/login/registeration'
 function Page() {
  
   return (

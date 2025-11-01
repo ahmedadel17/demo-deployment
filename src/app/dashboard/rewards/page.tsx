@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardRewards from '@/app/components/dashboard/dashboardRewards'
+import DashboardRewards from '@/components/dashboard/dashboardRewards'
 function DashboardRewardsPage() {
   return (
     <>

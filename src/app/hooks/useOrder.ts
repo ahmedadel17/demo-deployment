@@ -24,12 +24,11 @@ export const useOrder = () => {
 
  
 
-  const updateShippingMethod = (shippingMethodSlug: string, cartData?: { total_amount?: string }) => {
+  const updateShippingMethod = (shippingMethodSlug: string, cartData?: { total_amount?: string; amount_to_pay?: string }) => {
     dispatch(setShippingMethodSlug(shippingMethodSlug));
     
     // Check if total amount is zero
-    const amount_to_pay = parseFloat(cartData?.amount_to_pay );
-    console.log(cartData)
+    const amount_to_pay = parseFloat(cartData?.amount_to_pay || '0');
     if (amount_to_pay == 0) {
       // If amount is zero, set status to confirm order
       dispatch(setOrderStatus('PlaceOrder'));
@@ -61,6 +60,7 @@ export const useOrder = () => {
     shipping_cost?: number;
     tax_amount?: number;
     discount_amount?: number;
+    amount_to_pay?: number;
   }) => {
     dispatch(setOrderAmounts(amounts));
   };
@@ -102,6 +102,7 @@ export const useOrder = () => {
       shipping_cost: order.shipping_cost,
       tax_amount: order.tax_amount,
       discount_amount: order.discount_amount,
+      amount_to_pay: order.amount_to_pay,
       notes: order.notes,
       created_at: order.created_at,
       updated_at: order.updated_at,

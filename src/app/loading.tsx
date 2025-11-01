@@ -1,4 +1,4 @@
-import LoadingSkeleton from './components/skeleton/LoadingSkeleton';
+import LoadingSkeleton from '../components/skeleton/LoadingSkeleton';
 
 export default function Loading() {
   return <LoadingSkeleton type="home" />;

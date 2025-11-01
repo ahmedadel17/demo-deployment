@@ -1,4 +1,4 @@
-import Breadcrumb from "../components/header/headerBreadcrumb";
+import Breadcrumb from "../../components/header/headerBreadcrumb";
 
 function Layout({children}: {children: React.ReactNode}) {
   return (

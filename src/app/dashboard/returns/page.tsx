@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardReturns from '@/app/components/dashboard/dashboardReturns'
+import DashboardReturns from '@/components/dashboard/dashboardReturns'
 function DashboardReturnsPage() {
   return (
     <>

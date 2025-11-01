@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardPointsHistory from '@/app/components/dashboard/dashboardPointsHistory'
+import DashboardPointsHistory from '@/components/dashboard/dashboardPointsHistory'
 function PointsPage() {
   return (
     <>

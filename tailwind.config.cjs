@@ -1,7 +1,7 @@
 
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { generatePaletteFromHex } = require('./components/colors');
-const components = require('./components/index');
+const { generatePaletteFromHex } = require('./tailwindPlugins/colors');
+const components = require('./tailwindPlugins/index');
 const rtl = require('tailwindcss-rtl');
 const typography = require('@tailwindcss/typography');
 
@@ -30,7 +30,7 @@ module.exports = {
             translate: {
                 '0.25': '0.0625rem',
             },
-
+          
             colors: {
                 primary: generatePaletteFromHex('#0A2463'),
                 secondary: generatePaletteFromHex('#CAA34E'),
@@ -41,17 +41,17 @@ module.exports = {
                     200: '#e5e7eb',
                     300: '#d1d5db',
                     400: '#9ca3af',
-                    500: '#6b7280',
+                    500: '#535353',
                     600: '#4b5563',
                     700: '#374151',
                     800: '#1f2937',
                     900: '#111827',
                 },
                 green: {
-                    500: '#055e26ff',
+                    500: 'var(--apicolor-gradient_two)',
                 },
                 red: {
-                    500: '#AE1113',
+                    500: 'var(--apicolor-red)',
                 },
             },
 

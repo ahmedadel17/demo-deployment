@@ -36,17 +36,17 @@ export function useCart() {
           'Authorization': `Bearer ${authToken}`
         }
       });
-      console.log('🛒 Cart data fetched from API:', response.data);
+      // console.log('🛒 Cart data fetched from API:', response.data);
 
       if (response.data.status && response.data.data) {
         dispatch(setCartData(response.data.data));
-        console.log('🛒 Cart data fetched from API:', response.data.data);
+        // console.log('🛒 Cart data fetched from API:', response.data.data);
       } else {
         throw new Error('Invalid cart data received from API');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch cart data';
-      console.error('❌ Failed to fetch cart data:', error);
+      // console.error('❌ Failed to fetch cart data:', error);
       dispatch(setCartError(errorMessage));
       
       // If API fails, try to load from localStorage as fallback

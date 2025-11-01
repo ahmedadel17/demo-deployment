@@ -1,28 +1,15 @@
 import React from 'react'
-import ProductMerchant from '../components/product/productMerchant';
-import ProductShare from '../components/product/productShare';
-import ProductInteractions from '../components/ProductInteractions';
-import ProductTitle from '../components/productDetails/productTitle';
-import ProductPrice from '../components/productDetails/productPrice';
-import ProductDescription from '../components/productDetails/productDescription';
-import ProductVariations from '../components/productDetails/productVariations';
-import ProductMeta from '../components/productDetails/productMeta';
+import ProductMerchant from '@/components/product/productMerchant';
+import ProductShare from '@/components/product/productShare';
+import ProductTitle from '@/components/productDetails/productTitle';
+import ProductPrice from '@/components/productDetails/productPrice';
+import ProductDescription from '@/components/productDetails/productDescription';
+import ProductVariations from '@/components/productDetails/productVariations';
+import ProductMeta from '@/components/productDetails/productMeta';
 function ProductDetails() {
-      const images = [
-    "/assets/images/product-6.jpg",
-    "/assets/images/product-6-1.jpg",
-    "/assets/images/product-6-2.jpg",
-    "/assets/images/product-6-3.jpg",
-    "/assets/images/product-6-4.jpg",
-  ];
+   
   return (
     <>
-      <ProductInteractions 
-        productId="product-6"
-        productTitle="Mercer 7 Inch Chino Shorts"
-        productPrice="200.00"
-        productImage="/assets/images/product-6.jpg"
-      />
       <div className=" container space-y-16">
 
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">

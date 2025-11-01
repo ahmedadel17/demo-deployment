@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import getRequest from "../../../helpers/get";
 import { useAuth } from "../hooks/useAuth";
 import { useLocale, useTranslations } from "next-intl";
-import Breadcrumb from "../components/header/headerBreadcrumb";
+import Breadcrumb from "../../components/header/headerBreadcrumb";
 
 interface Order {
   id: string;
@@ -52,7 +52,7 @@ export default function Dashboard() {
     setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, wallet: true } }));
     try {
       const response = await getRequest('/customer/wallet', {'Content-Type': 'application/json'}, token, locale);
-      console.log('wallet', response);
+      // console.log('wallet', response);
       setState(prev => ({ 
         ...prev, 
         wallet: response.data,
@@ -72,7 +72,7 @@ export default function Dashboard() {
     setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, points: true } }));
     try {
       const response = await getRequest('/customer/points-history', {'Content-Type': 'application/json'}, token, locale);
-      console.log('points', response);
+      // console.log('points', response);
       setState(prev => ({ 
         ...prev, 
         points: response.data,
@@ -88,7 +88,7 @@ export default function Dashboard() {
     setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, profile: true } }));
     try {
       const response = await getRequest('/customer/get-profile', {'Content-Type': 'application/json'}, token, locale);
-      console.log('profile', response);
+      // console.log('profile', response);
       setState(prev => ({ 
         ...prev, 
         profile: response.data,

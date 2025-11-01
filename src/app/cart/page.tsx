@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import Cart from '../components/cart/cart';
+import Cart from '../../components/cart/cart';
 
 function CartPage() {
   return <Cart />;

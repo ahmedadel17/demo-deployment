@@ -204,3 +204,4 @@ You can customize the network detection by:
 - Check browser console for any network-related errors
 - Verify Redux store is properly configured
 - Test on different network conditions (WiFi, mobile data, etc.)
+

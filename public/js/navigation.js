@@ -41,6 +41,9 @@ class NavbarManager {
             this.initMegaMenus();
             this.initMobileSubmenus();
             this.initGlobalEvents();
+            
+            // Ensure all mega menus start hidden
+            this.closeAllMegaMenus();
         } catch (e) {
             console.error("Error initializing navbar:", e);
         }
@@ -61,9 +64,9 @@ class NavbarManager {
         const svg = toggle.querySelector("svg");
         if (svg) {
             if (isOpen) {
-                svg.innerHTML = `<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>`;
+                svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>`;
             } else {
-                svg.innerHTML = `<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>`;
+                svg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>`;
             }
         }
     }
@@ -255,6 +258,9 @@ class NavbarManager {
 
             const megaDropdown = link.closest(".te-navbar-mega-dropdown");
             if (!megaDropdown) return;
+
+            // Ensure mega menu starts hidden
+            megaMenuContent.classList.remove("te-mega-menu-show");
 
             if (this.state.isTouch) {
                 // Touch devices: use click events

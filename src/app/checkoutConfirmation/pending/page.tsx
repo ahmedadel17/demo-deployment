@@ -29,11 +29,11 @@ const checkPaymentStatus = useCallback(async () => {
     if(paymentId && !hasStatusBeenChecked()){
         markStatusAsChecked();
         const paymentData = await getRequest(`/payment/hyper-pay/check-status?id=${paymentId}`, { 'Content-Type': 'application/json' }, token, locale);
-        console.log('Payment Status Response:', paymentData);
+        // console.log('Payment Status Response:', paymentData);
         
         // Log the status specifically if it exists
         if (paymentData?.status) {
-            console.log('Payment Status:', paymentData.status);
+            // console.log('Payment Status:', paymentData.status);
 
             router.push('/checkoutConfirmation/?orderId='+cartData?.id);
         }else{

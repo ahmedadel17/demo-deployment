@@ -43,7 +43,7 @@ const wishlistSlice = createSlice({
       // Save to localStorage
       try {
         localStorage.setItem('wishlistProducts', JSON.stringify(action.payload));
-        console.log('💾 Wishlist products saved to localStorage:', action.payload);
+        // console.log('💾 Wishlist products saved to localStorage:', action.payload);
       } catch (error) {
         console.error('❌ Failed to save wishlist to localStorage:', error);
       }
@@ -59,7 +59,7 @@ const wishlistSlice = createSlice({
         // Update localStorage
         try {
           localStorage.setItem('wishlistProducts', JSON.stringify(state.products));
-          console.log('💾 Product added to wishlist:', product);
+          // console.log('💾 Product added to wishlist:', product);
         } catch (error) {
           console.error('❌ Failed to save wishlist to localStorage:', error);
         }
@@ -73,7 +73,7 @@ const wishlistSlice = createSlice({
       // Update localStorage
       try {
         localStorage.setItem('wishlistProducts', JSON.stringify(state.products));
-        console.log('🗑️ Product removed from wishlist:', productId);
+        // console.log('🗑️ Product removed from wishlist:', productId);
       } catch (error) {
         console.error('❌ Failed to update wishlist in localStorage:', error);
       }
@@ -85,11 +85,11 @@ const wishlistSlice = createSlice({
       if (existingIndex === -1) {
         // Add to wishlist
         state.products.push({ ...product, is_favourite: true });
-        console.log('💾 Product added to wishlist:', product);
+        // console.log('💾 Product added to wishlist:', product);
       } else {
         // Remove from wishlist
         state.products.splice(existingIndex, 1);
-        console.log('🗑️ Product removed from wishlist:', product);
+        // console.log('🗑️ Product removed from wishlist:', product);
       }
       
       state.lastUpdated = new Date().toISOString();
@@ -108,7 +108,7 @@ const wishlistSlice = createSlice({
       // Clear from localStorage
       try {
         localStorage.removeItem('wishlistProducts');
-        console.log('🗑️ Wishlist cleared');
+        // console.log('🗑️ Wishlist cleared');
       } catch (error) {
         console.error('❌ Failed to clear wishlist from localStorage:', error);
       }
@@ -119,7 +119,7 @@ const wishlistSlice = createSlice({
         if (savedWishlist) {
           const products = JSON.parse(savedWishlist);
           state.products = products;
-          console.log('📦 Wishlist loaded from localStorage:', products);
+          // console.log('📦 Wishlist loaded from localStorage:', products);
         }
       } catch (error) {
         console.error('❌ Failed to load wishlist from localStorage:', error);
@@ -140,7 +140,7 @@ const wishlistSlice = createSlice({
       // Save to localStorage
       try {
         localStorage.setItem('wishlistProducts', JSON.stringify(action.payload));
-        console.log('💾 Wishlist updated from API:', action.payload);
+        // console.log('💾 Wishlist updated from API:', action.payload);
       } catch (error) {
         console.error('❌ Failed to save wishlist to localStorage:', error);
       }

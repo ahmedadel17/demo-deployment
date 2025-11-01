@@ -1,5 +1,5 @@
 import React from 'react'
-import ShippingMethod from '@/app/components/checkout/shippingMethod/shippingMethods'
+import ShippingMethod from '@/components/checkout/shippingMethod/shippingMethods'
 function page() {
   return (
     <div>

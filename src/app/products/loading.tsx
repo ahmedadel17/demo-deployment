@@ -1,6 +1,6 @@
-import LoadingSkeleton from '../components/skeleton/LoadingSkeleton';
+import ProductsPageSkeleton from '../../components/skeleton/ProductsPageSkeleton';
 
 export default function Loading() {
-  return <LoadingSkeleton type="products" />;
+  return <ProductsPageSkeleton />;
 }
 

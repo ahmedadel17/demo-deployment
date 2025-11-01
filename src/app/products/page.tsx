@@ -1,23 +1,26 @@
 import React from 'react'
 import { Product } from '../dummyData/products'
-import Breadcrumb from '../components/header/headerBreadcrumb'
+import Breadcrumb from '@/components/header/headerBreadcrumb'
 import axios from "axios";
-import PriceFilterWidget from '../components/product/widgets/priceWidget';
-import CategoryWidget from '../components/product/widgets/categoryWidget';
-import SizeColorFilter from '../components/product/widgets/variableWidget';
-import ProductSortControls from '../components/product/widgets/filterform';
-import ProductPagination from '../components/product/productPagination';
+import PriceFilterWidget from '@/components/product/widgets/priceWidget';
+import CategoryWidget from '@/components/product/widgets/categoryWidget';
+import SizeColorFilter from '@/components/product/widgets/variableWidget';
+import ProductSortControls from '@/components/product/widgets/filterform';
+import ProductPagination from '@/components/product/productPagination';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
-import ProductCard2 from '../components/productCard2';
-import FilterSidebar from '../components/product/widgets/FilterSidebar';
+import ProductCard2 from '@/components/product/productCard2';
+import FilterSidebar from '@/components/product/widgets/FilterSidebar';
 interface ProductsPageProps {
   searchParams: {
     page?: string;
     limit?: string;
     sort?: string;
+    order?: string;
+    per_page?: string;
     category?: string;
-    categories?: string;
+    categories?: string | string[];
+    'categories[]'?: string | string[];
     min_price?: string;
     max_price?: string;
     keyword?: string;
@@ -35,58 +38,56 @@ async function Products({ searchParams }: ProductsPageProps) {
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value || null;
   
-  // Alternative: Get token from headers
-  // const headersList = await headers();
-  // const token = headersList.get('authorization')?.replace('Bearer ', '') || null;
-  // Get pagination parameters from URL
+ 
   const currentPage = parseInt(searchParams.page || '1');
-  const itemsPerPage = parseInt(searchParams.limit || '12');
-  const sortBy = searchParams.sort || 'newest';
-  const category = searchParams.category;
-  const categories = searchParams.categories;
+  const itemsPerPage = parseInt(searchParams.limit || searchParams.per_page || '12');
+  const sortBy = searchParams.sort || searchParams.order || 'newest';
   
-  // Handle categories[] array parameter - extract from searchParams
-  const categoriesArray: string[] = [];
-  const searchParamsString = searchParams.toString();
-  if (searchParamsString) {
-    const urlParams = new URLSearchParams(searchParamsString);
-    const categoriesArrayFromUrl = urlParams.getAll('categories[]');
-    categoriesArray.push(...categoriesArrayFromUrl);
-  }
-
+  // Get grid columns based on per_page value
+  const perPage = parseInt(searchParams.per_page || '9');
+  const getGridCols = (perPageValue: number) => {
+    switch (perPageValue) {
+      case 6:
+        return 'grid-cols-2 md:grid-cols-2 lg:grid-cols-2';
+      case 9:
+        return 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3';
+      case 12:
+        return 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+      default:
+        return 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3';
+    }
+  };
+  const gridColsClass = getGridCols(perPage);
+  const category = searchParams.category;
+  // Handle categories[] array format from URL
+  const categoriesParam = searchParams['categories[]'];
+  const categoriesArray = Array.isArray(categoriesParam)
+    ? categoriesParam
+    : categoriesParam
+      ? [categoriesParam]
+      : Array.isArray(searchParams.categories)
+        ? searchParams.categories
+        : searchParams.categories
+          ? [searchParams.categories]
+          : [];
   const priceMin = searchParams.min_price;
   const priceMax = searchParams.max_price;
   const searchQuery = searchParams.keyword;
   const sizes = searchParams.sizes;
   const colors = searchParams.colors;
-  
-  // Handle nested attributes format (attributes[1]=3&attributes[2]=20)
-  const attributesObject: Record<string, string[]> = {};
-  if (searchParamsString) {
-    const urlParams = new URLSearchParams(searchParamsString);
-    for (const [key, value] of urlParams.entries()) {
-      if (key.startsWith('attributes[') && key.endsWith(']')) {
-        const attrId = key.slice(11, -1); // Extract attribute ID from "attributes[1]"
-        if (!attributesObject[attrId]) {
-          attributesObject[attrId] = [];
-        }
-        attributesObject[attrId].push(value);
-      }
-    }
-  }
+  const attributes = searchParams.attributes;
 
-  console.log('Search params received:', {
-    searchQuery,
-    category,
-    categories,
-    categoriesArray,
-    priceMin,
-    priceMax,
-    sizes,
-    colors,
-    attributesObject,
-    allSearchParams: searchParams
-  });
+  // console.log('Search params received:', {
+  //   searchQuery,
+  //   category,
+  //   categoriesArray,
+  //   priceMin,
+  //   priceMax,
+  //   sizes,
+  //   colors,
+  //   attributes,
+  //   allSearchParams: searchParams
+  // });
 
   // Build query parameters for API
   const queryParams = new URLSearchParams({
@@ -95,14 +96,11 @@ async function Products({ searchParams }: ProductsPageProps) {
     sort: sortBy,
   });
 
-  // Handle both single category and multiple categories
-  if (categoriesArray && categoriesArray.length > 0) {
-    // Use categories[] array parameter
-    categoriesArray.forEach(catId => {
-      queryParams.append('categories[]', catId);
+  // Handle categories[] array format for API
+  if (categoriesArray.length > 0) {
+    categoriesArray.forEach((cat: string) => {
+      queryParams.append('categories[]', cat);
     });
-  } else if (categories) {
-    queryParams.append('categories', categories);
   } else if (category) {
     queryParams.append('category', category);
   }
@@ -112,19 +110,14 @@ async function Products({ searchParams }: ProductsPageProps) {
   if (searchQuery && searchQuery.trim()) queryParams.append('keyword', searchQuery.trim());
   if (sizes) queryParams.append('sizes', sizes);
   if (colors) queryParams.append('colors', colors);
-  
-  // Add nested attributes to query parameters
-  Object.entries(attributesObject).forEach(([attrId, values]) => {
-    values.forEach(value => {
-      queryParams.append(`attributes[${attrId}]`, value);
-    });
-  });
+  if (attributes) queryParams.append('attributes', attributes);
 
-  console.log('API Query Parameters:', queryParams.toString());
-  console.log('Category parameters being sent to API:', { category, categories, categoriesArray });
-  console.log('Price parameters being sent to API:', { priceMin, priceMax });
-  console.log('Size and color parameters being sent to API:', { sizes, colors });
-  console.log('Attributes parameter being sent to API:', { attributesObject });
+  // console.log('API Query Parameters:', queryParams.toString());
+  // console.log('Category parameters being sent to API:', { category, categoriesArray });
+  // console.log('Price parameters being sent to API:', { priceMin, priceMax });
+  // console.log('Size and color parameters being sent to API:', { sizes, colors });
+  // console.log('Attributes parameter being sent to API:', { attributes });
+
   try {
     // Prepare headers
     const headers: Record<string, string> = {
@@ -136,8 +129,39 @@ async function Products({ searchParams }: ProductsPageProps) {
       headers['Authorization'] = `Bearer ${token}`;
     }
     
+    // Debug: Check what the API base URL is
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    // console.log('Products page - Environment check:', {
+    //   'process.env.NEXT_PUBLIC_API_BASE_URL': apiBaseUrl,
+    //   'typeof apiBaseUrl': typeof apiBaseUrl,
+    //   'NODE_ENV': process.env.NODE_ENV
+    // });
+    
+    if (!apiBaseUrl) {
+      console.error('NEXT_PUBLIC_API_BASE_URL is not set! This will cause requests to go to localhost.');
+      throw new Error('NEXT_PUBLIC_API_BASE_URL environment variable is not set. Please check your .env file.');
+    }
+    
+    // Ensure proper URL construction
+    const cleanBaseUrl = apiBaseUrl.replace(/\/+$/, '');
+    const apiUrl = `${cleanBaseUrl}/catalog/products?${queryParams.toString()}`;
+    
+    // console.log('🟢 Products Page - Making API request to:', apiUrl);
+    // console.log('🟢 Products Page - Request URL:', apiUrl);
+    // console.log('🟢 Products Page - Query Parameters:', queryParams.toString());
+    // console.log('🟢 Products Page - Selected Categories:', categoriesArray);
+    // console.log('🟢 Products Page - Full Request Details:', {
+    //   baseUrl: cleanBaseUrl,
+    //   endpoint: '/catalog/products',
+    //   queryParams: Object.fromEntries(queryParams),
+    //   headers: {
+    //     ...headers,
+    //     "Accept-Language": locale,
+    //   }
+    // });
+    
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/products?${queryParams.toString()}`,
+      apiUrl,
       {
         headers: {
           ...headers,
@@ -145,9 +169,14 @@ async function Products({ searchParams }: ProductsPageProps) {
         },  
       }
     );
+    
+    // console.log('🟢 Products Page - API Response received:', {
+    //   status: response.status,
+    //   dataCount: response.data?.data?.items?.length || 0,
+    //   totalPages: response.data?.data?.paginate?.total_pages || 0
+    // });
 
     const productsData = response.data.data;
-    console.log('productsData',productsData)
     const products = (productsData.items || []).map((product: Product & { is_favourite?: boolean }) => ({
       ...product,
       is_favourite: product.is_favourite || false // Ensure is_favourite property exists
@@ -189,7 +218,7 @@ async function Products({ searchParams }: ProductsPageProps) {
                 {products.length > 0 ? (
                   <div
                     id="products-grid"
-                    className="grid gap-3 grid-cols-2 md:grid-cols-2 lg:grid-cols-3 lg:gap-6"
+                    className={`grid gap-3 ${gridColsClass} lg:gap-6`}
                   >
                     {products?.map((product: Product) => (
                     <ProductCard2 key={product.id} product={product} />

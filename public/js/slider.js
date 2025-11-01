@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+function initSiteSlider() {
     let sliderElement = document.getElementById("site-slider");
     if (!sliderElement) {
         console.error('Slider element with ID "site-slider" not found.');
@@ -466,4 +466,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Store cleanup function globally if needed
     window.sliderCleanup = cleanup;
-});
+}
+
+// Initialize on DOM ready or immediately if already ready (for dynamically injected HTML)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSiteSlider);
+} else {
+  try { initSiteSlider(); } catch (e) { console.error(e); }
+}
+
+// Expose for manual re-init after dynamic HTML injections
+window.initSiteSlider = initSiteSlider;

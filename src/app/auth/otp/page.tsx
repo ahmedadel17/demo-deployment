@@ -1,5 +1,5 @@
 import React from 'react'
-import OTP from '../../components/login/otp'
+import OTP from '../../../components/login/otp'
 function page() {
   return (
     <div>

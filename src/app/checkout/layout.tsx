@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import OrderSummary from '../components/checkout/orderSummary'
+import OrderSummary from '../../components/checkout/orderSummary'
 import { useTranslations } from 'next-intl';  
 
 const CheckoutLayout = ({children}: {children: React.ReactNode}) => {

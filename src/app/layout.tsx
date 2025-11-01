@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "./style.css";
-import "./style.min.css"
-import "./embla-carousel.css";
+// import "./embla-carousel.css";
 import "./rtl.css";
-import FooterNav from "./components/footer/footerNav";
-import ReduxProvider from "./components/ReduxProvider";
-import CartInitializer from "./components/cart/CartInitializer";
-import WishlistInitializer from "./components/wishlist/WishlistInitializer";
+import FooterNav from "../components/footer/footerNav";
+import ReduxProvider from "../components/ReduxProvider";
+import CartInitializer from "../components/cart/CartInitializer";
+import WishlistInitializer from "../components/wishlist/WishlistInitializer";
 import { Toaster } from "react-hot-toast";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
-import ThemeScript from "./components/ThemeScript";
-import NavProgress from "./components/navProgress";
-import NetworkStatus from "./components/NetworkStatus";
-import NetworkManager from "./components/NetworkManager";
-import LayoutWithMenuData from "./components/LayoutWithMenuData";
+import ThemeScript from "../components/ThemeScript";
+import NavProgress from "../components/navProgress";
+import LayoutWithMenuData from "../components/LayoutWithMenuData";
+import ScriptLoader from "../components/ScriptLoader";
+import ColorProvider from "../components/ColorProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -48,22 +46,25 @@ export default async function RootLayout({
               <CartInitializer />
               <WishlistInitializer />
               <LayoutWithMenuData>
+              <ColorProvider>
                 <main className="flex-1 pb-16 lg:pb-0">
                   {children}
                 </main>
+                </ColorProvider>
               </LayoutWithMenuData>
               <button className="te-footer-back-to-top back-to-top hidden lg:flex show" aria-label="Back to top">
-    <svg className="te-footer-back-to-top-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m5 9 7-7 7 7"></path>
-        <path d="M12 16V2"></path>
-        <circle cx="12" cy="21" r="1"></circle>
-    </svg>
-</button>
+                <svg className="te-footer-back-to-top-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m5 9 7-7 7 7"></path>
+                    <path d="M12 16V2"></path>
+                    <circle cx="12" cy="21" r="1"></circle>
+                </svg>
+            </button>
             </div>
             <FooterNav />
           </ReduxProvider>
           <Toaster position="top-center" /> 
         </NextIntlClientProvider>
+        <ScriptLoader />
       </body>
     </html>
   );

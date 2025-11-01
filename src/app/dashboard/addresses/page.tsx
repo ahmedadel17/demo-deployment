@@ -1,4 +1,4 @@
-import DashboardAddresses from '@/app/components/dashboard/dashboardAddresses'
+import DashboardAddresses from '@/components/dashboard/dashboardAddresses'
 import React from 'react'
 
 function DashboardAddressPage() {

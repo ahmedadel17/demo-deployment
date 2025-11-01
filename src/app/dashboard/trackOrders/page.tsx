@@ -1,5 +1,5 @@
 import React from 'react'
-import TrackOrders from '@/app/components/dashboard/dashboardTrackOrders'
+import TrackOrders from '@/components/dashboard/dashboardTrackOrders'
 function TrackOrdersPage() {
   return (
     <>
