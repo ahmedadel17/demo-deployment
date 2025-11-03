@@ -2,7 +2,7 @@
 import React from 'react'
 import VariationPrice from './productVariationData/variationPrice'
 import { useAppSelector } from '@/app/store/hooks';
-function ProductPrice({ price, old_price }: { price: number, old_price: number }) {
+function ProductPrice({ price, old_price }: { price: number, old_price: number | null }) {
   const { variationData } = useAppSelector((state) => state.product);
   return (
     <>

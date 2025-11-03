@@ -111,51 +111,75 @@ export default function ProductSlider({ products }: { products: Product[] }) {
             ref={emblaRef}
           >
             <div className="embla__container flex gap-3 lg:gap-6 py-1">
-              {products?.map((_, index) => {
-                // Group products in sets of 4 for large screens
-                if (index % 4 === 0) {
-                  const p1 = products[index];
-                  const p2 = products[index + 1];
-                  const p3 = products[index + 2];
-                  const p4 = products[index + 3];
-                  return (
+              {products && (() => {
+                const slides: React.ReactNode[] = [];
+                
+                // Process products in groups of 4
+                for (let i = 0; i < products.length; i += 4) {
+                  const p1 = products[i];
+                  const p2 = products[i + 1];
+                  const p3 = products[i + 2];
+                  const p4 = products[i + 3];
+                  
+                  // Check how many products we have in this group
+                  const hasP3 = !!p3;
+                  const hasP4 = !!p4;
+                  
+                  // Desktop slide: shows all products (1-4) in one slide
+                  // Mobile slide 1: shows p1 and p2
+                  slides.push(
                     <div
-                      key={`slide-${index}`}
+                      key={`slide-${i}-desktop`}
                       className="embla__slide flex-shrink-0 py-1 w-full flex gap-3"
                     >
                       {p1 && (
                         <div className="basis-1/2 lg:basis-1/4">
-                          <ProductCard2
-                            product={p1}
-                          />
+                          <ProductCard2 product={p1} />
                         </div>
                       )}
                       {p2 && (
                         <div className="basis-1/2 lg:basis-1/4">
-                          <ProductCard2
-                            product={p2}
-                          />
+                          <ProductCard2 product={p2} />
                         </div>
                       )}
+                      {/* Desktop only: show p3 and p4 */}
                       {p3 && (
                         <div className="hidden lg:block lg:basis-1/4">
-                          <ProductCard2
-                            product={p3}
-                          />
+                          <ProductCard2 product={p3} />
                         </div>
                       )}
                       {p4 && (
                         <div className="hidden lg:block lg:basis-1/4">
-                          <ProductCard2
-                            product={p4}
-                          />
+                          <ProductCard2 product={p4} />
                         </div>
                       )}
                     </div>
                   );
+                  
+                  // Mobile slide 2: shows p3 and p4 (hidden on desktop)
+                  if (hasP3 || hasP4) {
+                    slides.push(
+                      <div
+                        key={`slide-${i}-mobile`}
+                        className="embla__slide flex-shrink-0 py-1 w-full flex gap-3 lg:hidden"
+                      >
+                        {p3 && (
+                          <div className="basis-1/2">
+                            <ProductCard2 product={p3} />
+                          </div>
+                        )}
+                        {p4 && (
+                          <div className="basis-1/2">
+                            <ProductCard2 product={p4} />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
                 }
-                return null; // Skip non-leading indices within each group of 4
-              })}
+                
+                return slides;
+              })()}
             </div>
           </div>
 

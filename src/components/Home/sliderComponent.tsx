@@ -110,17 +110,22 @@ export function SliderComponent({ slides }: SliderComponentProps) {
       {/* Embla Carousel */}
       <div 
         id="slides-container" 
-        className="embla flex duration-700 ease-in-out relative z-10" 
+        className="embla flex duration-700 ease-in-out relative z-10 w-full" 
         ref={emblaRef}
         style={{ willChange: 'transform' }}
       >
-        <div className="embla__container flex">
+        <div className="embla__container flex w-full">
           {slides?.map((slide, index) => (
             <div 
               key={slide.id} 
               className="slide-item w-full flex-shrink-0 relative bg-cover bg-center bg-no-repeat"
               style={{
                 backgroundImage: `url("${slide.image}")`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                width: '100%',
+                minWidth: '100%',
                 height: '100%',
                 minHeight: '100%'
               }}

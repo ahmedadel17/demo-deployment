@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-
+import { useTranslations } from 'next-intl'
 type Props = {
   min?: number
   max?: number
@@ -11,7 +11,7 @@ type Props = {
 export default function PriceWidget({ min, max }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  
+  const t = useTranslations()
   // Use dynamic values from parent API request, fallback to defaults only if not provided
   const minPrice = min ?? 0
   const maxPrice = max ?? 1000
@@ -128,7 +128,7 @@ export default function PriceWidget({ min, max }: Props) {
   return (
     <div className="price-widget w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filter by Price</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t("Filter by Price")}</h3>
         {(minVal !== minPrice || maxVal !== maxPrice) && (
           <button 
             onClick={handleClear}
@@ -141,7 +141,7 @@ export default function PriceWidget({ min, max }: Props) {
 
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-sm text-gray-600 dark:text-gray-400">Price Range</span>
+          <span className="text-sm text-gray-600 dark:text-gray-400">{t("Price Range")}</span>
           <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
             <span><span className="icon-riyal-symbol text-xs me-1" />{minVal}</span>
             <span className="text-gray-400">-</span>
@@ -184,7 +184,7 @@ export default function PriceWidget({ min, max }: Props) {
 
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <label className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Min</label>
+            <label className="text-xs text-gray-500 dark:text-gray-400 block mb-1">{t("Min")}</label>
             <input
               type="number"
               min={0}
@@ -198,7 +198,7 @@ export default function PriceWidget({ min, max }: Props) {
             />
           </div>
           <div className="flex-1">
-            <label className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Max</label>
+            <label className="text-xs text-gray-500 dark:text-gray-400 block mb-1">{t("Max")}</label>
             <input
               type="number"
               min={0}
@@ -215,7 +215,7 @@ export default function PriceWidget({ min, max }: Props) {
       </div>
 
       <div className="mb-6">
-        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Quick Select</h4>
+        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">{t("Quick Select")}</h4>
         <div className="grid grid-cols-2 gap-2">
           {quickRanges.map((range, idx) => (
             <button
@@ -239,15 +239,10 @@ export default function PriceWidget({ min, max }: Props) {
         </div>
       </div>
 
-      <button 
-        onClick={() => updateUrlParams(minVal, maxVal)}
-        className="w-full te-btn te-btn-default"
-      >
-        Apply Filter
-      </button>
+    
 
       <div className="mt-4 text-center">
-        <span className="text-xs text-gray-500 dark:text-gray-400">Showing products</span>
+        <span className="text-xs text-gray-500 dark:text-gray-400">{t("Showing products")}</span>
       </div>
     </div>
   )

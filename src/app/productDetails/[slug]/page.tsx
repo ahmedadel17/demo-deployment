@@ -19,6 +19,7 @@ async function ProductDetailsPage({ params }: { params: { slug: string } }) {
       'Accept-Language': locale
     }
   });
+  console.log('product', product.data.data);
   return (
     <>
       
@@ -47,21 +48,19 @@ async function ProductDetailsPage({ params }: { params: { slug: string } }) {
              <ProductTitle name={product.data.data.name} rate={product.data.data.rate} rate1={product.data.data.rate_percent_1} rate2={product.data.data.rate_percent_2} rate3={product.data.data.rate_percent_3} rate4={product.data.data.rate_percent_4} rate5={product.data.data.rate_percent_5} out_of_stock={product.data.data.out_of_stock} />
 
                 {/* <!-- Price --> */}
-                <ProductPrice price={product.data.data.min_price} old_price={product.data.data.old_price} />
-
-                {/* <!-- Product Description --> */}
-                <ProductDescription short_description={product.data.data.short_description} description={product.data.data.description} />
-
-                <hr className="border-gray-300 dark:border-gray-800"/>
+              
 
                 {/* <!-- Quantity --> */}
               <ProductDetailsWrapper 
-                productId={product.data.data.id} 
+                productId={String(product.data.data.id)} 
                 productTitle={product.data.data.name}
-                productPrice={product.data.data.price}
+                productPrice={product.data.data.price_after_discount || product.data.data.min_price}
+                productOldPrice={product.data.data.min_price}
+                productShortDescription={product.data.data.short_description}
+                productDescription={product.data.data.description}
                 productImage={product.data.data.images?.[0]?.url}
                 hasVariations={product.data.data.has_variation}
-                variations={product.data.data.variations}
+                variations={product.data.data.variations || []}
                 defaultVariationId={product.data.data.default_variation_id}
               />
 

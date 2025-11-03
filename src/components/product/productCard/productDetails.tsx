@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useCart } from '@/app/hooks/useCart';
 import { useAuth } from '@/app/hooks/useAuth';
 import { setCartData } from '@/app/store/slices/cartSlice';
@@ -78,18 +78,15 @@ function ProductDetails({ product }: ProductDetailsProps) {
   const t = useTranslations();
   const { toggleProduct } = useWishlist();
 
-  // Fetch variation ID when both color and size are selected
-  const fetchVariationId = async (colorId: number, sizeId: number) => {
+  // Fetch variation ID when all attributes are selected
+  const fetchVariationId = async (attributes: Record<number, number>) => {
     setState(prev => ({ ...prev, isLoadingVariation: true }));
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog/products/get-variation-by-attribute`,
         {
           product_id: product.id,
-          attributes: {
-            1: sizeId,
-            2: colorId,
-          }
+          attributes: attributes // Maps attribute_id to value_id
         },
         {
           headers: {
@@ -114,7 +111,8 @@ function ProductDetails({ product }: ProductDetailsProps) {
           ...prev,
           variationId: null,
           selectedVariation: null,
-          isLoadingVariation: false
+          isLoadingVariation: false,
+          variationData: null
         }));
       }
     } catch (error) {
@@ -123,28 +121,17 @@ function ProductDetails({ product }: ProductDetailsProps) {
         ...prev,
         variationId: null,
         selectedVariation: null,
-        isLoadingVariation: false
+        isLoadingVariation: false,
+        variationData: null
       }));
     }
   };
 
-  // Fetch variation when both color and size are selected
-  useEffect(() => {
-    // Only fetch if both are selected and not currently loading
-    if (state.selectedColorId && state.selectedSizeId && !state.isLoadingVariation) {
-      fetchVariationId(state.selectedColorId, state.selectedSizeId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selectedColorId, state.selectedSizeId]);
-
-  // Handle color selection
-  const handleColorSelect = (color: string, colorId: number) => {
-    setState(prev => ({ ...prev, selectedColor: color, selectedColorId: colorId }));
-  };
-
-  // Handle size selection
-  const handleSizeSelect = (size: string, sizeId: number) => {
-    setState(prev => ({ ...prev, selectedSize: size, selectedSizeId: sizeId }));
+  // Handle selection changes
+  const handleSelectionChange = (selections: Record<number, number>) => {
+    // Update state based on selections for backward compatibility
+    // This is optional, mainly for tracking selected values if needed
+    console.log('Selections changed:', selections);
   };
 
   // Handle favorite toggle
@@ -201,14 +188,14 @@ function ProductDetails({ product }: ProductDetailsProps) {
       return;
     }
 
-    // If product has default_variation_id, skip color/size validation
+    // If product has default_variation_id, skip variation validation
     if (!product?.default_variation_id) {
-      if (!state.selectedColor || !state.selectedSize) {
-        toast.error('Please select both color and size');
+      if (!state.variationId && !state.variationData) {
+        toast.error('Please select all product variations');
         return;
       }
 
-      if (!state.selectedColorId || !state.selectedSizeId) {
+      if (state.isLoadingVariation) {
         toast.error('Please wait while we process your selection');
         return;
       }
@@ -248,7 +235,7 @@ function ProductDetails({ product }: ProductDetailsProps) {
         
       } else {
         console.error('Add to cart failed:', response.data);
-        toast.error('Failed to add product to cart');
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -267,14 +254,12 @@ function ProductDetails({ product }: ProductDetailsProps) {
         {state.variationData && <ProductTitle name={state.variationData.name} slug={product.slug} />}
         {/* Price */}
         <ProductPrice min_price={parseFloat((state.variationData?.price_before_discount || product.price_before_discount || product.min_price || '0').toString())} price_after_discount={parseFloat((state.variationData?.price_after_discount || product.price_after_discount || product.price || '0').toString())} />
-        {/* Colors & Sizes */}
-        {(product.variations?.[1]?.values?.length || product.variations?.[0]?.values?.length) && (
+        {/* Variations */}
+        {product.variations && product.variations.length > 0 && (
           <ProductVariations 
-            variations={product.variations} 
-            onColorSelect={handleColorSelect}
-            onSizeSelect={handleSizeSelect}
-            selectedColor={state.selectedColor}
-            selectedSize={state.selectedSize}
+            variations={product.variations as any} 
+            onSelectionChange={handleSelectionChange}
+            onVariationFetch={fetchVariationId}
           />
         )}
       </div>
@@ -283,8 +268,7 @@ function ProductDetails({ product }: ProductDetailsProps) {
         default_variation_id={product.default_variation_id} 
         isAddingToCart={state.isAddingToCart} 
         isLoadingVariation={state.isLoadingVariation} 
-        selectedColor={state.selectedColor} 
-        selectedSize={state.selectedSize} 
+        hasVariation={!!state.variationId || !!state.variationData}
         handleAddToCart={handleAddToCart} 
         handleFavoriteToggle={handleFavoriteToggle} 
         isFavorite={state.isFavorite || false} 

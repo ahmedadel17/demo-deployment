@@ -7,9 +7,10 @@ function ProductDescription({ short_description, description }: { short_descript
     <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed">
        {short_description}
     </p>
-    <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed">
-       {description}
-    </p>
+    <div
+      className="text-gray-700 dark:text-gray-300 text-base leading-relaxed"
+      dangerouslySetInnerHTML={{ __html: description || '' }}
+    />
 </div>
 </>
   )

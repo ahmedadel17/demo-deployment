@@ -19,12 +19,20 @@ export default function ColorProvider({ children }: Props) {
         // console.log('colors 📱',colors);
         // Set all colors as CSS variables dynamically
         Object.entries(colors).forEach(([key, value]) => {
-            if (key.endsWith('_color') || key.startsWith('gradient_')) {
-              const variableName = `--apicolor-${key.replace('_color', '')}`
+            // Handle colors that end with '_color', start with 'gradient_', or are gray/green/red with numbers
+            if (key.endsWith('_color') || key.startsWith('gradient_') || 
+                key.startsWith('gray_') || key.startsWith('green_') || key.startsWith('red_')) {
+              let variableName = `--apicolor-${key}`
+              
+              // Remove '_color' suffix if present
+              if (key.endsWith('_color')) {
+                variableName = `--apicolor-${key.replace('_color', '')}`
+              }
+              
               root.style.setProperty(variableName, value as string)
           
               // 🟢 اطبع اسم اللون وقيمته
-              // console.log(`${variableName}: ${value}`)
+              console.log(`${variableName}: ${value}`)
             }
           })
 

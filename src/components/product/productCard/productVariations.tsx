@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 
 type VariationValue = {
   id: number
@@ -8,112 +8,181 @@ type VariationValue = {
   color?: string
 }
 
-type Variation = {
-  id: number
-  name: string
+type Attribute = {
+  attribute_id: number
+  attribute_name: string
+  attribute_type: string
   values: VariationValue[]
 }
 
 type ProductVariationsProps = {
-  variations?: Variation[]
-  onColorSelect?: (color: string, colorId: number) => void
-  onSizeSelect?: (size: string, sizeId: number) => void
-  selectedColor?: string | null
-  selectedSize?: string | null
+  variations?: Attribute[]
+  onSelectionChange?: (selections: Record<number, number>) => void
+  onVariationFetch?: (attributes: Record<number, number>) => void
+  initialSelections?: Record<number, number>
 }
 
 function ProductVariations({ 
   variations = [], 
-  onColorSelect,
-  onSizeSelect,
-  selectedColor: externalSelectedColor,
-  selectedSize: externalSelectedSize
+  onSelectionChange,
+  onVariationFetch,
+  initialSelections
 }: ProductVariationsProps) {
-  // Internal state if not controlled externally
-  const [internalState, setInternalState] = useState({
-    selectedColor: null as string | null,
-    selectedSize: null as string | null,
-  })
+  // State to track selected values for each attribute
+  const [selections, setSelections] = useState<Record<number, number>>(initialSelections || {})
+  const lastFetchedSelections = useRef<string>('')
 
-  // Use external state if provided, otherwise use internal state
-  const selectedColor = externalSelectedColor !== undefined ? externalSelectedColor : internalState.selectedColor
-  const selectedSize = externalSelectedSize !== undefined ? externalSelectedSize : internalState.selectedSize
+  // Sort variations: color first, then others
+  const sortedVariations = useMemo(() => {
+    const colorAttrs = variations.filter(v => 
+      v.attribute_name?.toLowerCase().includes('color') || 
+      v.attribute_type === 'color'
+    )
+    const otherAttrs = variations.filter(v => 
+      !v.attribute_name?.toLowerCase().includes('color') && 
+      v.attribute_type !== 'color'
+    )
+    return [...colorAttrs, ...otherAttrs]
+  }, [variations])
 
-  // Find color and size variations (colors are typically at index 1, sizes at index 0)
-  const colorVariation = variations.find(v => v.name?.toLowerCase().includes('color') || variations.indexOf(v) === 1)
-  const sizeVariation = variations.find(v => v.name?.toLowerCase().includes('size') || variations.indexOf(v) === 0)
-
-  // Use found variations or fallback to array indices
-  const colors = colorVariation || variations[1]
-  const sizes = sizeVariation || variations[0]
-
-  const handleColorSelect = (color: string, colorId: number) => {
-    if (externalSelectedColor === undefined) {
-      setInternalState(prev => ({ ...prev, selectedColor: color }))
+  // Update selections when initialSelections prop changes
+  useEffect(() => {
+    if (initialSelections) {
+      setSelections(initialSelections)
+      lastFetchedSelections.current = '' // Reset fetch tracking when selections reset
     }
-    onColorSelect?.(color, colorId)
+  }, [initialSelections])
+
+  // Reset fetch tracking when variations change
+  useEffect(() => {
+    lastFetchedSelections.current = ''
+  }, [variations])
+
+  // Check if all variations are selected and fetch variation data
+  useEffect(() => {
+    if (sortedVariations.length > 0 && onVariationFetch) {
+      const allSelected = sortedVariations.every(attr => 
+        selections[attr.attribute_id] !== undefined && selections[attr.attribute_id] !== null
+      )
+      
+      if (allSelected && Object.keys(selections).length === sortedVariations.length) {
+        // Create a unique key for the current selections to prevent duplicate calls
+        const selectionsKey = JSON.stringify(selections)
+        
+        // Only fetch if this is a new selection combination
+        if (selectionsKey !== lastFetchedSelections.current) {
+          lastFetchedSelections.current = selectionsKey
+          // All variations selected, fetch variation data
+          onVariationFetch(selections)
+        }
+      } else {
+        // If not all selected, clear the fetch tracking
+        lastFetchedSelections.current = ''
+      }
+    }
+  }, [selections, sortedVariations, onVariationFetch])
+
+  // Handle value selection for any attribute
+  const handleSelect = (attributeId: number, valueId: number) => {
+    const newSelections = {
+      ...selections,
+      [attributeId]: valueId
+    }
+    setSelections(newSelections)
+    onSelectionChange?.(newSelections)
   }
 
-  const handleSizeSelect = (size: string, sizeId: number) => {
-    if (externalSelectedSize === undefined) {
-      setInternalState(prev => ({ ...prev, selectedSize: size }))
+  // Render attribute based on type
+  const renderAttribute = (attribute: Attribute) => {
+    const selectedValueId = selections[attribute.attribute_id]
+    const isColorAttribute = attribute.attribute_name?.toLowerCase().includes('color') || 
+                             attribute.attribute_type === 'color'
+    
+    if (attribute.attribute_type === 'multi' || attribute.attribute_type === 'color') {
+      return (
+        <div key={attribute.attribute_id} className="product-attribute mb-4">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {attribute.attribute_name}
+          </label>
+          
+          {isColorAttribute ? (
+            // Render as color swatches (original style)
+            <div className="flex flex-wrap gap-1 items-center">
+              {attribute.values.slice(0, 4).map((value) => {
+                const isSelected = selectedValueId === value.id
+                const colorValue = value.color || value.value
+                return (
+                  <button
+                    key={value.id}
+                    type="button"
+                    className={`color-option ${isSelected ? 'active' : ''}`}
+                    style={{ backgroundColor: value.color }}
+                    title={colorValue}
+                    aria-label={`Select color ${colorValue}`}
+                    onClick={() => handleSelect(attribute.attribute_id, value.id)}
+                  >
+                    <span className="sr-only">{colorValue}</span>
+                  </button>
+                )
+              })}
+              {attribute.values.length > 4 && (
+                <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                  +{attribute.values.length - 4}
+                </span>
+              )}
+            </div>
+          ) : (
+            // Render as size/text buttons
+            <div className="flex flex-wrap gap-2">
+              {attribute.values.map((value) => {
+                const isSelected = selectedValueId === value.id
+                return (
+                  <button
+                    key={value.id}
+                    type="button"
+                    className={`size-option ${isSelected ? 'active' : ''}`}
+                    aria-label={`Select ${attribute.attribute_name}: ${value.value}`}
+                    onClick={() => handleSelect(attribute.attribute_id, value.id)}
+                  >
+                    {value.value}
+                  </button>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )
     }
-    onSizeSelect?.(size, sizeId)
+
+    // Default fallback for other attribute types
+    return (
+      <div key={attribute.attribute_id} className="product-attribute mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {attribute.attribute_name}
+        </label>
+        <select
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+          value={selectedValueId || ''}
+          onChange={(e) => handleSelect(attribute.attribute_id, Number(e.target.value))}
+        >
+          <option value="">Select {attribute.attribute_name}</option>
+          {attribute.values.map((value) => (
+            <option key={value.id} value={value.id}>
+              {value.value}
+            </option>
+          ))}
+        </select>
+      </div>
+    )
+  }
+
+  if (!variations || variations.length === 0) {
+    return null
   }
 
   return (
-    <div className="product-options space-y-4 mt-4">
-      {/* Colors */}
-      {colors?.values && colors.values.length > 0 && (
-        <div className="product-colors">
-          <div className="flex flex-wrap gap-1 items-center">
-            {colors.values.slice(0, 4).map((color: VariationValue, i: number) => {
-              const colorValue = color.color || color.value
-              const isSelected = selectedColor === color.color || selectedColor === color.value || selectedColor === colorValue
-              return (
-                <button
-                  key={color.id || i}
-                  className={`color-option ${isSelected ? 'active' : ''}`}
-                  style={{ backgroundColor: color.color }}
-                  title={colorValue}
-                  aria-label={`Select color ${colorValue}`}
-                  onClick={() => handleColorSelect(colorValue, color.id)}
-                >
-                  <span className="sr-only">{colorValue}</span>
-                </button>
-              )
-            })}
-            {colors.values.length > 4 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-                +{colors.values.length - 4}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Sizes */}
-      {sizes?.values && sizes.values.length > 0 && (
-        <div className="product-sizes">
-          <div className="flex flex-wrap gap-1 items-center">
-            {sizes.values.slice(0, 4).map((size: VariationValue, i: number) => (
-              <button
-                key={size.id || i}
-                className={`size-option ${selectedSize === size.value ? 'active' : ''}`}
-                aria-label={`Select size ${size.value}`}
-                onClick={() => handleSizeSelect(size.value, size.id)}
-              >
-                {size.value}
-              </button>
-            ))}
-            {sizes.values.length > 4 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-                +{sizes.values.length - 4}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
+    <div className="product-options space-y-3 mt-4">
+      {sortedVariations.map((attribute) => renderAttribute(attribute))}
     </div>
   )
 }

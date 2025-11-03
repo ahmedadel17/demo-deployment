@@ -72,6 +72,31 @@ export default function PageBuilder({ html, css, scripts }: PageBuilderProps) {
     };
   }, [scripts]);
 
+  // Handle Add to Cart button clicks
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      
+      // Check if the clicked element or its parent is the "Add to Cart" button
+      const addToCartButton = target.closest('.te-btn.te-btn-primary');
+      
+      if (addToCartButton) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('added to cart');
+      }
+    };
+
+    container.addEventListener('click', handleClick);
+
+    return () => {
+      container.removeEventListener('click', handleClick);
+    };
+  }, [html]);
+
   return (
     <>
       {/* Inject CSS */}

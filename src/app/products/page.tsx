@@ -160,14 +160,42 @@ async function Products({ searchParams }: ProductsPageProps) {
     //   }
     // });
     
-    const response = await axios.get(
-      apiUrl,
-      {
-        headers: {
-          ...headers,
-          "Accept-Language": locale,
-        },  
+    // Helper function to retry with exponential backoff
+    const retryWithBackoff = async <T,>(fn: () => Promise<T>, maxRetries = 3, delay = 1000): Promise<T> => {
+      for (let i = 0; i < maxRetries; i++) {
+        try {
+          return await fn();
+        } catch (error) {
+          const isLastAttempt = i === maxRetries - 1;
+          const axiosError = error as { response?: { status?: number } };
+          
+          // Check if it's a 429 error and not the last attempt
+          if (axiosError?.response?.status === 429 && !isLastAttempt) {
+            const retryDelay = delay * Math.pow(2, i); // Exponential backoff
+            console.warn(`Rate limited (429). Retrying in ${retryDelay}ms... (Attempt ${i + 1}/${maxRetries})`);
+            await new Promise(resolve => setTimeout(resolve, retryDelay));
+            continue;
+          }
+          
+          // If it's not a 429 or it's the last attempt, throw the error
+          throw error;
+        }
       }
+      throw new Error('Max retries exceeded');
+    };
+
+    const response = await retryWithBackoff(
+      () => axios.get(
+        apiUrl,
+        {
+          headers: {
+            ...headers,
+            "Accept-Language": locale,
+          },  
+        }
+      ),
+      3, // max retries
+      1000 // initial delay in ms
     );
     
     // console.log('🟢 Products Page - API Response received:', {
@@ -181,6 +209,7 @@ async function Products({ searchParams }: ProductsPageProps) {
       ...product,
       is_favourite: product.is_favourite || false // Ensure is_favourite property exists
     }));
+    console.log('products', products);
     
     // Extract pagination data from the API response
     const paginationData = productsData.paginate || {};
@@ -268,6 +297,13 @@ async function Products({ searchParams }: ProductsPageProps) {
   } catch (error) {
     console.error('Error fetching products:', error);
     
+    // Check if it's a 429 rate limit error
+    const axiosError = error as { response?: { status?: number } };
+    const isRateLimited = axiosError?.response?.status === 429;
+    const errorMessage = isRateLimited 
+      ? 'Too many requests. Please wait a moment and try again.'
+      : 'Error loading products. Please try again later.';
+    
     return (
       <div className="container my-12">
         <Breadcrumb name="Products" />
@@ -276,8 +312,15 @@ async function Products({ searchParams }: ProductsPageProps) {
             <svg className="mx-auto h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Error loading products</h3>
-            <p className="text-gray-500 dark:text-gray-400">Please try again later.</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              {isRateLimited ? 'Rate Limit Exceeded' : 'Error loading products'}
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">{errorMessage}</p>
+            {isRateLimited && (
+              <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
+                The server is receiving too many requests. Please wait a few seconds before refreshing.
+              </p>
+            )}
           </div>
         </div>
       </div>

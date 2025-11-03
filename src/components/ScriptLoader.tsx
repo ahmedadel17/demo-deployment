@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import axios from 'axios';
 import Script from 'next/script';
 
 interface ScriptLoaderProps {
@@ -9,6 +10,27 @@ interface ScriptLoaderProps {
 
 export default function ScriptLoader({ scripts = [] }: ScriptLoaderProps) {
   useEffect(() => {
+    // Global axios interceptor for auth handling
+    const interceptorId = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const message = error?.response?.data?.message;
+        const status = error?.response?.status;
+        if (status === 401 || message === 'Unauthenticated') {
+          try {
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('authToken');
+              localStorage.removeItem('userData');
+            }
+          } catch {}
+          if (typeof window !== 'undefined') {
+            window.location.href = '/auth/login';
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+
     // Initialize any global functionality that needs to run after scripts load
     const initializeGlobalFeatures = () => {
       // Initialize product card interactions
@@ -82,7 +104,10 @@ export default function ScriptLoader({ scripts = [] }: ScriptLoaderProps) {
     // Run initialization after a short delay to ensure DOM is ready
     const timer = setTimeout(initializeGlobalFeatures, 100);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      axios.interceptors.response.eject(interceptorId);
+    };
   }, []);
 
   return (
@@ -93,11 +118,11 @@ export default function ScriptLoader({ scripts = [] }: ScriptLoaderProps) {
         strategy="afterInteractive"
         onLoad={() => console.log('Main script loaded')}
       /> */}
-      <Script
+      {/* <Script
         src="/js/product-btns.min.js"
         strategy="afterInteractive"
         // onLoad={() => console.log('Product buttons script loaded')}
-      />
+      /> */}
       <Script
         src="/js/embla-carousel.min.js"
         strategy="afterInteractive"
@@ -119,7 +144,9 @@ export default function ScriptLoader({ scripts = [] }: ScriptLoaderProps) {
         onLoad={() => {
           // console.log('Custom slider script loaded')
           try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             if (typeof (window as any).initSiteSlider === 'function') {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ;(window as any).initSiteSlider()
             }
           } catch {}

@@ -332,6 +332,21 @@
    "Visa":"Visa",
    "Mastercard":"Mastercard",
    "Tabby":"Tabby",
-   "Tamara":"Tamara"
+   "Tamara":"Tamara",
+   "Filter by Price":"Filter by Price",
+   "Price Range":"Price Range",
+   "Categories":"Categories",
+   "Clear All":"Clear All",
+   "selected":"selected",
+   "categories":"categories",
+   "Min":"Min",
+   "Max":"Max",
+   "Quick Select":"Quick Select",
+   "Apply Filter":"Apply Filter",
+   "Showing products":"Showing products",
+   "Product Attributes":"Product Attributes",
+   "No attributes available":"No attributes available",
+   "Selected":"Selected",
+   "Clear":"Clear"
   
 }

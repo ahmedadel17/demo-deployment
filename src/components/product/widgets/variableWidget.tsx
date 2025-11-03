@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-
+import { useTranslations } from 'next-intl'
 type AttributeValue = {
   id: number
   value: string
@@ -25,7 +25,7 @@ export default function VariableWidget({ attributes, onApplyAction }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [selected, setSelected] = useState<Record<string, AttributeValue[]>>({})
-
+  const t = useTranslations()
   // Initialize selected attributes from URL parameters
   useEffect(() => {
     const urlAttributes: Record<string, AttributeValue[]> = {}
@@ -118,12 +118,12 @@ export default function VariableWidget({ attributes, onApplyAction }: Props) {
   return (
     <div className="variable-widget w-full max-w-sm mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Product Attributes</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t("Product Attributes")}</h3>
         <button
           onClick={clearAll}
           className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
         >
-          Clear
+          {t("Clear")}
         </button>
       </div>
 
@@ -177,14 +177,14 @@ export default function VariableWidget({ attributes, onApplyAction }: Props) {
         ))
       ) : (
         <div className="text-center py-8">
-          <p className="text-gray-500 dark:text-gray-400 text-sm">No attributes available</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">{t("No attributes available")}</p>
         </div>
       )}
 
       {/* Selected section */}
       {Object.keys(selected).length > 0 && (
         <div className="mb-6">
-          <div className="text-sm font-medium text-gray-900 dark:text-white mb-2">Selected:</div>
+          <div className="text-sm font-medium text-gray-900 dark:text-white mb-2">{t("Selected")}:</div>
           {Object.entries(selected).map(([attrId, values]) => {
             const attribute = attributes.find(attr => attr.id.toString() === attrId)
             return (
@@ -218,16 +218,11 @@ export default function VariableWidget({ attributes, onApplyAction }: Props) {
         </div>
       )}
 
-      <button
-        onClick={apply}
-        className="w-full te-btn te-btn-default"
-      >
-        Apply Filter
-      </button>
+    
 
       <div className="mt-4 text-center">
         <span className="text-xs text-gray-500 dark:text-gray-400">
-          Showing {resultsCount} products
+          {t("Showing")} {resultsCount} {t("products")}
         </span>
       </div>
     </div>

@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from 'react'
-import { useAppSelector, useAppDispatch } from '@/app/store/hooks'
+import { useAppDispatch } from '@/app/store/hooks'
 import { useAuth } from '@/app/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { setCartData, setCartLoading, setCartError } from '@/app/store/slices/cartSlice'
 import { toast } from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
+
 interface AddToCartButtonProps {
   productId?: string;
   productTitle?: string;
@@ -16,12 +17,18 @@ interface AddToCartButtonProps {
   quantity: number;
   customerNote: string;
   defaultVariationId?: number;
+  variationId?: number | null;
+  variationData?: any;
+  isLoadingVariation?: boolean;
 }
 
 function AddToCartButton({ 
   productId, 
-    hasVariations = false,
+  hasVariations = false,
   defaultVariationId,
+  variationId,
+  variationData,
+  isLoadingVariation = false,
   quantity,
   customerNote
 }: AddToCartButtonProps) {
@@ -29,32 +36,32 @@ function AddToCartButton({
   const { isAuthenticated, token } = useAuth();
   const router = useRouter();
   const t = useTranslations();
-  // Get data from Redux
-  const { selectedSizeId, selectedColorId, variationData } = useAppSelector((state) => state.product);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
+      toast.error('Please login first to add items to cart');
       router.push('/auth/login');
       return;
     }
 
     if (!token) {
-      setError('Authentication required');
+      setError('Authentication required. Please login again.');
       return;
     }
 
-    // Check if variations are required
-    if (hasVariations && !defaultVariationId && (!selectedSizeId || !selectedColorId)) {
-      setError('Please select both size and color before adding to cart');
-      return;
-    }
+    // If product has default_variation_id, skip variation validation
+    if (!defaultVariationId) {
+      if (hasVariations && !variationId && !variationData) {
+        setError('Please select all product variations');
+        return;
+      }
 
-    // Check if variation data is available for products with variations
-    if (hasVariations && !defaultVariationId && !(variationData?.data as any)?.id) {
-      setError('Please wait for variation data to load');
-      return;
+      if (isLoadingVariation) {
+        setError('Please wait while we process your selection');
+        return;
+      }
     }
 
     setIsAddingToCart(true);
@@ -64,13 +71,11 @@ function AddToCartButton({
 
     try {
       const requestData = {
-        item_id: defaultVariationId? defaultVariationId : (variationData?.data as any)?.id ? (variationData?.data as any).id : productId,
+        item_id: defaultVariationId || variationId || productId,
         qty: quantity,
         customer_note: customerNote,
         type: 'product',
       };
-
-      // console.log('Adding to cart with data:', requestData);
 
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/marketplace/cart/add-to-cart`,
@@ -83,12 +88,16 @@ function AddToCartButton({
         }
       );
 
-      toast.success('Product added to cart successfully!');
-      
-      // Save the complete cart response to Redux
-      dispatch(setCartData(response.data.data));
-      
-    
+      if (response.data.status) {
+        // Update cart store with the new cart data from response
+        if (response.data.data) {
+          dispatch(setCartData(response.data.data));
+        }
+        toast.success('Product added to cart successfully!');
+      } else {
+        console.error('Add to cart failed:', response.data);
+        toast.error(response.data.message || 'Failed to add to cart');
+      }
       
     } catch (err) {
       console.error('Error adding to cart:', err);
@@ -96,7 +105,7 @@ function AddToCartButton({
         router.push('/auth/login');
         return;
       }
-      const errorMessage = 'Failed to add to cart';
+      const errorMessage = 'An error occurred while adding to cart';
       toast.error(errorMessage);
       dispatch(setCartError(errorMessage));
     } finally {
@@ -104,6 +113,10 @@ function AddToCartButton({
       dispatch(setCartLoading(false));
     }
   };
+
+  // Determine if button should be disabled
+  const isDisabled = isAddingToCart || isLoadingVariation || 
+    (hasVariations && !defaultVariationId && (!variationId && !variationData));
 
   return (
     <>
@@ -117,13 +130,18 @@ function AddToCartButton({
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        disabled={isAddingToCart || (hasVariations && !defaultVariationId && (!selectedSizeId || !selectedColorId || !(variationData?.data as any)?.id))}
+        disabled={isDisabled}
         className="w-full py-3 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isAddingToCart ? (
           <>
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             {t('Adding to Cart')}...
+          </>
+        ) : isLoadingVariation ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            {t('Loading')}...
           </>
         ) : (
           <>

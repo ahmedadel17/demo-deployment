@@ -91,57 +91,49 @@ function FooterNav() {
 
   return (
     <div 
-      className="fixed block lg:hidden bottom-0 left-0 right-0 z-50 w-full bg-white border-t dark:border-gray-800 shadow-lg dark:bg-gray-900" 
-      style={{ 
-        position: 'fixed',
-        bottom: '0',
-        left: '0',
-        right: '0',
-        width: '100%',
-        height: '64px',
-        zIndex: 9999,
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-        margin: '0',
-        padding: '0',
-        boxSizing: 'border-box',
-        transform: 'translateY(0)',
-        maxHeight: 'calc(100vh - env(safe-area-inset-bottom, 0px))'
-      }}
+      className="fixed block lg:hidden bottom-0 start-0 z-50 w-full h-16 bg-white/70 backdrop-blur-md border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
     >
-      <div className="flex h-full mx-auto font-medium dark:bg-gray-900 justify-center items-center">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex flex-col items-center justify-center px-3 py-2 hover:bg-gray-50 group flex-1 ${
-                isActive ? 'bg-blue-50' : ''
-              }`}
-              style={{
-                color: isActive ? '#2563eb' : 'dark:text-gray-300'
-              }}
-            >
-              <div 
-                className="flex items-center justify-center"
-                style={{
-                  color: isActive ? '#2563eb' : '#6b7280'
-                }}
-              >
-                {item.icon}
-              </div>
-              <span 
-                className="text-sm"
-                style={{
-                  color: isActive ? '#2563eb' : '#6b7280'
-                }}
-              >
-                {t(item.label)}
-              </span>
-            </Link>
-          )
-        })}
-      </div>
+      {(() => {
+        const count = navItems.length;
+        const gridColsClass = count === 1
+          ? 'grid-cols-1'
+          : count === 2
+          ? 'grid-cols-2'
+          : count === 3
+          ? 'grid-cols-3'
+          : 'grid-cols-4';
+        // Center the grid when fewer than 4 items
+        const justifyClass = count < 4 ? 'justify-center' : '';
+        const maxWidth = count === 1 ? '8rem' : count === 2 ? '16rem' : count === 3 ? '24rem' : '32rem';
+        return (
+          <div
+            className={`grid h-full mx-auto font-medium ${gridColsClass} ${justifyClass}`}
+            style={{ maxWidth }}
+          >
+            {navItems.map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group`}
+                >
+                  <div className="relative">
+                    {/* Icon */}
+                    <div className={`${isActive ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-400'} group-hover:text-blue-600 dark:group-hover:text-blue-500`}>
+                      {item.icon}
+                    </div>
+                  </div>
+                  <span className={`text-sm ${isActive ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-400'} group-hover:text-blue-600 dark:group-hover:text-blue-500`}>
+                    {t(item.label)}
+                  </span>
+                </Link>
+              )
+            })}
+          </div>
+        );
+      })()}
+      
     </div>
   )
 }

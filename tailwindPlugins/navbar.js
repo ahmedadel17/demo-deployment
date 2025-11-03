@@ -64,8 +64,9 @@ module.exports = plugin(function ({ addComponents, theme }) {
         '.te-navbar-nav-mobile': {
             position: 'absolute',
             top: '100%',
-            left: '0',
-            right: '0',
+            insetInlineStart: '0',
+            insetInlineEnd: '0',
+            width: '100%',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(12px)',
             borderTop: `1px solid ${theme('colors.gray.200')}`,
@@ -76,7 +77,8 @@ module.exports = plugin(function ({ addComponents, theme }) {
             zIndex: '-1',
             transition: 'all 0.3s ease-in-out',
             boxShadow: theme('boxShadow.lg'),
-            borderRadius: `0 0 ${theme('borderRadius.xl')} ${theme('borderRadius.xl')}`,
+            borderBottomLeftRadius: theme('borderRadius.xl'),
+            borderBottomRightRadius: theme('borderRadius.xl'),
 
             [`@media (min-width: ${theme('screens.lg')})`]: {
                 display: 'none',

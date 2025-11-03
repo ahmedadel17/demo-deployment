@@ -6,15 +6,14 @@ interface ProductFooterProps {
   default_variation_id?: string | number
   isAddingToCart: boolean
   isLoadingVariation: boolean
-  selectedColor: string | null
-  selectedSize: string | null
+  hasVariation?: boolean
   handleAddToCart: () => void
   handleFavoriteToggle: () => void
   isFavorite: boolean
   isFavoriteLoading: boolean
 }
 
-function ProductFooter({ default_variation_id, isAddingToCart, isLoadingVariation, selectedColor, selectedSize, handleAddToCart, handleFavoriteToggle, isFavorite, isFavoriteLoading }: ProductFooterProps) {
+function ProductFooter({ default_variation_id, isAddingToCart, isLoadingVariation, hasVariation, handleAddToCart, handleFavoriteToggle, isFavorite, isFavoriteLoading }: ProductFooterProps) {
   return (
     <div className="product-footer mt-auto flex gap-1 lg:gap-2 items-stretch justify-between">
           <button
@@ -23,7 +22,7 @@ function ProductFooter({ default_variation_id, isAddingToCart, isLoadingVariatio
                 ? (isAddingToCart || isLoadingVariation)
                   ? 'opacity-50 cursor-not-allowed'
                   : ''
-                : (selectedColor && selectedSize && !isLoadingVariation)
+                : (hasVariation && !isLoadingVariation)
                   ? ''
                   : 'opacity-50 cursor-not-allowed'
             }`}
@@ -32,7 +31,7 @@ function ProductFooter({ default_variation_id, isAddingToCart, isLoadingVariatio
             disabled={
               default_variation_id 
                 ? isAddingToCart || isLoadingVariation
-                : !selectedColor || !selectedSize || isAddingToCart || isLoadingVariation
+                : !hasVariation || isAddingToCart || isLoadingVariation
             }
           >
             {isAddingToCart ? (
