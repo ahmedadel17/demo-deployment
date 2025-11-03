@@ -53,7 +53,7 @@ async function main() {
       red_color
     }
     await writeFile('components/theme-colors.json', JSON.stringify(out, null, 2), 'utf8')
-    console.log('Wrote components/theme-colors.json with', out)
+    // console.log('Wrote components/theme-colors.json with', out)
   } catch (err) {
     console.error('Error fetching theme colors:', err)
   }

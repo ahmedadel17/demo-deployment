@@ -32,7 +32,7 @@ export default function ColorProvider({ children }: Props) {
               root.style.setProperty(variableName, value as string)
           
               // 🟢 اطبع اسم اللون وقيمته
-              console.log(`${variableName}: ${value}`)
+              // console.log(`${variableName}: ${value}`)
             }
           })
 

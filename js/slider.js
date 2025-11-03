@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         slidesContainer.className = "";
         slidesContainer.classList.add('flex', 'duration-700', 'ease-in-out', 'relative', 'z-10');
 
-        console.log('Cleaned up slider container classes');
+        // console.log('Cleaned up slider container classes');
     }
 
     // Create clones for infinite loop
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Update slideItems to include clones
         slideItems = document.querySelectorAll(".slide-item");
 
-        console.log('Created clones. Total slides now:', slideItems.length);
+        // console.log('Created clones. Total slides now:', slideItems.length);
     }
 
     // Apply dynamic heights and overlay styles
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update slider position with smooth transition
     let updateSlider = (instant = false) => {
-        console.log('UpdateSlider called - Moving to slide:', currentSlide, 'Instant:', instant);
+        // console.log('UpdateSlider called - Moving to slide:', currentSlide, 'Instant:', instant);
 
         let direction = document.dir === "rtl" ? -1 : 1;
 
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         slidesContainer.style.willChange = 'transform';
 
-        console.log('Applied transform:', translateValue);
+        // console.log('Applied transform:', translateValue);
 
         if (hasMultipleSlides && paginationDots) {
             updatePagination();
@@ -232,10 +232,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!hasMultipleSlides || isTransitioning) return;
         isTransitioning = true;
 
-        console.log('Previous clicked - Current slide:', currentSlide);
+        // console.log('Previous clicked - Current slide:', currentSlide);
         currentSlide -= 1;
 
-        console.log('Previous - New slide:', currentSlide);
+        // console.log('Previous - New slide:', currentSlide);
         updateSlider();
         restartAutoplay();
     };
@@ -245,10 +245,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!hasMultipleSlides || isTransitioning) return;
         isTransitioning = true;
 
-        console.log('Next clicked - Current slide:', currentSlide);
+        // console.log('Next clicked - Current slide:', currentSlide);
         currentSlide += 1;
 
-        console.log('Next - New slide:', currentSlide);
+        // console.log('Next - New slide:', currentSlide);
         updateSlider();
         restartAutoplay();
     };

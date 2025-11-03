@@ -131,7 +131,7 @@ function ProductDetails({ product }: ProductDetailsProps) {
   const handleSelectionChange = (selections: Record<number, number>) => {
     // Update state based on selections for backward compatibility
     // This is optional, mainly for tracking selected values if needed
-    console.log('Selections changed:', selections);
+    // console.log('Selections changed:', selections);
   };
 
   // Handle favorite toggle

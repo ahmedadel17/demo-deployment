@@ -8,7 +8,7 @@ function DropDownSubMenu({ label, items, onNavigate }: { label: string, items: a
  const toggleSubMenu = () => {
   setOpenSubmenus(prev => !prev);
  }
- console.log('items 📱',items);
+//  console.log('items 📱',items);
   
   // Check if an item has nested submenus (has items array with sub-items)
   const hasNestedSubmenu = (item: any) => {
