@@ -1,6 +1,7 @@
 "use client"
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import {useRouter} from 'next/navigation';
+import Link from 'next/link';
 import axios from "axios";
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '../app/hooks/useAuth';
@@ -218,12 +219,7 @@ const handleSubmit = useCallback(async () => {
                             {t('Enter the 6-digit code sent to your phone')}
                        </p>
                        
-                       {/* Show Redux auth error */}
-                       {error && (
-                         <div className="mt-2 text-red-600 dark:text-red-400 text-sm">
-                           {error}
-                         </div>
-                       )}
+                     
                    </div>
    
                    <div className="text-center">
@@ -238,15 +234,14 @@ const handleSubmit = useCallback(async () => {
                    </div>
    
                    <div className="flex flex-col gap-3 sm:flex-row sm:space-x-4">
-                       <button
-                           type="button"
+                       <Link
+                           href="/auth/login"
                            id="back-to-phone-from-otp"
-                           disabled={state.isSubmitting || isLoading}
                            className={`te-btn te-btn-default sm:flex-1 ${
-                             (state.isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed' : ''
+                             (state.isSubmitting || isLoading) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
                            }`}>
                            {t('Change Phone')}
-                       </button>
+                       </Link>
                        <button
                            onClick={handleSubmit}
                            id="otp-submit"

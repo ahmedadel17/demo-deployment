@@ -35,6 +35,7 @@ const MyAddressesPage: React.FC = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [settingDefault, setSettingDefault] = useState<string | null>(null);
+  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const isFetchingRef = useRef(false);
 
   // Fetch addresses from API
@@ -232,12 +233,51 @@ const MyAddressesPage: React.FC = () => {
               )}
 
               {/* Create New Address Form */}
-              {showCreateForm && (
+              {showCreateForm && !editingAddress && (
                 <div className="p-6 border-b border-gray-200 dark:border-gray-600">
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                     Create New Address
                   </h2>
                   <CreateNewAddressForm onAddressCreated={handleAddressCreated} />
+                </div>
+              )}
+
+              {/* Edit Address Form */}
+              {editingAddress && (
+                <div className="p-6 border-b border-gray-200 dark:border-gray-600">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      Edit Address
+                    </h2>
+                    <button
+                      onClick={() => setEditingAddress(null)}
+                      className="te-btn te-btn-default"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <CreateNewAddressForm
+                    mode="edit"
+                    addressId={editingAddress.id}
+                    initialValuesOverride={{
+                      name: editingAddress.name || '',
+                      address: editingAddress.address || '',
+                      contact_phone: editingAddress.contact_phone || editingAddress.phone || '',
+                      country: editingAddress.country || 'SA',
+                      house: editingAddress.house || '',
+                      street: editingAddress.street || '',
+                      notes: editingAddress.notes || '',
+                      // lat/lng/city_id/country_id are required to submit; user can re-pick
+                      lat: '',
+                      lng: '',
+                      city_id: '',
+                      country_id: ''
+                    }}
+                    onAddressCreated={() => {
+                      setEditingAddress(null);
+                      handleAddressCreated();
+                    }}
+                  />
                 </div>
               )}
 
@@ -305,13 +345,12 @@ const MyAddressesPage: React.FC = () => {
                         </div>
 
                         <div className="mt-4 flex space-x-2 rtl:space-x-reverse">
-                          <Link
-                            href={`/dashboard/edit-address?id=${address.id}`}
+                          <button
                             className="text-sm font-medium text-primary-600 dark:text-primary-100 hover:underline"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setEditingAddress(address); setShowCreateForm(false); }}
                           >
                             Edit
-                          </Link>
+                          </button>
                           <span className="text-gray-300 dark:text-gray-600">|</span>
                           <button
                             onClick={(e) => {

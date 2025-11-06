@@ -18,9 +18,12 @@ interface ProductImageProps {
   title?: string
   badges?: Badge[]
   productId?: number | string
+  productPrice?: string
+  productImage?: string
+  product?: any // Full product object
 }
 
-function ProductImage({ thumbnail, hover, slug, name, title, badges, productId }: ProductImageProps) {
+function ProductImage({ thumbnail, hover, slug, name, title, badges, productId, productPrice, productImage, product }: ProductImageProps) {
   if (thumbnail) {
     return (
       <a
@@ -31,7 +34,13 @@ function ProductImage({ thumbnail, hover, slug, name, title, badges, productId }
         <ProductBadges badges={badges} />
 
         {/* Hover Buttons */}
-        <ProductHoverButtons productId={productId || slug} />
+        <ProductHoverButtons 
+          product={product}
+          productId={productId || slug}
+          productTitle={name || title}
+          productPrice={productPrice}
+          productImage={productImage || thumbnail}
+        />
 
         {/* Thumbnail Images */}
         <ProductThumbnailImages

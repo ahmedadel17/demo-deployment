@@ -5,6 +5,7 @@ import ProductTitle from "./productTitle";
 import ProductPrice from "./productPrice";
 import ProductVariations from "./productVariations";
 import ProductInfo from "./productInfo";
+import ProductHoverButtons from "../../product/productCard/productHoverButtons";
 
 interface Badge {
   type: string;
@@ -81,49 +82,13 @@ const ProductCard: React.FC<Props> = ({ product, carousel = false }) => {
           )}
 
           {/* Hover Buttons */}
-          <div className="product-hover-btns absolute inset-0 pointer-events-auto flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-30 z-20 gap-2">
-            {/* Compare Button */}
-            <button
-              className="compare-btn w-8 h-8 bg-white text-gray-700 rounded-full shadow-lg hover:bg-primary-300 hover:text-white transition-all duration-200 flex items-center justify-center"
-              data-product-id={product.id}
-              title="Add to Compare"
-            >
-              <svg
-                className="w-4 h-4"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="18" cy="18" r="3" />
-                <circle cx="6" cy="6" r="3" />
-                <path d="M13 6h3a2 2 0 0 1 2 2v7" />
-                <path d="M11 18H8a2 2 0 0 1-2-2V9" />
-              </svg>
-            </button>
-
-            {/* Quick View */}
-            <button
-              className="quick-view-btn w-8 h-8 bg-white text-gray-700 rounded-full shadow-lg hover:bg-primary-300 hover:text-white transition-colors duration-200 flex items-center justify-center"
-              title="Quick View"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </button>
-          </div>
+          <ProductHoverButtons
+            product={product}
+            productId={product.id}
+            productTitle={product.name}
+            productPrice={product.price || product.price_after_discount || product.min_price}
+            productImage={product.thumbnail}
+          />
 
           {/* Main Image */}
           <img

@@ -354,7 +354,7 @@
    "Enter your comment here":"ادخل تعليقك هنا",
    "Heres whats happening with your account":"هنا ما يحدث في حسابك",
    "New Arrivals":"المنتجات الجديدة",
-   "Login":"تسجيل الدخول",
+   "Login":"الدخول",
    "Current Selection":"التحديد الحالي",
    "Search Results":"نتائج البحث",
    "No products found for your search":"لا يوجد منتجات للبحث عنها",
@@ -375,5 +375,6 @@
    "Product Attributes":"سمات المنتج",
    "No attributes available":"لا توجد سمات متاحة",
    "Selected":"محدد",
-   "Clear":"مسح"
+   "Clear":"مسح",
+   "Product added to cart successfully":"تم إضافة المنتج إلى السلة بنجاح"
 }

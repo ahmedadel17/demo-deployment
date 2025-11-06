@@ -5,6 +5,7 @@ import cartReducer from './slices/cartSlice';
 import orderReducer from './slices/orderSlice';
 import wishlistReducer from './slices/wishlistSlice';
 import networkReducer from './slices/networkSlice';
+import compareReducer from './slices/compareSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     order: orderReducer,
     wishlist: wishlistReducer,
     network: networkReducer,
+    compare: compareReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

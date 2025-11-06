@@ -56,6 +56,9 @@ const ProductItem: React.FC<ProductItemProps> = ({ product }) => {
         title={product.title}
         badges={product.badges}
         productId={product.id}
+        productPrice={product.price || product.price_after_discount || product.min_price}
+        productImage={product.thumbnail}
+        product={product}
       />
 
       <ProductDetails product={product} />

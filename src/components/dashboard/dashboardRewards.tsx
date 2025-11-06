@@ -1,6 +1,9 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useAuth } from '@/app/hooks/useAuth';
+import getRequest from '../../../helpers/get';
+import { useLocale } from 'next-intl';
 
 interface ConversionTier {
   points: number;
@@ -19,14 +22,37 @@ interface Transaction {
 }
 
 export default function RewardsWalletCenter() {
-  // Mock data (from PHP)
-  const current_points = 1250;
-  const wallet_balance = 50.0;
-  const total_earned_lifetime = 3250;
-  const total_converted_lifetime = 2000;
-  const points_to_next_tier = 750;
-  const current_tier = "Silver";
-  const next_tier = "Gold";
+  const { user, token } = useAuth();
+  const locale = useLocale();
+  // Mirror dashboard wallet source
+  const [walletState, setWalletState] = useState<{ balance: number } | null>(null);
+  const [isLoadingWallet, setIsLoadingWallet] = useState(false);
+
+  const fetchWallet = useCallback(async () => {
+    if (!token) return;
+    setIsLoadingWallet(true);
+    try {
+      const response = await getRequest('/customer/wallet', { 'Content-Type': 'application/json' }, token, locale);
+      setWalletState(response?.data ?? null);
+    } catch (e) {
+      // noop
+    } finally {
+      setIsLoadingWallet(false);
+    }
+  }, [token, locale]);
+
+  useEffect(() => {
+    fetchWallet();
+  }, [fetchWallet]);
+
+  // Real user-based points (fallback to 0) without using any
+  const authUser = (user ?? {}) as { reward_points?: number };
+  const current_points = Number(authUser.reward_points ?? 0);
+  const total_earned_lifetime = 0;
+  const total_converted_lifetime = 0;
+  const points_to_next_tier = 0;
+  const current_tier = "";
+  const next_tier = "";
 
   const conversion_tiers: ConversionTier[] = [
     { points: 100, bonus: 0, value: 10.0, label: "Basic" },
@@ -126,8 +152,9 @@ export default function RewardsWalletCenter() {
             Wallet Balance
           </h2>
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-            <span className="text-lg mr-1">﷼</span>
-            {wallet_balance.toFixed(2)}
+            {/* Match dashboard formatting */}
+            <span className="text-lg mr-1">$</span>
+            {isLoadingWallet ? 'Loading' : `${walletState?.balance || 0}`}
           </p>
           <p className="text-sm text-purple-600 dark:text-purple-300">
             Ready to spend

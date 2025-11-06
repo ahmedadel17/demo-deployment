@@ -7,13 +7,13 @@ const footerPlugin = plugin(function ({ addComponents, theme }) {
        BASE FOOTER STYLES
     ==================== */
     ".te-footer": {
-      backgroundImage: `linear-gradient(to left, ${theme("colors.gray.900")}, ${theme("colors.gray.800")})`,
-      backgroundColor: theme("colors.gray.900"), // Fallback color
+      backgroundImage: `linear-gradient(to left, ${theme("colors.gradient_one")}, ${theme("colors.gradient_two")})`,
+      backgroundColor: theme("colors.gradient_one"), // Fallback color
       color: theme("colors.gray.300"),
 
       ".dark &": {
-        backgroundImage: `linear-gradient(to left, ${theme("colors.gray.800")}, ${theme("colors.gray.700")})`,
-        backgroundColor: theme("colors.gray.800"), // Fallback color
+        backgroundImage: `linear-gradient(to left, ${theme("colors.gradient_two")}, ${theme("colors.gradient_one")})`,
+        backgroundColor: theme("colors.gradient_two"), // Fallback color
       },
     },
 

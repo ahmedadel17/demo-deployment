@@ -29,9 +29,12 @@ interface CreateAddressData {
 
 interface CreateNewAddressFormProps {
   onAddressCreated?: (addressData: CreateAddressData) => void;
+  mode?: 'create' | 'edit';
+  addressId?: number;
+  initialValuesOverride?: Partial<CreateAddressData>;
 }
 
-const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCreated }) => {
+const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCreated, mode = 'create', addressId, initialValuesOverride }) => {
   const { token } = useAuth()
   const searchInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslations();
@@ -49,6 +52,10 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
     city_id: '',
     country_id: '',
   }
+  const mergedInitialValues: CreateAddressData = {
+    ...initialValues,
+    ...(initialValuesOverride as CreateAddressData | undefined),
+  };
 
   const validationSchema = Yup.object({
     name: Yup.string().notRequired().nullable().min(2, ('Name must be at least 2 characters')),
@@ -78,7 +85,11 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
       return;
     }
 
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/create-address`, values, {
+    const endpoint = mode === 'edit' && addressId
+      ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/update-address/${addressId}`
+      : `${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/create-address`;
+
+    const response = await axios.post(endpoint, values, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -98,7 +109,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
     <div className="bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-700 p-1">
 
         <Formik
-          initialValues={initialValues}
+          initialValues={mergedInitialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
         >
@@ -228,7 +239,7 @@ const CreateNewAddressForm: React.FC<CreateNewAddressFormProps> = ({ onAddressCr
                 <input type="hidden" name="lng" value={values.lng} />
 
                 <button type="submit" className="te-btn te-btn-primary w-full" disabled={isSubmitting}>
-                  {isSubmitting ?   t('Saving...') : t('Save Address')}
+                  {isSubmitting ?   t('Saving...') : (mode === 'edit' ? t('Update Address') : t('Save Address'))}
                 </button>
               </div>
             </Form>

@@ -35,6 +35,8 @@ module.exports = {
                 primary: generatePaletteFromHex('var(--apicolor-primary)'),
                 secondary: generatePaletteFromHex('var(--apicolor-secondary)'),
                 accent: generatePaletteFromHex('var(--apicolor-accent)'),
+                gradient_one: 'var(--apicolor-gradient_one)',
+                gradient_two: 'var(--apicolor-gradient_two)',
                 gray: {
                     50: 'var(--apicolor-gray_50)',
                     100: 'var(--apicolor-gray_100)',

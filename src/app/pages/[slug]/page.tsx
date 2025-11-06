@@ -6,12 +6,13 @@ import { notFound } from 'next/navigation';
 async function getPageData(slug: string) {
   try {
     const locale = await getLocale();
+    console.log('locale', locale);
     const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/core/pages/key/${slug}`, {
       headers: {
         'Accept-Language': locale
       }
     });
-    // console.log('response', res);
+    console.log('response', res);
     return res;
   } catch (error) {
     console.error('Error fetching page data:', error);

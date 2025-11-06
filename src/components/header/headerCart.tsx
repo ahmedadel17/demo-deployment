@@ -28,7 +28,7 @@ const CartDropdown: React.FC = () => {
   };
 
   const handleRemoveItem = async (id: number) => {
-    // console.log('Removing item with ID:', id);
+    console.log('Removing item with ID:', id);
     if (!id) {
       console.error('Item ID is missing:', id);
       toast.error('Unable to remove item: ID not found');
@@ -172,7 +172,7 @@ const CartDropdown: React.FC = () => {
             </div>
 
             {/* Remove Button */}
-            <div onClick={(e) => e.stopPropagation()}>
+            <div >
               <DeleteButton
                 onDelete={() => {
                   return handleRemoveItem(item.id);

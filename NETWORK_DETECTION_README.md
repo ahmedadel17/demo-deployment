@@ -205,3 +205,4 @@ You can customize the network detection by:
 - Verify Redux store is properly configured
 - Test on different network conditions (WiFi, mobile data, etc.)
 
+
